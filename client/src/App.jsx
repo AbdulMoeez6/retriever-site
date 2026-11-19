@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn.jsx";
 import MissionCommand from "./pages/app/MissionCommand.jsx";
 import Readiness from "./pages/app/Readiness.jsx";
 import Opportunities from "./pages/app/Opportunities.jsx";
+import Evidence from "./pages/app/Evidence.jsx";
 import { useApp } from "./lib/store.jsx";
 
 function RouteEffects() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="mission-command" element={<MissionCommand />} />
           <Route path="readiness" element={<Readiness />} />
           <Route path="opportunities" element={<Opportunities />} />
+          <Route path="evidence" element={<Evidence />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
