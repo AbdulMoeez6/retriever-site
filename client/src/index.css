@@ -262,5 +262,6 @@ button:disabled { cursor: default; }
 @keyframes mark-in { from { opacity: 0; transform: translate(-50%, -48%) scale(1.04); } to { opacity: var(--mark-o, .085); transform: translate(-50%, -50%) scale(1); } }
 @keyframes mark-drift { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-51.5%, -49%) scale(1.03); } }
 .hero-dots { opacity: .45; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 55%); mask-image: linear-gradient(to bottom, #000, transparent 55%); }
+@keyframes bar-grow { from { transform: scaleX(0); opacity: .4; } to { transform: scaleX(1); opacity: 1; } }
 
 .video-aurora-mask { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22rem); mask-image: linear-gradient(to bottom, transparent 0, #000 22rem); }

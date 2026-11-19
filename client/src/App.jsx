@@ -10,6 +10,7 @@ import Readiness from "./pages/app/Readiness.jsx";
 import Opportunities from "./pages/app/Opportunities.jsx";
 import Evidence from "./pages/app/Evidence.jsx";
 import Funding from "./pages/app/Funding.jsx";
+import Roadmap from "./pages/app/Roadmap.jsx";
 import { useApp } from "./lib/store.jsx";
 
 function RouteEffects() {
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="opportunities" element={<Opportunities />} />
           <Route path="evidence" element={<Evidence />} />
           <Route path="funding" element={<Funding />} />
+          <Route path="roadmap" element={<Roadmap />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
