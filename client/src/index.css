@@ -59,6 +59,26 @@ button:disabled { cursor: default; }
 
   .success-mark { animation: check-pop .45s ease both; }
 
+  /* Aurora + canvas */
+  .aurora { pointer-events: none; position: absolute; inset: -15%; background:
+    radial-gradient(42% 48% at 18% 18%, rgba(27,54,93,0.16), transparent 62%),
+    radial-gradient(36% 40% at 82% 12%, rgba(50,98,150,0.11), transparent 58%),
+    radial-gradient(46% 42% at 72% 82%, rgba(27,54,93,0.10), transparent 62%);
+    filter: blur(18px); animation: aurora-shift 28s ease-in-out infinite alternate; }
+  .aurora-soft { opacity: 0.7; }
+  html.dark .aurora { background:
+    radial-gradient(42% 48% at 18% 18%, rgba(90,130,180,0.14), transparent 62%),
+    radial-gradient(36% 40% at 82% 12%, rgba(70,110,160,0.10), transparent 58%),
+    radial-gradient(46% 42% at 72% 82%, rgba(40,70,110,0.12), transparent 62%); }
+  .aurora-video { opacity: 1; background:
+    radial-gradient(42% 50% at 16% 18%, rgba(80,140,210,0.32), transparent 62%),
+    radial-gradient(36% 40% at 84% 22%, rgba(50,110,180,0.22), transparent 58%),
+    radial-gradient(50% 46% at 58% 92%, rgba(30,70,130,0.28), transparent 62%) !important; }
+  .hero-watermark { position: absolute; left: 72%; top: 58%; width: min(34rem, 55vw); transform: translate(-50%, -50%); opacity: 0.035; pointer-events: none; user-select: none; z-index: 0; }
+  html.dark .hero-watermark { opacity: 0.08; }
+  .app-canvas { background-image: radial-gradient(rgba(27,54,93,0.045) 1px, transparent 1px); background-size: 22px 22px; }
+  html.dark .app-canvas { background-image: radial-gradient(rgba(200,214,232,0.045) 1px, transparent 1px); }
+
   /* Motion helpers */
   .page-enter { animation: page-in .3s ease-out both; }
   .stagger-in { animation: rise-in .45s ease-out both; animation-delay: var(--stagger, 0ms); }
@@ -74,3 +94,32 @@ button:disabled { cursor: default; }
 @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
 @keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes aurora-shift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.05); } }
+/* ---------- Editorial hero (Air-style faded watermark) ---------- */
+@layer components {
+  .hero-editorial { --hero-bg: #F8F9FB; background: var(--hero-bg); }
+  html.dark .hero-editorial { --hero-bg: #0C1017; }
+  .hero-editorial .aurora { opacity: .55; }
+  .hero-mark {
+    position: absolute; z-index: 0; pointer-events: none; user-select: none;
+    left: 50%; top: 23rem; width: min(68rem, 120vw); aspect-ratio: 1; transform: translate(-50%, -50%);
+    background: url("./assets/logo-mark.png") center / contain no-repeat;
+    filter: grayscale(1) contrast(1.15) brightness(1.05);
+    -webkit-mask-image: radial-gradient(closest-side, #000 22%, rgba(0,0,0,.55) 52%, transparent 78%);
+            mask-image: radial-gradient(closest-side, #000 22%, rgba(0,0,0,.55) 52%, transparent 78%);
+    opacity: 0; animation: mark-in 2.4s cubic-bezier(.2,.7,.2,1) .15s forwards, mark-drift 40s ease-in-out 2.6s infinite alternate;
+    mix-blend-mode: multiply;
+  }
+  html.dark .hero-mark { mix-blend-mode: screen; filter: grayscale(1) brightness(1.1); --mark-o: .07; }
+  .hero-fade-bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 16rem; pointer-events: none; z-index: 1;
+    background: linear-gradient(to bottom, transparent, var(--hero-bg)); }
+  .hero-title { color: #0F2342; }
+  html.dark .hero-title { color: #F4F7FA; }
+  .hero-title .hero-accent { background: linear-gradient(90deg, #1B365D 0%, rgba(27,54,93,0.45) 100%); -webkit-background-clip: text; background-clip: text; }
+  html.dark .hero-title .hero-accent { background: linear-gradient(90deg, #C8D6E8, rgba(200,214,232,0.45)); -webkit-background-clip: text; background-clip: text; }
+  .hero-rise { animation: rise-in .8s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0ms); }
+
+}
+@keyframes mark-in { from { opacity: 0; transform: translate(-50%, -48%) scale(1.04); } to { opacity: var(--mark-o, .085); transform: translate(-50%, -50%) scale(1); } }
+@keyframes mark-drift { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-51.5%, -49%) scale(1.03); } }
+.hero-dots { opacity: .45; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 55%); mask-image: linear-gradient(to bottom, #000, transparent 55%); }

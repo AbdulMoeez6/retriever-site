@@ -9,6 +9,10 @@ export default function Landing() {
       <main className="page-enter">
         {/* Hero — calm, editorial, with a large softly faded Retriever watermark */}
         <section id="product" className="hero-editorial relative isolate overflow-hidden pb-24 pt-20 sm:pt-28">
+          <div className="aurora" />
+          <div className="dotgrid hero-dots pointer-events-none absolute inset-0" />
+          <div aria-hidden="true" className="hero-mark" />
+          <div aria-hidden="true" className="hero-fade-bottom" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12 xl:gap-20">
               <div className="max-w-2xl">
