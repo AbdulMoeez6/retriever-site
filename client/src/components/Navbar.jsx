@@ -1,7 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useApp } from "../lib/store.jsx";
+import Icon from "./Icon.jsx";
 import { Logo } from "./ui.jsx";
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useApp();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const navClass = (on) => `rounded-md px-3 py-2 text-sm transition-colors ${on ? "font-medium text-ink dark:text-white" : "text-muted hover:text-ink dark:text-slate-400 dark:hover:text-white"}`;
@@ -20,6 +23,9 @@ export default function Navbar() {
         </nav>
         <div className="ms-auto flex items-center gap-2">
           <span className="hidden rounded-full border border-line px-2 py-0.5 text-[11px] font-medium text-muted dark:border-slate-700 dark:text-slate-400 lg:inline">Sample data</span>
+          <button type="button" onClick={toggleTheme} className="grid size-9 place-items-center rounded-md text-muted hover:bg-soft dark:text-slate-400 dark:hover:bg-white/10" aria-label="Toggle colour theme">
+            <Icon name={theme === "dark" ? "sun" : "moon"} />
+          </button>
           <Link to="/signin" className="hidden rounded-md px-3 py-2 text-sm text-ink dark:text-slate-100 sm:inline">Sign in</Link>
           <Link to="/book-demo" className="btn-lift rounded-lg bg-navy px-4 py-2 text-sm font-medium text-white hover:bg-navy-700">Book a demo</Link>
         </div>
