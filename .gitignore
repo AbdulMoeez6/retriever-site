@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Build output (the published site is the root index.html, built by `npm run build:pages`)
+client/dist/
+client/dist-preview/
+client/dist-ssr/
+
+# Local environment and secrets
+.env
+.env.*
+
+# Logs and OS files
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
