@@ -5,6 +5,7 @@ import AppLayout from "./components/AppLayout.jsx";
 import Landing from "./pages/Landing.jsx";
 import BookDemo from "./pages/BookDemo.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import SharedRoadmap from "./pages/SharedRoadmap.jsx";
 import MissionCommand from "./pages/app/MissionCommand.jsx";
 import Readiness from "./pages/app/Readiness.jsx";
 import Opportunities from "./pages/app/Opportunities.jsx";
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/book-demo" element={<BookDemo />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/shared-roadmap" element={<SharedRoadmap />} />
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Navigate to="mission-command" replace />} />
           <Route path="mission-command" element={<MissionCommand />} />
