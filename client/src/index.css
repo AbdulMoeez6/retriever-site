@@ -59,6 +59,12 @@ button:disabled { cursor: default; }
 
   .success-mark { animation: check-pop .45s ease both; }
 
+  /* Motion helpers */
+  .page-enter { animation: page-in .3s ease-out both; }
+  .stagger-in { animation: rise-in .45s ease-out both; animation-delay: var(--stagger, 0ms); }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease-out, transform .55s ease-out; }
+  .reveal.revealed { opacity: 1; transform: none; }
+
 }
 
 @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
