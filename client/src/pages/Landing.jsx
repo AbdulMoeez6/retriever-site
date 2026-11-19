@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar.jsx";
 import GlassVideo from "../components/GlassVideo.jsx";
 import KpiCard from "../components/KpiCard.jsx";
 import { HistoryChart } from "../components/Charts.jsx";
+import QuickAssessment from "../components/QuickAssessment.jsx";
 import Icon from "../components/Icon.jsx";
 import { Mark } from "../components/ui.jsx";
 import { useApp } from "../lib/store.jsx";
@@ -10,7 +11,7 @@ import { useGreeting } from "../lib/format.js";
 import { ASSETS } from "../lib/assets.js";
 
 export default function Landing() {
-  const { currentTech, kpis, profile } = useApp();
+  const { currentTech, kpis, patchUi, profile } = useApp();
   const t = currentTech();
   const k = kpis();
   const greet = useGreeting();
@@ -34,6 +35,7 @@ export default function Landing() {
                 <p className="hero-rise mt-8 max-w-xl text-lg text-muted dark:text-slate-300 sm:text-xl" style={{ "--d": "160ms" }}>Retriever structures the evidence; your team makes the call.</p>
                 <div className="hero-rise mt-12 flex flex-wrap items-center gap-3" style={{ "--d": "240ms" }}>
                   <Link to="/book-demo" className="btn-lift inline-flex h-12 items-center gap-2 rounded-lg bg-navy px-6 text-base font-medium text-white shadow-[0_10px_24px_-12px_rgba(27,54,93,0.7)] hover:bg-navy-700">Book a demo <Icon name="arrow" /></Link>
+                  <button type="button" onClick={() => patchUi({ quickOpen: true })} className="btn-lift inline-flex h-12 items-center rounded-lg border border-line bg-white/80 px-5 text-base font-medium backdrop-blur dark:border-slate-700 dark:bg-[#161C27]">Try the five-question quick assessment</button>
                 </div>
                 <p className="hero-rise mt-5 text-sm text-muted dark:text-slate-400" style={{ "--d": "300ms" }}>For tech transfer offices, government programs and defense primes.</p>
               </div>
@@ -92,6 +94,7 @@ export default function Landing() {
           </div>
         </section>
       </main>
+      <QuickAssessment />
     </div>
   );
 }
