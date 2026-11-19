@@ -77,6 +77,20 @@ export default function Landing() {
             </Link>
           </div>
         </section>
+
+        {/* Faded transition: light hero into the dark navy showcase */}
+        <div aria-hidden="true" className="fade-to-navy" />
+
+        {/* Showcase */}
+        <section id="videos" className="video-section glass-on-dark relative isolate overflow-hidden pb-24 pt-10 sm:pb-32 sm:pt-12">
+          <div className="aurora aurora-video video-aurora-mask" />
+          <div className="dotgrid video-aurora-mask pointer-events-none absolute inset-0" />
+          <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</h2>
+            <GlassVideo variant="wide" src={ASSETS.missionVideo} poster={ASSETS.missionPoster}
+              label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" maxTilt={4} />
+          </div>
+        </section>
       </main>
     </div>
   );
