@@ -1,7 +1,23 @@
+import { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import Landing from "./pages/Landing.jsx";
+import { useApp } from "./lib/store.jsx";
+
+function RouteEffects() {
+  const { pathname } = useLocation();
+  const { closeOverlays } = useApp();
+  useEffect(() => { window.scrollTo(0, 0); closeOverlays(); }, [pathname, closeOverlays]);
+  return null;
+}
+
 export default function App() {
   return (
-    <main style={{ padding: "4rem 1.5rem", textAlign: "center", fontFamily: "system-ui, sans-serif" }}>
-      <h1>Retriever</h1>
-    </main>
+    <>
+      <RouteEffects />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
