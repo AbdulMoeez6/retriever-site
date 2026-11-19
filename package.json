@@ -1,0 +1,14 @@
+{
+  "name": "retriever-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Retriever website \u2014 React + Tailwind client. Sample data only.",
+  "scripts": {
+    "postinstall": "npm --prefix client install",
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
