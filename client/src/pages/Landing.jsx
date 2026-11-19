@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import GlassVideo from "../components/GlassVideo.jsx";
+import KpiCard from "../components/KpiCard.jsx";
+import { HistoryChart } from "../components/Charts.jsx";
 import Icon from "../components/Icon.jsx";
+import { Mark } from "../components/ui.jsx";
+import { useApp } from "../lib/store.jsx";
+import { useGreeting } from "../lib/format.js";
 import { ASSETS } from "../lib/assets.js";
 
 export default function Landing() {
+  const { currentTech, kpis, profile } = useApp();
+  const t = currentTech();
+  const k = kpis();
+  const greet = useGreeting();
+
   return (
     <div className="hero-editorial min-h-screen text-ink dark:text-slate-100">
       <Navbar />
@@ -32,6 +42,39 @@ export default function Landing() {
                   label="Readiness walkthrough" className="w-[min(19rem,76vw)]" maxTilt={7} revealAfter={600} />
               </div>
             </div>
+
+            {/* Dashboard preview */}
+            <Link to="/signin" className="relative mx-auto mt-24 block w-full max-w-6xl text-left" aria-label="Open the Retriever dashboard preview">
+              <div aria-hidden="true" className="absolute -top-8 left-1/2 -z-10 h-40 w-[85%] -translate-x-1/2 rounded-full bg-navy/20 blur-3xl lg:h-72" />
+              <div className="relative overflow-hidden rounded-2xl border border-navy/15 bg-white p-2 shadow-raised ring-4 ring-navy/5 dark:border-slate-700 dark:bg-[#161C27]">
+                <div className="overflow-hidden rounded-xl bg-page dark:bg-[#0C1017]">
+                  <div className="flex min-h-[22rem]">
+                    <aside className="hidden w-48 shrink-0 border-r border-line bg-soft p-3 text-xs dark:border-slate-800 dark:bg-[#121722] sm:block">
+                      <div className="mb-4 flex items-center gap-2 font-semibold"><Mark size={20} /> Retriever</div>
+                      <div className="rounded-md bg-white px-2 py-1.5 font-medium dark:bg-white/10">Mission Command</div>
+                      <div className="mt-1 px-2 py-1.5 text-muted dark:text-slate-400">Readiness</div>
+                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Opportunities</div>
+                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Funding</div>
+                    </aside>
+                    <div className="flex-1 p-5">
+                      <div className="text-lg font-semibold">{greet}, {profile.name.split(" ")[0]}</div>
+                      <div className="mt-1 text-xs text-muted dark:text-slate-400">Mission Command · {t.name} · Sample data</div>
+                      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        <KpiCard compact label="Technologies" value={k.techs} />
+                        <KpiCard compact label="Average TRL" value={k.avgTrl} />
+                        <KpiCard compact label="Assessments" value={k.assessments} />
+                        <KpiCard compact label="Funding matches" value={k.funding} />
+                      </div>
+                      <div className="card mt-3 p-4">
+                        <div className="text-sm font-medium">Readiness over time</div>
+                        <div className="mt-1 text-xs text-muted dark:text-slate-400">Only human-reviewed evidence counts. TRL 1 to 9.</div>
+                        <HistoryChart techId={t.id} area height={150} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </div>
         </section>
       </main>
