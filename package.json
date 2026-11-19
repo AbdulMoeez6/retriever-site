@@ -2,11 +2,15 @@
   "name": "retriever-site",
   "version": "1.0.0",
   "private": true,
-  "description": "Retriever website \u2014 React + Tailwind client. Sample data only.",
+  "description": "Retriever template \u2014 React + Tailwind client with a minimal Express server (PERN-ready). Sample data only.",
   "scripts": {
-    "postinstall": "npm --prefix client install",
-    "dev": "npm --prefix client run dev",
-    "build": "npm --prefix client run build"
+    "postinstall": "npm --prefix client install && npm --prefix server install",
+    "dev": "concurrently -n server,client -c blue,green \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   },
   "engines": {
     "node": ">=18"
