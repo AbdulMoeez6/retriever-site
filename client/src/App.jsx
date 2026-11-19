@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Toast from "./components/Toast.jsx";
+import AppLayout from "./components/AppLayout.jsx";
 import Landing from "./pages/Landing.jsx";
 import BookDemo from "./pages/BookDemo.jsx";
 import SignIn from "./pages/SignIn.jsx";
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/book-demo" element={<BookDemo />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/app" element={<AppLayout />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toast />
