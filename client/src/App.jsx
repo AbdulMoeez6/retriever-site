@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Toast from "./components/Toast.jsx";
 import Landing from "./pages/Landing.jsx";
 import BookDemo from "./pages/BookDemo.jsx";
+import SignIn from "./pages/SignIn.jsx";
 import { useApp } from "./lib/store.jsx";
 
 function RouteEffects() {
@@ -19,6 +20,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/book-demo" element={<BookDemo />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toast />
