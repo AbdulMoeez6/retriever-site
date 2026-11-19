@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import GlassVideo from "../components/GlassVideo.jsx";
 import Icon from "../components/Icon.jsx";
+import { ASSETS } from "../lib/assets.js";
 
 export default function Landing() {
   return (
@@ -24,6 +26,10 @@ export default function Landing() {
                   <Link to="/book-demo" className="btn-lift inline-flex h-12 items-center gap-2 rounded-lg bg-navy px-6 text-base font-medium text-white shadow-[0_10px_24px_-12px_rgba(27,54,93,0.7)] hover:bg-navy-700">Book a demo <Icon name="arrow" /></Link>
                 </div>
                 <p className="hero-rise mt-5 text-sm text-muted dark:text-slate-400" style={{ "--d": "300ms" }}>For tech transfer offices, government programs and defense primes.</p>
+              </div>
+              <div className="flex justify-center lg:justify-end lg:pr-4">
+                <GlassVideo variant="device" src={ASSETS.readinessVideo} poster={ASSETS.readinessPoster}
+                  label="Readiness walkthrough" className="w-[min(19rem,76vw)]" maxTilt={7} revealAfter={600} />
               </div>
             </div>
           </div>
