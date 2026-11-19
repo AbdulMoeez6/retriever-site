@@ -228,6 +228,19 @@ button:disabled { cursor: default; }
 @keyframes chart-draw { to { stroke-dashoffset: 0; } }
 @keyframes glass-shimmer { 0%, 55% { background-position: 120% 0; } 100% { background-position: -40% 0; } }
 @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora, .bd-aurora, .page-enter, .stagger-in, .success-mark, .modal, .modal-panel, .drawer, .drawer-backdrop, .modal-backdrop, .toast,
+  .chart-line, .chart-area, .chart-dot, .glass-frame::before, .bd-rise, .bd-success, .bd-err { animation: none !important; }
+  .chart-line.animate { stroke-dashoffset: 0; } .chart-area.animate, .chart-dot.animate { opacity: 1; }
+  .bd-check-ring, .bd-check-tick { animation: none !important; stroke-dashoffset: 0; }
+  .card, .card-hover, .btn-lift, .ring-arc, .reveal, .glass-reveal, .glass-frame, .bd-btn, .bd-btn::after, .progress > span { transition: none !important; }
+  .card:hover, .card-hover:hover, .btn-lift:hover, .bd-btn:hover { transform: none; }
+  .glass-frame, .glass-frame:hover { transform: none !important; }
+  .reveal, .glass-reveal, html.js .glass-reveal:not(.revealed) { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .hero-watermark { opacity: 0.05; }
+}
+
 /* ---------- Editorial hero (Air-style faded watermark) ---------- */
 @layer components {
   .hero-editorial { --hero-bg: #F8F9FB; background: var(--hero-bg); }
@@ -261,6 +274,11 @@ button:disabled { cursor: default; }
 }
 @keyframes mark-in { from { opacity: 0; transform: translate(-50%, -48%) scale(1.04); } to { opacity: var(--mark-o, .085); transform: translate(-50%, -50%) scale(1); } }
 @keyframes mark-drift { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-51.5%, -49%) scale(1.03); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-mark { animation: none !important; opacity: var(--mark-o, .085); }
+  .hero-rise { animation: none !important; }
+}
+
 .hero-dots { opacity: .45; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 55%); mask-image: linear-gradient(to bottom, #000, transparent 55%); }
 @keyframes bar-grow { from { transform: scaleX(0); opacity: .4; } to { transform: scaleX(1); opacity: 1; } }
 
