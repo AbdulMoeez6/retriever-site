@@ -85,6 +85,11 @@ button:disabled { cursor: default; }
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease-out, transform .55s ease-out; }
   .reveal.revealed { opacity: 1; transform: none; }
 
+  /* Charts */
+  .chart-line.animate { stroke-dasharray: 1; stroke-dashoffset: 1; animation: chart-draw .9s ease-out forwards; }
+  .chart-area.animate { opacity: 0; animation: fade .55s ease .35s forwards; }
+  .chart-dot.animate { opacity: 0; animation: fade .3s ease .7s forwards; }
+  .ring-arc { transition: stroke-dashoffset .8s ease-out; }
 }
 
 /* ---------- Glass video frames (hero device + showcase) ---------- */
@@ -179,6 +184,7 @@ button:disabled { cursor: default; }
 @keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes aurora-shift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.05); } }
+@keyframes chart-draw { to { stroke-dashoffset: 0; } }
 @keyframes glass-shimmer { 0%, 55% { background-position: 120% 0; } 100% { background-position: -40% 0; } }
 /* ---------- Editorial hero (Air-style faded watermark) ---------- */
 @layer components {
