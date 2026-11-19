@@ -6,6 +6,7 @@ import Landing from "./pages/Landing.jsx";
 import BookDemo from "./pages/BookDemo.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import MissionCommand from "./pages/app/MissionCommand.jsx";
+import Readiness from "./pages/app/Readiness.jsx";
 import { useApp } from "./lib/store.jsx";
 
 function RouteEffects() {
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Navigate to="mission-command" replace />} />
           <Route path="mission-command" element={<MissionCommand />} />
+          <Route path="readiness" element={<Readiness />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

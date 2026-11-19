@@ -1,0 +1,63 @@
+import { Link } from "react-router-dom";
+import { useApp } from "../../lib/store.jsx";
+import { lastLevel } from "../../lib/format.js";
+import { HistoryChart, HistoryTable, Ring } from "../../components/Charts.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
+import { FileIcon } from "../../components/Icon.jsx";
+import { Avatar, PageHeader, ReviewChip, btnSecondary } from "../../components/ui.jsx";
+
+export default function Readiness() {
+  const { currentTech, history, docs, ui, patchUi } = useApp();
+  const t = currentTech();
+  const hist = history[t.id] || { TRL: [], MRL: [], IRL: [] };
+  const reviewed = docs.filter((d) => d.technologyId === t.id && d.reviewed);
+  const pending = docs.filter((d) => d.technologyId === t.id && !d.reviewed);
+  const all = reviewed.concat(pending);
+  return (
+    <div className="flex flex-col gap-5">
+      <PageHeader title="Readiness" sub="TRL, MRL and IRL assessments for a technology. Only human-reviewed evidence counts.">
+        <TechSwitcher />
+        <button type="button" onClick={() => patchUi({ quickOpen: true })} className={btnSecondary}>Five-question quick assessment</button>
+      </PageHeader>
+      <section className="card p-5">
+        <div key={t.id} className="grid justify-items-center gap-6 sm:grid-cols-3">
+          <Ring label="TRL" value={lastLevel(hist.TRL)} />
+          <Ring label="MRL" value={lastLevel(hist.MRL)} />
+          <Ring label="IRL" value={lastLevel(hist.IRL)} />
+        </div>
+      </section>
+      <section className="card p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-medium">Readiness history</h2>
+            <p className="mt-1 text-xs text-muted dark:text-slate-400">Levels over time from saved assessments. Sample data only. TRL 1 to 9.</p>
+          </div>
+          <button type="button" onClick={() => patchUi({ historyOpen: !ui.historyOpen })} className="text-sm text-muted underline-offset-2 hover:underline dark:text-slate-400">{ui.historyOpen ? "Hide table" : "Show table"}</button>
+        </div>
+        <div className="mt-3"><HistoryChart key={t.id} techId={t.id} height={152} /></div>
+        <HistoryTable techId={t.id} />
+      </section>
+      <section className="card p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-medium">Human-reviewed evidence</h2>
+            <p className="mt-1 text-xs text-muted dark:text-slate-400">{reviewed.length} of {all.length} documents for {t.name} count toward readiness.</p>
+          </div>
+          <Link to="/app/evidence" className="text-sm text-muted underline-offset-2 hover:underline dark:text-slate-400">Open Evidence</Link>
+        </div>
+        <div className="progress mt-3"><span style={{ width: `${all.length ? (reviewed.length / all.length) * 100 : 0}%` }} /></div>
+        <ul className="mt-4 grid gap-2 text-sm">
+          {all.length ? all.map((d) => (
+            <li key={d.id} className="flex items-center gap-3 rounded-lg border border-line px-3 py-2 dark:border-slate-800">
+              <FileIcon type={d.type} />
+              <span className="flex-1 truncate">{d.name}</span>
+              {d.reviewer && <span className="hidden sm:inline-flex"><Avatar name={d.reviewer} size={22} /></span>}
+              <span className="hidden text-xs text-muted dark:text-slate-400 sm:inline">{d.reviewer || "Awaiting reviewer"}</span>
+              <ReviewChip reviewed={!!d.reviewed} />
+            </li>
+          )) : <li className="text-muted">No documents on file yet.</li>}
+        </ul>
+      </section>
+    </div>
+  );
+}
