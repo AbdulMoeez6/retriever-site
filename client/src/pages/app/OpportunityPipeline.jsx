@@ -4,39 +4,9 @@ import Icon from "../../components/Icon.jsx";
 import TechSwitcher from "../../components/TechSwitcher.jsx";
 import { CreateProfileBanner, PageHeader, ShellContext, StatusChip, Tabs, formatMoney } from "../../components/ui.jsx";
 import Funding from "./Funding.jsx";
+import { ChartCard, PIPELINE_GROUPS, pipelineSpec } from "../../components/DataChart.jsx";
 
 const STAGE_SHADE = (i) => `rgba(27,54,93,${0.28 + i * 0.18})`;
-
-/** Stage summary: a segmented bar sized by matched value, with counts underneath. */
-function StageSummary({ opps }) {
-  const total = opps.reduce((a, o) => a + o.amount, 0) || 1;
-  return (
-    <section className="card p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-medium">From match to award</h2>
-        <span className="text-xs text-muted dark:text-slate-400">{opps.length} opportunities · {formatMoney(opps.reduce((a, o) => a + o.amount, 0))} matched (sample)</span>
-      </div>
-      <div className="mt-4 flex h-2.5 gap-1 overflow-hidden rounded-full">
-        {PIPELINE_STAGES.map((st, i) => {
-          const v = opps.filter((o) => o.stage === st).reduce((a, o) => a + o.amount, 0);
-          return v ? <span key={st} className="bar-fill h-full rounded-full" title={`${st} · ${formatMoney(v)}`} style={{ width: `${(v / total) * 100}%`, background: STAGE_SHADE(i), "--d": `${i * 90}ms` }} /> : null;
-        })}
-        {!opps.length && <span className="h-full w-full rounded-full bg-soft dark:bg-white/10" />}
-      </div>
-      <dl className="mt-4 grid grid-cols-5 gap-2">
-        {PIPELINE_STAGES.map((st, i) => {
-          const list = opps.filter((o) => o.stage === st);
-          return (
-            <div key={st}>
-              <dt className="flex items-center gap-1.5 text-xs text-muted dark:text-slate-400"><span className="size-2 rounded-full" style={{ background: STAGE_SHADE(i) }} />{st}</dt>
-              <dd className="mt-1 text-lg font-semibold tabular-nums">{list.length}</dd>
-            </div>
-          );
-        })}
-      </dl>
-    </section>
-  );
-}
 
 function OppCard({ o, onOpen, onMove }) {
   const i = PIPELINE_STAGES.indexOf(o.stage);
@@ -83,7 +53,8 @@ export default function OpportunityPipeline() {
       {ui.oppTab === "Funding matches" ? <ShellContext.Provider value={true}><Funding /></ShellContext.Provider> : (
         <>
           {!hasTech && <CreateProfileBanner text="Create your Technology Profile to start matching funding opportunities." />}
-          <StageSummary opps={opps} />
+          <ChartCard id="opp.value" title="Pipeline value" types={["bar", "donut"]} groups={PIPELINE_GROUPS} height={170}
+            build={({ group }) => pipelineSpec(opps, group)} />
           <div className="overflow-x-auto pb-2">
             <div className="grid min-w-[62rem] grid-cols-5 gap-3">
               {PIPELINE_STAGES.map((stage, si) => {

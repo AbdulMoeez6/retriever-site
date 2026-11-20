@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useApp } from "../../lib/store.jsx";
 import { lastLevel } from "../../lib/format.js";
-import { HistoryChart, HistoryTable, Ring } from "../../components/Charts.jsx";
+import { Ring } from "../../components/Charts.jsx";
+import { ChartCard, READINESS_RANGES, readinessSpec } from "../../components/DataChart.jsx";
 import TechSwitcher from "../../components/TechSwitcher.jsx";
 import { FileIcon } from "../../components/Icon.jsx";
 import { Avatar, PageHeader, ReviewChip, btnSecondary } from "../../components/ui.jsx";
@@ -35,17 +36,8 @@ export default function Readiness() {
           <Ring label="IRL" value={lastLevel(hist.IRL)} />
         </div>
       </section>
-      <section className="card p-5">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-medium">Readiness history</h2>
-            <p className="mt-1 text-xs text-muted dark:text-slate-400">Levels over time from saved assessments. Sample data only. TRL 1 to 9.</p>
-          </div>
-          <button type="button" onClick={() => patchUi({ historyOpen: !ui.historyOpen })} className="text-sm text-muted underline-offset-2 hover:underline dark:text-slate-400">{ui.historyOpen ? "Hide table" : "Show table"}</button>
-        </div>
-        <div className="mt-3"><HistoryChart key={t.id} techId={t.id} height={152} /></div>
-        <HistoryTable techId={t.id} />
-      </section>
+      <ChartCard id="readiness.history" title="Readiness history" types={["line", "area", "bar"]} ranges={READINESS_RANGES} withTable
+        build={({ range }) => readinessSpec(hist, range)} />
       <section className="card p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

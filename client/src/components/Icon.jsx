@@ -1,5 +1,15 @@
 // Inline SVG icons ported from the HTML template.
 const P = {
+  table: <><rect x="3.5" y="5" width="17" height="14" rx="1.5" /><path d="M3.5 10h17M3.5 14.5h17M9.5 10v9" /></>,
+  cards: <><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></>,
+  board: <><rect x="3.5" y="4" width="5" height="16" rx="1.2" /><rect x="9.5" y="4" width="5" height="11" rx="1.2" /><rect x="15.5" y="4" width="5" height="13" rx="1.2" /></>,
+  chartLine: <><path d="M4 19h16" /><path d="m4.5 15 4.5-5 4 3 6.5-7" /></>,
+  chartArea: <><path d="M4 19h16" /><path d="M4.5 17v-3l4.5-5 4 3 6.5-6.5V17z" /></>,
+  chartBar: <><path d="M4 19h16" /><path d="M7 16v-5M11 16V7M15 16v-7M19 16v-3" /></>,
+  donut: <><circle cx="12" cy="12" r="7.5" /><circle cx="12" cy="12" r="3.2" /><path d="M12 4.5v4.3M18.8 15.4l-3.9-1.8" /></>,
+  chartFrame: <><rect x="3.5" y="4.5" width="17" height="15" rx="2" /><path d="m7 15 3.5-3.5 2.5 2 4-4.5" /></>,
+  eye: <><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.8" /></>,
+  eyeOff: <><path d="M4 4l16 16" /><path d="M9.9 6A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.9 3.6M6.4 7.4A15.6 15.6 0 0 0 2.5 12s3.5 6.5 9.5 6.5a9 9 0 0 0 3.7-.8" /></>,
   command: <><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></>,
   shield: <><path d="M12 3.2 19 5.6V12c0 4.2-2.8 7.1-7 9.1C7.8 19.1 5 16.2 5 12V5.6L12 3.2z" /><path d="m8.6 12 2.3 2.3 4.6-5" /></>,
   search: <><circle cx="11" cy="11" r="6.5" /><path d="M16.2 16.2 21 21" /></>,

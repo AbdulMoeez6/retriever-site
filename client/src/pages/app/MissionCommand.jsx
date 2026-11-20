@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/store.jsx";
 import { greeting } from "../../lib/format.js";
-import { PIPELINE_STAGES } from "../../data/pilotData.js";
 import KpiCard from "../../components/KpiCard.jsx";
-import { HistoryChart, HistoryTable } from "../../components/Charts.jsx";
+import { ChartCard, PIPELINE_GROUPS, READINESS_RANGES, pipelineSpec, readinessSpec } from "../../components/DataChart.jsx";
 import TechSwitcher from "../../components/TechSwitcher.jsx";
 import PilotWorkflow from "../../components/PilotWorkflow.jsx";
 import Icon from "../../components/Icon.jsx";
@@ -33,39 +32,8 @@ function StartCard() {
   );
 }
 
-function PipelineSnapshot({ opps }) {
-  const navigate = useNavigate();
-  const max = Math.max(1, ...PIPELINE_STAGES.map((st) => opps.filter((o) => o.stage === st).reduce((a, o) => a + o.amount, 0)));
-  return (
-    <section className="card p-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium">Opportunity pipeline</h2>
-        <Link to="/app/opportunities" className="u-link text-xs text-muted dark:text-slate-400">Open pipeline</Link>
-      </div>
-      <p className="mt-1 text-xs text-muted dark:text-slate-400">{opps.length} opportunities · {formatMoney(opps.reduce((a, o) => a + o.amount, 0))} matched (sample)</p>
-      <ul className="mt-4 grid gap-3">
-        {PIPELINE_STAGES.map((st, i) => {
-          const list = opps.filter((o) => o.stage === st);
-          const value = list.reduce((a, o) => a + o.amount, 0);
-          return (
-            <li key={st}>
-              <button type="button" onClick={() => navigate("/app/opportunities")} className="group grid w-full grid-cols-[5.5rem_1fr_3.5rem] items-center gap-3 text-left">
-                <span className="text-xs text-muted group-hover:text-ink dark:text-slate-400 dark:group-hover:text-white">{st}</span>
-                <span className="h-2 overflow-hidden rounded-full bg-soft dark:bg-white/10">
-                  <span className="bar-fill block h-full rounded-full" style={{ width: `${(value / max) * 100}%`, "--d": `${i * 80}ms`, background: `rgba(27,54,93,${0.35 + i * 0.16})` }} />
-                </span>
-                <span className="text-right font-mono text-[11px]">{value ? formatMoney(value) : "—"}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
 export default function MissionCommand() {
-  const { hasTech, currentTech, ui, pipeline, questionnairePct, actions, notifications, profile, patchUi, toast } = useApp();
+  const { hasTech, currentTech, ui, history, pipeline, questionnairePct, actions, notifications, profile, patchUi, toast } = useApp();
   const navigate = useNavigate();
   const first = profile.name.split(" ")[0];
   const header = (techName) => (
@@ -105,19 +73,11 @@ export default function MissionCommand() {
         {kpis.map(([l, v, s, route]) => <KpiCard key={l} label={l} value={v} sub={s} onClick={() => navigate(`/app/${route}`)} />)}
       </div>
       <PilotWorkflow techId={t.id} />
-      <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
-        <section className="card p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-medium">Readiness over time</h2>
-              <p className="mt-1 text-xs text-muted dark:text-slate-400">Only human-reviewed evidence counts. Empty points are shown as Not reviewed.</p>
-            </div>
-            <button type="button" onClick={() => patchUi({ historyOpen: !ui.historyOpen })} className="u-link text-sm text-muted dark:text-slate-400">{ui.historyOpen ? "Hide table" : "Show table"}</button>
-          </div>
-          <div className="mt-3"><HistoryChart key={t.id} techId={t.id} area height={168} /></div>
-          <HistoryTable techId={t.id} />
-        </section>
-        <PipelineSnapshot opps={opps} />
+      <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr]">
+        <ChartCard id="mc.readiness" title="Readiness over time" types={["line", "area", "bar"]} ranges={READINESS_RANGES} withTable
+          build={({ range }) => readinessSpec(history[t.id] || {}, range)} />
+        <ChartCard id="mc.pipeline" title="Opportunity pipeline" types={["bar", "donut"]} groups={PIPELINE_GROUPS} height={190}
+          build={({ group }) => pipelineSpec(opps, group)} />
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="card p-5">
