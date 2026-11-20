@@ -11,6 +11,7 @@ export default {
         ink: "#0D1420",
         muted: "#4B5465",
         line: "#DCE3EC",
+        accent: { DEFAULT: "#2E5AAC", soft: "#EAF0FA" },
       },
       fontFamily: {
         sans: ['"Hanken Grotesk"', '"IBM Plex Sans"', "system-ui", "sans-serif"],

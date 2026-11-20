@@ -283,3 +283,59 @@ button:disabled { cursor: default; }
 @keyframes bar-grow { from { transform: scaleX(0); opacity: .4; } to { transform: scaleX(1); opacity: 1; } }
 
 .video-aurora-mask { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22rem); mask-image: linear-gradient(to bottom, transparent 0, #000 22rem); }
+
+/* ---------- Motion and interaction layer (dashboard + landing) ---------- */
+@layer components {
+  /* Scroll reveal. Content stays visible without JavaScript. */
+  .sr { transition: opacity .75s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1); transition-delay: var(--sr-d, 0ms); }
+  html.js .sr:not(.revealed) { opacity: 0; transform: translateY(24px); }
+  html.js .sr-left:not(.revealed) { transform: translateX(-28px); }
+  html.js .sr-right:not(.revealed) { transform: translateX(28px); }
+
+  /* Feature cards: lift, cursor spotlight, and extra text that opens and stays open while hovered or focused. */
+  .feat-card { position: relative; isolation: isolate; overflow: hidden; border-radius: 1rem; border: 1px solid #E2E8F0; background: #fff; padding: 1.5rem;
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease, border-color .4s ease; }
+  .feat-card::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .4s ease;
+    background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), rgba(46,90,172,.10), transparent 60%); }
+  .feat-card:hover, .feat-card:focus-within { transform: translateY(-6px); border-color: rgba(27,54,93,.24); box-shadow: 0 28px 50px -30px rgba(27,54,93,.5); }
+  .feat-card:hover::before, .feat-card:focus-within::before { opacity: 1; }
+  html.dark .feat-card { background: #161C27; border-color: #2A3344; }
+  .feat-more { display: grid; grid-template-rows: 0fr; opacity: 0; margin-top: 0; transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease, margin-top .45s ease; }
+  .feat-more > div { overflow: hidden; }
+  .feat-card:hover .feat-more, .feat-card:focus-within .feat-more { grid-template-rows: 1fr; opacity: 1; margin-top: .85rem; }
+  .feat-icon { transition: transform .4s cubic-bezier(.2,.7,.2,1), background-color .3s ease, color .3s ease; }
+  .feat-card:hover .feat-icon { transform: translateY(-2px) rotate(-4deg); background-color: #1B365D; color: #fff; }
+  .feat-cue { transition: opacity .3s ease, transform .3s ease; }
+  .feat-card:hover .feat-cue, .feat-card:focus-within .feat-cue { opacity: 0; transform: translateY(4px); }
+  @media (hover: none) { .feat-more { grid-template-rows: 1fr; opacity: 1; margin-top: .85rem; } .feat-cue { display: none; } }
+
+  /* Smooth underline for text links */
+  .u-link { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .35s cubic-bezier(.2,.7,.2,1); }
+  .u-link:hover, .u-link:focus-visible { background-size: 100% 1px; }
+
+  /* Arrow nudge inside buttons */
+  .nudge svg { transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+  .nudge:hover svg { transform: translateX(3px); }
+
+  /* Dashboard details */
+  .bar-fill { transform-origin: left center; animation: bar-grow .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0ms); }
+  .col-fill { transform-origin: bottom center; animation: col-grow .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0ms); }
+  .pulse-ring { animation: pulse-ring 2.2s ease-out infinite; }
+  .hover-reveal { opacity: 0; transform: translateY(3px); transition: opacity .2s ease, transform .2s ease; }
+  .group:hover .hover-reveal, .group:focus-within .hover-reveal { opacity: 1; transform: none; }
+  @media (hover: none) { .hover-reveal { opacity: 1; transform: none; } }
+  .check-pop { animation: check-pop .35s cubic-bezier(.2,.7,.2,1) both; }
+  .tick-in { animation: pop .3s ease-out both; }
+  .step-node { transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease; }
+  .step-btn:hover .step-node { transform: scale(1.12); box-shadow: 0 6px 14px -6px rgba(27,54,93,.55); }
+  .trl-seg { transition: transform .25s cubic-bezier(.2,.7,.2,1), background-color .3s ease; }
+  .trl-seg:hover { transform: translateY(-3px); }
+}
+@keyframes col-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(46,90,172,.38); } 70% { box-shadow: 0 0 0 9px rgba(46,90,172,0); } 100% { box-shadow: 0 0 0 0 rgba(46,90,172,0); } }
+@media (prefers-reduced-motion: reduce) {
+  .sr, html.js .sr:not(.revealed) { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .feat-card, .feat-card::before, .feat-more, .feat-icon, .feat-cue, .u-link, .nudge svg, .hover-reveal, .step-node, .trl-seg { transition: none !important; }
+  .feat-card:hover, .feat-card:focus-within, .feat-card:hover .feat-icon, .trl-seg:hover, .step-btn:hover .step-node { transform: none !important; }
+  .bar-fill, .col-fill, .pulse-ring, .check-pop, .tick-in { animation: none !important; }
+}
