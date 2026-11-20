@@ -16,7 +16,7 @@ export default function Opportunities() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Knowledge opportunities" sub="A list of gaps to work on. Match tags are sample scores from funding matches." />
+      <PageHeader title="Readiness gaps" sub="Gaps on matched opportunities and the evidence still needed. Match tags are sample scores." />
       <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
         <div className="grid content-start gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           {list.length ? list.map((o) => {

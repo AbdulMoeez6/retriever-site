@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useApp } from "../../lib/store.jsx";
 import Icon from "../../components/Icon.jsx";
-import { btnSecondary, formatMoney } from "../../components/ui.jsx";
+import { PageHeader, btnSecondary, formatMoney } from "../../components/ui.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
 
 // Fixed fill-in-the-blanks templates. Nothing is generated, stored or sent.
 const SECTIONS = [
@@ -45,10 +46,14 @@ export default function ProposalAssistant() {
   };
 
   return (
-    <div className="flex max-w-3xl flex-col gap-5">
-      <div className="flex justify-end"><button type="button" onClick={exportDraft} className={btnSecondary}><Icon name="download" /> Export draft</button></div>
-      <div className="card grid gap-2 p-4 text-sm sm:grid-cols-[11rem_1fr]">
-        <div className="font-semibold">Template preview: built from fixed templates and not saved.</div>
+    <div className="flex flex-col gap-5">
+      <PageHeader title={<span className="inline-flex flex-wrap items-center gap-2">Proposal assistant <span className="rounded-full border border-line px-2 py-0.5 text-xs font-medium text-muted dark:border-slate-700 dark:text-slate-400">Template preview</span></span>} sub="Fill-in-the-blanks outline built from your questionnaire answers.">
+        <TechSwitcher />
+        <button type="button" onClick={exportDraft} className={btnSecondary}><Icon name="download" /> Export draft</button>
+      </PageHeader>
+      <div className="flex max-w-3xl flex-col gap-5">
+      <div className="card grid gap-2 border-l-2 border-l-navy p-4 text-sm sm:grid-cols-[11rem_1fr]">
+        <div className="font-medium">Built from fixed templates and not saved.</div>
         <p className="text-muted dark:text-slate-400">These sections are assembled in your browser from your Readiness Questionnaire answers. Nothing here is reviewed, stored or checked against the solicitation; treat it as a starting outline only.</p>
       </div>
       <section className="card p-5">
@@ -64,14 +69,15 @@ export default function ProposalAssistant() {
         {SECTIONS.map((s) => (
           <div key={s.id}>
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold">{s.title}</h2>
-              <button type="button" onClick={() => regenerate(s.id)} className="inline-flex items-center gap-1 text-xs font-medium text-[#2F5BD3]"><Icon name="refresh" className="size-3.5" /> Regenerate</button>
+              <h2 className="text-sm font-medium">{s.title}</h2>
+              <button type="button" onClick={() => regenerate(s.id)} className="group inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium text-navy transition-colors hover:bg-soft dark:text-slate-200 dark:hover:bg-white/10"><Icon name="refresh" className="size-3.5 transition-transform duration-500 group-hover:rotate-180" /> Regenerate</button>
             </div>
             <textarea rows={4} value={text[s.id]} onChange={(e) => setText((x) => ({ ...x, [s.id]: e.target.value }))} className="field mt-2 w-full text-sm" />
             <p className="mt-1 font-mono text-[11px] text-muted dark:text-slate-400">Source: {s.source}</p>
           </div>
         ))}
       </section>
+      </div>
     </div>
   );
 }

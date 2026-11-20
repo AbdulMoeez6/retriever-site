@@ -11,7 +11,7 @@ export default function ActionPlanning() {
   }));
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Action planning" sub="Actions for the team to take on a technology record. Toggle a status to move it on.">
+      <PageHeader title="Action plan" sub="Actions for the team to take on a technology record. Toggle a status to move it on.">
         <button type="button" onClick={() => patchUi({ modal: "action" })} className={btnPrimary}><Icon name="plus" /> Add action</button>
       </PageHeader>
       <ul className="card">
