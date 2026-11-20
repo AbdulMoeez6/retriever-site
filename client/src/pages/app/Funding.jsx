@@ -1,6 +1,7 @@
 import { useApp } from "../../lib/store.jsx";
 import { escapeCsv, fitFromScore } from "../../lib/format.js";
 import Icon from "../../components/Icon.jsx";
+import { useViewMode } from "../../components/ViewControls.jsx";
 import { PageHeader, StatusChip, btnSecondary, filterBtn } from "../../components/ui.jsx";
 
 const COLS = "md:grid-cols-[1.4fr_1.2fr_7rem_3.5rem_6.5rem_7.5rem]";
@@ -12,6 +13,7 @@ export default function Funding() {
     if (ui.fundingFit !== "All" && fitFromScore(f.score) !== ui.fundingFit) return false;
     return matchesQuery({ ...f, fit: fitFromScore(f.score), technology: techName(f.technologyId) }, ["opportunity", "agency", "deadline", "status", "fit", "technology", "agencyType"]);
   });
+  const [mode, viewToggle] = useViewMode("funding", ["table", "cards"]);
   const exportCsv = () => {
     const header = ["Opportunity", "Agency", "Agency type", "Deadline", "Match score", "Fit", "Gaps", "Status"];
     const lines = [header.join(",")].concat(rows.map((f) => [f.opportunity, f.agency, f.agencyType, f.deadline, f.score, fitFromScore(f.score), f.gaps, f.status].map(escapeCsv).join(",")));
@@ -29,6 +31,7 @@ export default function Funding() {
   return (
     <div className="flex flex-col gap-5">
       <PageHeader title="Funding matches" sub="Matches for this organization. Fit is a sample score band only.">
+        {viewToggle}
         <button type="button" onClick={exportCsv} className={btnSecondary}><Icon name="download" /> Export CSV</button>
       </PageHeader>
       <div className="flex flex-col gap-2">
@@ -39,7 +42,20 @@ export default function Funding() {
           {["All", "Strong fit", "Good fit", "Fair fit"].map((f) => <button type="button" key={f} onClick={() => patchUi({ fundingFit: f })} className={filterBtn(ui.fundingFit === f)}>{f}</button>)}
         </div>
       </div>
-      <div className="card overflow-hidden">
+      {mode === "cards" ? (
+        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {rows.length ? rows.map((f) => (
+            <li key={f.id}>
+              <button type="button" onClick={() => patchUi({ drawer: { type: "funding", id: f.id } })} className="card card-hover tick-in block h-full w-full p-4 text-left">
+                <div className="flex items-start justify-between gap-2"><span className="text-sm font-medium">{f.opportunity}</span><span className="font-mono text-xs text-muted">{f.score}</span></div>
+                <div className="mt-1 text-xs text-muted dark:text-slate-400">{f.agency}</div>
+                <div className="mt-3 flex flex-wrap items-center gap-2"><StatusChip status={fitFromScore(f.score)} /><StatusChip status={f.status} /><span className="ml-auto font-mono text-[11px] text-muted">{f.deadline}</span></div>
+              </button>
+            </li>
+          )) : <li className="text-sm text-muted">No funding matches for this filter.</li>}
+        </ul>
+      ) : (
+      <div className="card tick-in overflow-hidden">
         <div className={`hidden border-b border-line bg-soft px-4 py-2 text-xs font-medium text-muted dark:border-slate-800 dark:bg-white/5 dark:text-slate-400 md:grid md:gap-4 ${COLS}`}>
           <span>Opportunity</span><span>Agency</span><span>Deadline</span><span>Score</span><span>Fit</span><span>Status</span>
         </div>
@@ -55,6 +71,7 @@ export default function Funding() {
           </button>
         )) : <div className="px-4 py-8 text-center text-sm text-muted">No funding matches for this filter.</div>}
       </div>
+      )}
     </div>
   );
 }

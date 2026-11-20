@@ -55,3 +55,28 @@ export function useShown(key, initial = true) {
   );
   return [shown, toggle];
 }
+
+/** Plain data table in the template style. Rows open with click or Enter when `onRow` is set. */
+export function DataTable({ columns, rows, rowKey = (r) => r.id, onRow, empty = "Nothing here yet." }) {
+  return (
+    <div className="card tick-in overflow-x-auto">
+      <table className="w-full min-w-[40rem] text-left text-sm">
+        <thead className="border-b border-line bg-soft/70 text-xs text-muted dark:border-slate-800 dark:bg-white/5 dark:text-slate-400">
+          <tr>{columns.map((c) => <th key={c.label} className={`px-4 py-2.5 font-medium ${c.className || ""}`}>{c.label}</th>)}</tr>
+        </thead>
+        <tbody>
+          {rows.length ? rows.map((r) => (
+            <tr key={rowKey(r)} tabIndex={onRow ? 0 : undefined} onClick={onRow ? () => onRow(r) : undefined}
+              onKeyDown={onRow ? (e) => { if (e.key === "Enter") onRow(r); } : undefined}
+              className={`border-b border-line last:border-0 dark:border-slate-800 ${onRow ? "row-hover cursor-pointer outline-none focus-visible:bg-soft" : ""}`}>
+              {columns.map((c) => <td key={c.label} className={`px-4 py-3 align-middle ${c.className || ""}`}>{c.cell(r)}</td>)}
+            </tr>
+          )) : <tr><td colSpan={columns.length} className="px-4 py-8 text-center text-sm text-muted dark:text-slate-400">{empty}</td></tr>}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/** Stops a click inside a clickable row from opening the row. */
+export const stop = (fn) => (e) => { e.stopPropagation(); fn(e); };

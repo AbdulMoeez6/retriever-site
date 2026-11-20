@@ -4,11 +4,12 @@ import Icon from "../../components/Icon.jsx";
 import TechSwitcher from "../../components/TechSwitcher.jsx";
 import { CreateProfileBanner, PageHeader, ShellContext, StatusChip, Tabs, formatMoney } from "../../components/ui.jsx";
 import Funding from "./Funding.jsx";
+import { DataTable, stop, useViewMode } from "../../components/ViewControls.jsx";
 import { ChartCard, PIPELINE_GROUPS, pipelineSpec } from "../../components/DataChart.jsx";
 
 const STAGE_SHADE = (i) => `rgba(27,54,93,${0.28 + i * 0.18})`;
 
-function OppCard({ o, onOpen, onMove }) {
+function OppCard({ o, onOpen, onMove, showStage = false }) {
   const i = PIPELINE_STAGES.indexOf(o.stage);
   const last = i === PIPELINE_STAGES.length - 1;
   return (
@@ -20,6 +21,7 @@ function OppCard({ o, onOpen, onMove }) {
           <span className="font-mono text-xs">{formatMoney(o.amount)}</span>
           <StatusChip status={o.fit} />
         </div>
+        {showStage && <div className="mt-2"><StatusChip status={o.stage} /></div>}
         <div className="mt-1 text-[11px] text-muted dark:text-slate-400">{o.date}</div>
       </button>
       <div className="mt-3 flex items-center justify-between border-t border-line pt-2 dark:border-slate-700">
@@ -37,6 +39,8 @@ function OppCard({ o, onOpen, onMove }) {
 export default function OpportunityPipeline() {
   const { hasTech, ui, pipeline, patchUi, patchData, toast } = useApp();
   const opps = hasTech ? pipeline.filter((o) => o.techId === ui.techId) : [];
+  const [mode, viewToggle] = useViewMode("opportunities", ["board", "table", "cards"]);
+  const open = (id) => patchUi({ drawer: { type: "pipeline", id } });
   const move = (id, dir) => {
     const o = pipeline.find((x) => x.id === id);
     if (!o) return;
@@ -55,26 +59,50 @@ export default function OpportunityPipeline() {
           {!hasTech && <CreateProfileBanner text="Create your Technology Profile to start matching funding opportunities." />}
           <ChartCard id="opp.value" title="Pipeline value" types={["bar", "donut"]} groups={PIPELINE_GROUPS} height={170}
             build={({ group }) => pipelineSpec(opps, group)} />
-          <div className="overflow-x-auto pb-2">
-            <div className="grid min-w-[62rem] grid-cols-5 gap-3">
-              {PIPELINE_STAGES.map((stage, si) => {
-                const col = opps.filter((o) => o.stage === stage);
-                return (
-                  <section key={stage} className="rounded-xl bg-soft/70 p-2.5 dark:bg-white/[.03]">
-                    <div className="flex items-center justify-between px-1 pb-2">
-                      <h2 className="flex items-center gap-2 text-xs font-medium"><span className="size-2 rounded-full" style={{ background: STAGE_SHADE(si) }} />{stage}</h2>
-                      <span className="font-mono text-[11px] text-muted dark:text-slate-400">{col.length} · {col.length ? formatMoney(col.reduce((a, o) => a + o.amount, 0)) : "—"}</span>
-                    </div>
-                    <ul className="grid gap-2">
-                      {col.length ? col.map((o) => (
-                        <OppCard key={`${o.id}-${o.stage}`} o={o} onOpen={() => patchUi({ drawer: { type: "pipeline", id: o.id } })} onMove={(dir) => move(o.id, dir)} />
-                      )) : <li className="rounded-lg border border-dashed border-line px-2 py-6 text-center text-xs text-muted dark:border-slate-700 dark:text-slate-400">No opportunities here yet</li>}
-                    </ul>
-                  </section>
-                );
-              })}
-            </div>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-sm font-medium">{opps.length} opportunities</h2>
+            {viewToggle}
           </div>
+          {mode === "table" ? (
+            <DataTable rows={opps} onRow={(o) => open(o.id)} empty="No opportunities yet."
+              columns={[
+                { label: "Opportunity", cell: (o) => <span className="font-medium">{o.title}</span> },
+                { label: "Agency", cell: (o) => <span className="text-muted dark:text-slate-400">{o.agency}</span> },
+                { label: "Amount", cell: (o) => <span className="font-mono text-xs">{formatMoney(o.amount)}</span> },
+                { label: "Fit", cell: (o) => <StatusChip status={o.fit} /> },
+                { label: "Stage", cell: (o) => <StatusChip status={o.stage} /> },
+                { label: "", className: "text-right", cell: (o) => o.stage === PIPELINE_STAGES[PIPELINE_STAGES.length - 1] ? null : (
+                  <button type="button" onClick={stop(() => move(o.id, 1))} className="nudge inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs text-muted hover:bg-soft hover:text-ink dark:hover:bg-white/10">
+                    Move to {PIPELINE_STAGES[PIPELINE_STAGES.indexOf(o.stage) + 1]} <Icon name="chevronRight" className="size-3.5" />
+                  </button>) },
+              ]} />
+          ) : mode === "cards" ? (
+            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {opps.map((o) => <OppCard key={`${o.id}-${o.stage}`} o={o} showStage onOpen={() => open(o.id)} onMove={(dir) => move(o.id, dir)} />)}
+              {!opps.length && <li className="text-sm text-muted">No opportunities yet.</li>}
+            </ul>
+          ) : (
+            <div className="overflow-x-auto pb-2">
+              <div className="grid min-w-[62rem] grid-cols-5 gap-3">
+                {PIPELINE_STAGES.map((stage, si) => {
+                  const col = opps.filter((o) => o.stage === stage);
+                  return (
+                    <section key={stage} className="rounded-xl bg-soft/70 p-2.5 dark:bg-white/[.03]">
+                      <div className="flex items-center justify-between px-1 pb-2">
+                        <h2 className="flex items-center gap-2 text-xs font-medium"><span className="size-2 rounded-full" style={{ background: STAGE_SHADE(si) }} />{stage}</h2>
+                        <span className="font-mono text-[11px] text-muted dark:text-slate-400">{col.length} · {col.length ? formatMoney(col.reduce((a, o) => a + o.amount, 0)) : "—"}</span>
+                      </div>
+                      <ul className="grid gap-2">
+                        {col.length ? col.map((o) => (
+                          <OppCard key={`${o.id}-${o.stage}`} o={o} onOpen={() => open(o.id)} onMove={(dir) => move(o.id, dir)} />
+                        )) : <li className="rounded-lg border border-dashed border-line px-2 py-6 text-center text-xs text-muted dark:border-slate-700 dark:text-slate-400">No opportunities here yet</li>}
+                      </ul>
+                    </section>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
