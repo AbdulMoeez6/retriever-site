@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../lib/store.jsx";
 import { fitFromScore, uid } from "../lib/format.js";
 import Icon, { FileIcon } from "./Icon.jsx";
-import { Avatar, ReviewChip, StatusChip } from "./ui.jsx";
+import { Avatar, ReviewChip, StatusChip, formatMoney } from "./ui.jsx";
+import { PIPELINE_STAGES } from "../data/pilotData.js";
 
 const CloseX = ({ onClick }) => (
   <button type="button" onClick={onClick} className="grid size-8 shrink-0 place-items-center rounded-md hover:bg-soft dark:hover:bg-white/10" aria-label="Close"><Icon name="x" /></button>
@@ -68,6 +69,35 @@ export function Drawer() {
         <div className="card mt-5 p-4 text-sm">{doc.excerpt}</div>
         <p className="mt-3 text-xs text-muted dark:text-slate-400">{doc.reviewed ? "This document is human-reviewed and counts toward readiness." : "This document does not count toward readiness until it is human-reviewed."}</p>
         <button type="button" onClick={close} className="mt-8 h-10 w-full rounded-lg border border-line text-sm dark:border-slate-700">Close</button>
+      </>
+    );
+  } else if (d.type === "pipeline") {
+    const o = app.pipeline.find((x) => x.id === d.id); if (!o) return null;
+    const setStage = (stage) => { app.patchData((dd) => ({ pipeline: dd.pipeline.map((x) => (x.id === o.id ? { ...x, stage } : x)) })); app.toast(`Moved to ${stage}`); };
+    body = (
+      <>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-xs text-muted dark:text-slate-400">Opportunity · {o.stage}</div>
+            <h2 id="drawer-title" className="mt-1 text-lg font-semibold">{o.title}</h2>
+            <p className="mt-1 text-sm text-muted dark:text-slate-400">{o.agency} · {o.program}</p>
+          </div>
+          <CloseX onClick={close} />
+        </div>
+        <div className="mt-4"><StatusChip status={o.fit} /></div>
+        <dl className="mt-5 grid gap-3 text-sm">
+          <div><dt className="text-muted dark:text-slate-400">Technology</dt><dd className="font-medium">{techName(o.techId)}</dd></div>
+          <div><dt className="text-muted dark:text-slate-400">Award size (sample)</dt><dd className="font-mono text-xs">{formatMoney(o.amount)}</dd></div>
+          <div><dt className="text-muted dark:text-slate-400">Date</dt><dd className="font-mono text-xs">{o.date}</dd></div>
+        </dl>
+        <label className="mt-5 grid gap-1 text-sm">Stage
+          <select value={o.stage} onChange={(e) => setStage(e.target.value)} className="field">{PIPELINE_STAGES.map((st) => <option key={st}>{st}</option>)}</select>
+        </label>
+        <div className="mt-8 flex flex-col gap-2">
+          <button type="button" onClick={() => { patchUi({ drawer: null, proposalFor: o.id, techId: o.techId }); navigate("/app/proposal-assistant"); }} className="h-10 rounded-lg bg-navy text-sm font-medium text-white">Draft in Proposal Assistant</button>
+          <button type="button" onClick={() => { patchUi({ drawer: null, techId: o.techId }); navigate("/app/readiness-gaps"); }} className="h-10 rounded-lg border border-line text-sm dark:border-slate-700">Review readiness gaps</button>
+          <button type="button" onClick={close} className="h-10 rounded-lg border border-line text-sm dark:border-slate-700">Close</button>
+        </div>
       </>
     );
   } else if (d.type === "funding") {

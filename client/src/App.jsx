@@ -8,7 +8,8 @@ import SignIn from "./pages/SignIn.jsx";
 import SharedRoadmap from "./pages/SharedRoadmap.jsx";
 import MissionCommand from "./pages/app/MissionCommand.jsx";
 import Readiness from "./pages/app/Readiness.jsx";
-import Opportunities from "./pages/app/Opportunities.jsx";
+import OpportunityPipeline from "./pages/app/OpportunityPipeline.jsx";
+import ReadinessGaps from "./pages/app/Opportunities.jsx";
 import Evidence from "./pages/app/Evidence.jsx";
 import Funding from "./pages/app/Funding.jsx";
 import Roadmap from "./pages/app/Roadmap.jsx";
@@ -37,7 +38,8 @@ export default function App() {
           <Route index element={<Navigate to="mission-command" replace />} />
           <Route path="mission-command" element={<MissionCommand />} />
           <Route path="readiness" element={<Readiness />} />
-          <Route path="opportunities" element={<Opportunities />} />
+          <Route path="opportunities" element={<OpportunityPipeline />} />
+          <Route path="readiness-gaps" element={<ReadinessGaps />} />
           <Route path="evidence" element={<Evidence />} />
           <Route path="funding" element={<Funding />} />
           <Route path="roadmap" element={<Roadmap />} />
