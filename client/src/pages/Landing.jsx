@@ -9,6 +9,7 @@ import { Mark } from "../components/ui.jsx";
 import { useApp } from "../lib/store.jsx";
 import { useGreeting } from "../lib/format.js";
 import { ASSETS } from "../lib/assets.js";
+import LandingFeatures, { LandingClosing } from "../components/LandingFeatures.jsx";
 
 export default function Landing() {
   const { currentTech, kpis, patchUi, profile } = useApp();
@@ -56,7 +57,8 @@ export default function Landing() {
                       <div className="rounded-md bg-white px-2 py-1.5 font-medium dark:bg-white/10">Mission Command</div>
                       <div className="mt-1 px-2 py-1.5 text-muted dark:text-slate-400">Readiness</div>
                       <div className="px-2 py-1.5 text-muted dark:text-slate-400">Opportunities</div>
-                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Funding</div>
+                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Knowledge Base</div>
+                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Commercialization</div>
                     </aside>
                     <div className="flex-1 p-5">
                       <div className="text-lg font-semibold">{greet}, {profile.name.split(" ")[0]}</div>
@@ -80,6 +82,8 @@ export default function Landing() {
           </div>
         </section>
 
+        <LandingFeatures />
+
         {/* Faded transition: light hero into the dark navy showcase */}
         <div aria-hidden="true" className="fade-to-navy" />
 
@@ -91,6 +95,7 @@ export default function Landing() {
             <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</h2>
             <GlassVideo variant="wide" src={ASSETS.missionVideo} poster={ASSETS.missionPoster}
               label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" maxTilt={4} />
+            <LandingClosing />
           </div>
         </section>
       </main>
