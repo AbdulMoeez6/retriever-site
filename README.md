@@ -63,7 +63,16 @@ so it works from the repository sub-path (`https://<org>.github.io/retriever-sit
 | `/book-demo` | Book a demo (`?intent=pilot` for the pilot invite variant) |
 | `/signin` | Sample sign-in (any email and password) |
 | `/shared-roadmap` | Read-only roadmap view |
-| `/app/mission-command`, `/app/readiness`, `/app/opportunities`, `/app/evidence`, `/app/funding`, `/app/roadmap`, `/app/action-planning`, `/app/profiles`, `/app/settings` | Dashboard |
+| `/app/mission-command` | Dashboard: technology snapshot and the 7-step pilot workflow |
+| `/app/opportunities` | Opportunity pipeline (Matched → Awarded) and funding matches |
+| `/app/readiness`, `/app/readiness-gaps`, `/app/action-plan` | TRL · MRL · IRL with evidence, readiness gaps and readiness actions |
+| `/app/knowledge-base`, `/app/commercialization` | Document uploads and opportunity records; Commercialization Trail |
+| `/app/technology-profile`, `/app/team` | Four-step Technology Profile; team seats, roles and activity |
+| `/app/readiness-questionnaire`, `/app/evidence-reasoning`, `/app/proposal-assistant` | 12-section questionnaire, qualitative findings, proposal template preview |
+| `/app/settings` | Plan usage (no prices) and appearance |
+
+Earlier dashboard paths (`/app/evidence`, `/app/funding`, `/app/roadmap`, `/app/action-planning`, `/app/profiles`) redirect to their new pages.
+The dashboard uses a fictional organization (Acme Labs). Use "Start a new technology" in the sidebar switcher to see the empty pilot state.
 
 ## Content rules
 
