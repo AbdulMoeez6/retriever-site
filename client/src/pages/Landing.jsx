@@ -92,6 +92,15 @@ export default function Landing() {
             <Reveal as="h2" className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</Reveal>
             <GlassVideo variant="wide" src={ASSETS.missionVideo} poster={ASSETS.missionPoster}
               label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" maxTilt={4} />
+            <Reveal className="mx-auto mt-20 max-w-5xl">
+              <p className="text-center text-xs font-medium uppercase tracking-[0.16em] text-white/60">New in the dashboard</p>
+              <div className="mt-8 grid items-center gap-8 md:grid-cols-[76fr_24fr]">
+                <GlassVideo variant="wide" src={ASSETS.missionVideo2} poster={ASSETS.missionPoster2}
+                  label="Pilot workflow, opportunities and Commercialization Trail" className="w-full" maxTilt={4} />
+                <GlassVideo variant="device" src={ASSETS.readinessVideo2} poster={ASSETS.readinessPoster2}
+                  label="Readiness Questionnaire" className="mx-auto w-[min(15rem,70vw)] md:w-full" maxTilt={5} />
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>
