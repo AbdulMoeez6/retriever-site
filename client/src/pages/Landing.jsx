@@ -42,7 +42,7 @@ export default function Landing() {
               </div>
               <div className="flex justify-center lg:justify-end lg:pr-4">
                 <GlassVideo variant="device" src={ASSETS.readinessVideo} poster={ASSETS.readinessPoster}
-                  label="Readiness walkthrough" className="w-[min(19rem,76vw)]" maxTilt={7} revealAfter={600} />
+                  label="Readiness walkthrough" className="w-[min(19rem,76vw)]" revealAfter={600} />
               </div>
             </div>
 
@@ -91,14 +91,14 @@ export default function Landing() {
           <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
             <Reveal as="h2" className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</Reveal>
             <GlassVideo variant="wide" src={ASSETS.missionVideo} poster={ASSETS.missionPoster}
-              label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" maxTilt={4} />
+              label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" />
             <Reveal className="mx-auto mt-20 max-w-5xl">
               <p className="text-center text-xs font-medium uppercase tracking-[0.16em] text-white/60">New in the dashboard</p>
               <div className="mt-8 grid items-center gap-8 md:grid-cols-[76fr_24fr]">
                 <GlassVideo variant="wide" src={ASSETS.missionVideo2} poster={ASSETS.missionPoster2}
-                  label="Pilot workflow, opportunities and Commercialization Trail" className="w-full" maxTilt={4} />
+                  label="Pilot workflow, opportunities and Commercialization Trail" className="w-full" />
                 <GlassVideo variant="device" src={ASSETS.readinessVideo2} poster={ASSETS.readinessPoster2}
-                  label="Readiness Questionnaire" className="mx-auto w-[min(15rem,70vw)] md:w-full" maxTilt={5} />
+                  label="Readiness Questionnaire" className="mx-auto w-[min(15rem,70vw)] md:w-full" />
               </div>
             </Reveal>
           </div>
