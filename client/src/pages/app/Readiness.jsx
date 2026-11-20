@@ -7,7 +7,16 @@ import { FileIcon } from "../../components/Icon.jsx";
 import { Avatar, PageHeader, ReviewChip, btnSecondary } from "../../components/ui.jsx";
 
 export default function Readiness() {
-  const { currentTech, history, docs, ui, patchUi } = useApp();
+  const { currentTech, history, docs, ui, patchUi, hasTech } = useApp();
+  if (!hasTech) {
+    return (
+      <section className="card mx-auto w-full max-w-xl p-6 text-center">
+        <h2 className="text-lg font-semibold">Readiness — TRL · MRL · IRL</h2>
+        <p className="mt-2 text-sm text-muted dark:text-slate-400">Evidence-based readiness is assessed for a technology. Create your Technology Profile first.</p>
+        <button type="button" onClick={() => patchUi({ modal: "readiness" })} className="mt-5 rounded-lg bg-navy px-4 py-2 text-sm font-medium text-white">Get started</button>
+      </section>
+    );
+  }
   const t = currentTech();
   const hist = history[t.id] || { TRL: [], MRL: [], IRL: [] };
   const reviewed = docs.filter((d) => d.technologyId === t.id && d.reviewed);
@@ -43,7 +52,7 @@ export default function Readiness() {
             <h2 className="text-sm font-medium">Human-reviewed evidence</h2>
             <p className="mt-1 text-xs text-muted dark:text-slate-400">{reviewed.length} of {all.length} documents for {t.name} count toward readiness.</p>
           </div>
-          <Link to="/app/evidence" className="text-sm text-muted underline-offset-2 hover:underline dark:text-slate-400">Open Evidence</Link>
+          <Link to="/app/knowledge-base" className="text-sm text-muted underline-offset-2 hover:underline dark:text-slate-400">Open Knowledge Base</Link>
         </div>
         <div className="progress mt-3"><span style={{ width: `${all.length ? (reviewed.length / all.length) * 100 : 0}%` }} /></div>
         <ul className="mt-4 grid gap-2 text-sm">

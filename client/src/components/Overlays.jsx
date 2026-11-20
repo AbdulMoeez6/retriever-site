@@ -209,6 +209,15 @@ export function Modals() {
       </ModalShell>
     );
   }
+  if (ui.modal === "readiness") {
+    return (
+      <ModalShell title="Readiness — TRL · MRL · IRL" onClose={close}
+        footer={<button type="button" onClick={close} className="w-full rounded-lg border border-line px-4 py-2 text-sm dark:border-slate-700">Close</button>}>
+        <p className="mt-2 text-sm text-muted dark:text-slate-400">Evidence-based readiness is assessed for a technology. Create your Technology Profile first. You don't need to finish the questionnaire to start adding evidence here.</p>
+        <button type="button" onClick={() => { close(); navigate("/app/technology-profile"); }} className="mt-4 rounded-lg bg-navy px-4 py-2 text-sm font-medium text-white hover:bg-navy-700">Create Technology Profile</button>
+      </ModalShell>
+    );
+  }
   if (ui.modal === "upload") {
     const submit = (e) => {
       e.preventDefault();
