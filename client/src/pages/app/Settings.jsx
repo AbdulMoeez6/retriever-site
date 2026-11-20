@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/store.jsx";
 import { usagePct } from "../../lib/format.js";
+import { PageHeader } from "../../components/ui.jsx";
 
 function Metric({ label, used, limit }) {
   const pct = usagePct(used, limit);
@@ -20,10 +21,7 @@ export default function Settings() {
   const navigate = useNavigate();
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-        <p className="mt-1 text-sm text-muted dark:text-slate-400">Plan and usage for this organization. No prices are shown.</p>
-      </div>
+      <PageHeader title="Settings" sub="Plan and usage for this organization. No prices are shown." />
       <section className="card grid gap-5 p-5">
         <div>
           <div className="text-xs text-muted dark:text-slate-400">Current plan</div>

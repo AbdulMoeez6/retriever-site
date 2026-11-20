@@ -7,17 +7,13 @@ import BookDemo from "./pages/BookDemo.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import SharedRoadmap from "./pages/SharedRoadmap.jsx";
 import MissionCommand from "./pages/app/MissionCommand.jsx";
-import Readiness from "./pages/app/Readiness.jsx";
 import OpportunityPipeline from "./pages/app/OpportunityPipeline.jsx";
+import Readiness from "./pages/app/Readiness.jsx";
 import ReadinessGaps from "./pages/app/Opportunities.jsx";
-import Evidence from "./pages/app/Evidence.jsx";
-import Funding from "./pages/app/Funding.jsx";
-import Roadmap from "./pages/app/Roadmap.jsx";
 import ActionPlanning from "./pages/app/ActionPlanning.jsx";
-import Profiles from "./pages/app/Profiles.jsx";
-import TechnologyProfile from "./pages/app/TechnologyProfile.jsx";
 import KnowledgeBase from "./pages/app/KnowledgeBase.jsx";
 import Commercialization from "./pages/app/Commercialization.jsx";
+import TechnologyProfile from "./pages/app/TechnologyProfile.jsx";
 import Team from "./pages/app/Team.jsx";
 import Questionnaire from "./pages/app/Questionnaire.jsx";
 import EvidenceReasoning from "./pages/app/EvidenceReasoning.jsx";
@@ -44,22 +40,25 @@ export default function App() {
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<Navigate to="mission-command" replace />} />
           <Route path="mission-command" element={<MissionCommand />} />
-          <Route path="readiness" element={<Readiness />} />
           <Route path="opportunities" element={<OpportunityPipeline />} />
+          <Route path="readiness" element={<Readiness />} />
           <Route path="readiness-gaps" element={<ReadinessGaps />} />
-          <Route path="evidence" element={<Evidence />} />
-          <Route path="funding" element={<Funding />} />
-          <Route path="roadmap" element={<Roadmap />} />
-          <Route path="action-planning" element={<ActionPlanning />} />
-          <Route path="profiles" element={<Profiles />} />
-          <Route path="technology-profile" element={<TechnologyProfile />} />
+          <Route path="action-plan" element={<ActionPlanning />} />
           <Route path="knowledge-base" element={<KnowledgeBase />} />
           <Route path="commercialization" element={<Commercialization />} />
+          <Route path="technology-profile" element={<TechnologyProfile />} />
           <Route path="team" element={<Team />} />
           <Route path="readiness-questionnaire" element={<Questionnaire />} />
           <Route path="evidence-reasoning" element={<EvidenceReasoning />} />
           <Route path="proposal-assistant" element={<ProposalAssistant />} />
           <Route path="settings" element={<Settings />} />
+          {/* Earlier dashboard routes now live under the new navigation. */}
+          <Route path="evidence" element={<Navigate to="/app/knowledge-base" replace />} />
+          <Route path="funding" element={<Navigate to="/app/opportunities" replace />} />
+          <Route path="roadmap" element={<Navigate to="/app/commercialization" replace />} />
+          <Route path="action-planning" element={<Navigate to="/app/action-plan" replace />} />
+          <Route path="profiles" element={<Navigate to="/app/technology-profile" replace />} />
+          <Route path="*" element={<Navigate to="/app/mission-command" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

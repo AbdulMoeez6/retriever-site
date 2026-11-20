@@ -12,10 +12,10 @@ export const QUICK_QUESTIONS = [
   ];
 
 export const seedTechs = () => [
-    { id: "t1", name: "Compact sensor suite", org: "University TTO – Lab A", owner: "Elena Voss", trl: 6, mrl: 4, irl: 5, summary: "A compact sensing package recorded for laboratory and field use." },
-    { id: "t2", name: "Composite repair method", org: "University TTO – Lab B", owner: "James Okonkwo", trl: 5, mrl: 3, irl: 4, summary: "A repair method with workshop notes still moving through review." },
-    { id: "t3", name: "Modular power conditioner", org: "National Laboratory – Site A", owner: "Tom Alvarez", trl: 4, mrl: 3, irl: 3, summary: "A modular conditioner with one measurement table still open." },
-    { id: "t4", name: "Protective lens coating", org: "Defense Prime – Unit A", owner: "Hannah Cole", trl: 7, mrl: 5, irl: 4, summary: "A protective coating with abrasion trials already on file." }
+    { id: "t1", name: "Compact sensor suite", org: "Acme Labs – Sensors", owner: "Elena Voss", trl: 6, mrl: 4, irl: 5, summary: "A compact sensing package recorded for laboratory and field use." },
+    { id: "t2", name: "Composite repair method", org: "Acme Labs – Materials", owner: "James Okonkwo", trl: 5, mrl: 3, irl: 4, summary: "A repair method with workshop notes still moving through review." },
+    { id: "t3", name: "Modular power conditioner", org: "Acme Labs – Power", owner: "Tom Alvarez", trl: 4, mrl: 3, irl: 3, summary: "A modular conditioner with one measurement table still open." },
+    { id: "t4", name: "Protective lens coating", org: "Acme Labs – Optics", owner: "Hannah Cole", trl: 7, mrl: 5, irl: 4, summary: "A protective coating with abrasion trials already on file." }
   ];
 
 export const seedHistory = () => ({
@@ -84,14 +84,14 @@ export const seedActions = () => [
 
 export const seedActivity = () => [
     { id: "n1", title: "Readiness history updated", body: "Compact sensor suite now has a November assessment on file.", time: "2 hours ago", route: "readiness", techId: "t1" },
-    { id: "n2", title: "Gap still open", body: "Sensor field trial call is missing an environmental test record.", time: "Yesterday", route: "opportunities", techId: "t1" },
-    { id: "n3", title: "Document awaiting review", body: "Draft lab notes on compact sensor suite are not yet human-reviewed.", time: "Yesterday", route: "evidence", techId: "t1" },
-    { id: "n4", title: "Funding deadline approaching", body: "Repair methods briefing closes on 3 December 2026.", time: "2 days ago", route: "funding", techId: "t2" },
-    { id: "n5", title: "Action marked in progress", body: "James Okonkwo started the workshop record review.", time: "3 days ago", route: "action-planning", techId: "t2" }
+    { id: "n2", title: "Gap still open", body: "Sensor field trial call is missing an environmental test record.", time: "Yesterday", route: "readiness-gaps", techId: "t1" },
+    { id: "n3", title: "Document awaiting review", body: "Draft lab notes on compact sensor suite are not yet human-reviewed.", time: "Yesterday", route: "knowledge-base", techId: "t1" },
+    { id: "n4", title: "Funding deadline approaching", body: "Repair methods briefing closes on 3 December 2026.", time: "2 days ago", route: "opportunities", techId: "t2" },
+    { id: "n5", title: "Action marked in progress", body: "James Okonkwo started the workshop record review.", time: "3 days ago", route: "action-plan", techId: "t2" }
   ];
 
 export const ACTION_STATUSES = ["Open", "In progress", "Done"];
 
-export const seedProfile = () => ({ name: "Ayesha Malik", email: "ayesha@retrieverintel.com", organization: "White Lab Technologies", role: "Marketing & Operations" });
+export const seedProfile = () => ({ name: "Maya Chen", email: "maya.chen@acmelabs.example", organization: "Acme Labs", role: "Owner" });
 
 export const seedUsage = () => ({ assessmentsUsed: 8, assessmentsLimit: 20, documentsUsed: 9, documentsLimit: 10 });
