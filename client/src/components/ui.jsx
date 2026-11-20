@@ -1,3 +1,5 @@
+import { createContext, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { ASSETS } from "../lib/assets.js";
 import { initials } from "../lib/format.js";
 
@@ -52,7 +54,20 @@ export function SampleBadge({ className = "" }) {
   return <span className={`rounded-full border border-line px-2 py-0.5 text-[11px] font-medium text-muted dark:border-slate-700 dark:text-slate-400 ${className}`}>Sample data</span>;
 }
 
+/** True inside the dashboard shell, where the top bar already shows the page title. */
+export const ShellContext = createContext(false);
+
 export function PageHeader({ title, sub, children }) {
+  const inShell = useContext(ShellContext);
+  if (inShell) {
+    if (!sub && !children) return null;
+    return (
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        {sub ? <p className="text-sm text-muted dark:text-slate-400">{sub}</p> : <span />}
+        {children && <div className="flex flex-wrap items-end gap-3">{children}</div>}
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
       <div>
@@ -67,3 +82,33 @@ export function PageHeader({ title, sub, children }) {
 export const btnPrimary = "btn-lift inline-flex h-9 items-center gap-2 rounded-lg bg-navy px-3 text-sm font-medium text-white hover:bg-navy-700";
 export const btnSecondary = "btn-lift inline-flex h-9 items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm hover:bg-soft dark:border-slate-700 dark:bg-[#161C27] dark:hover:bg-white/5";
 export const filterBtn = (on) => `rounded-lg px-3 py-1.5 text-sm transition-colors ${on ? "bg-navy text-white" : "border border-line bg-white hover:bg-soft dark:border-slate-700 dark:bg-[#161C27]"}`;
+
+/** Banner shown when no technology is selected yet. */
+export function CreateProfileBanner({ text = "Create your Technology Profile to get started." }) {
+  const navigate = useNavigate();
+  return (
+    <div className="card flex flex-wrap items-center gap-3 px-4 py-3 text-sm">
+      <span>{text}</span>
+      <button type="button" onClick={() => navigate("/app/technology-profile")} className={btnSecondary}>Create Technology Profile</button>
+    </div>
+  );
+}
+
+/** Simple segmented tabs. */
+export function Tabs({ tabs, value, onChange }) {
+  return (
+    <div className="inline-flex rounded-lg border border-line bg-white p-1 dark:border-slate-700 dark:bg-[#161C27]" role="tablist">
+      {tabs.map((t) => (
+        <button type="button" role="tab" aria-selected={value === t} key={t} onClick={() => onChange(t)}
+          className={`rounded-md px-3 py-1 text-sm transition-colors ${value === t ? "bg-navy text-white" : "text-muted hover:text-ink dark:text-slate-400 dark:hover:text-white"}`}>{t}</button>
+      ))}
+    </div>
+  );
+}
+
+/** Small mono eyebrow label. */
+export const Eyebrow = ({ children, className = "" }) => (
+  <div className={`font-mono text-[11px] uppercase tracking-[0.12em] text-muted dark:text-slate-400 ${className}`}>{children}</div>
+);
+
+export const formatMoney = (n) => (n >= 1000000 ? `$${Number((n / 1000000).toFixed(2))}M` : `$${Math.round(n / 1000)}K`);
