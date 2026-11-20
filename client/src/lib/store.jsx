@@ -4,6 +4,9 @@ import {
   seedTechs, seedHistory, seedDocs, seedOpps, seedGaps, seedFunding,
   seedRoadmap, seedActions, seedActivity, seedProfile, seedUsage,
 } from "../data/sampleData.js";
+import {
+  WORKFLOW_STEPS, QUESTIONNAIRE, seedPipeline, seedTechProfiles, seedQuestionnaire, seedTrail, seedTeam, seedReasoning,
+} from "../data/pilotData.js";
 
 const AppContext = createContext(null);
 
@@ -19,6 +22,12 @@ const initialData = () => ({
   notifications: seedActivity(),
   profile: seedProfile(),
   usage: seedUsage(),
+  pipeline: seedPipeline(),
+  techProfiles: seedTechProfiles(),
+  questionnaire: seedQuestionnaire(),
+  trail: seedTrail(),
+  team: seedTeam(),
+  reasoning: seedReasoning(),
 });
 
 const initialUi = {
@@ -33,6 +42,10 @@ const initialUi = {
   selectedOpp: "o1",
   profileTab: "Overview",
   profileFocus: null,
+  oppTab: "Pipeline",
+  kbTab: "Documents",
+  proposalFor: "",
+  profileStep: 0,
   // overlays
   drawer: null,
   modal: null, // "action" | "profile" | "upload" | "share"
@@ -77,8 +90,36 @@ export function AppProvider({ children }) {
   }, [closeOverlays]);
 
   const helpers = useMemo(() => {
+    const hasTech = ui.techId !== "none" && data.techs.some((t) => t.id === ui.techId);
+    const questionnaireFor = (id) => data.questionnaire[id] || { completed: [], answers: {} };
+    const questionnairePct = (id) => Math.round((questionnaireFor(id).completed.length / QUESTIONNAIRE.length) * 100);
+    // Pilot workflow: each step's status is read from the record, never from clicks.
+    const pilotSteps = (id) => {
+      const live = hasTech && id === ui.techId;
+      const t = data.techs.find((x) => x.id === id);
+      const q = questionnaireFor(id).completed.length;
+      const docCount = data.docs.filter((d) => d.technologyId === id).length;
+      const opps = data.pipeline.filter((o) => o.techId === id).length;
+      const oppIds = data.opportunities.filter((o) => o.technologyId === id).map((o) => o.id);
+      const gapCount = data.gaps.filter((g) => oppIds.includes(g.opportunityId)).length;
+      const acts = data.actions.filter((a) => a.technologyId === id);
+      const status = {
+        profile: live ? ["done", "Created"] : ["todo", "Not created"],
+        questionnaire: !live ? ["todo", "Not started"] : q >= QUESTIONNAIRE.length ? ["done", "Complete"] : q ? ["active", `${q} of ${QUESTIONNAIRE.length} sections`] : ["todo", "Not started"],
+        documents: !live ? ["todo", "—"] : docCount ? ["done", `${docCount} document${docCount === 1 ? "" : "s"}`] : ["todo", "None yet"],
+        readiness: !live ? ["todo", "—"] : t && t.trl != null ? ["done", `TRL ${t.trl} · MRL ${t.mrl ?? "—"} · IRL ${t.irl ?? "—"}`] : ["todo", "Not assessed"],
+        intelligence: !live ? ["todo", "—"] : opps ? ["done", `${opps} opportunit${opps === 1 ? "y" : "ies"}`] : ["todo", "None yet"],
+        gaps: !live ? ["todo", "—"] : gapCount ? ["active", `${gapCount} open gap${gapCount === 1 ? "" : "s"}`] : opps ? ["done", "No open gaps"] : ["todo", "—"],
+        actions: !live ? ["todo", "—"] : acts.length && acts.every((a) => a.status === "Done") ? ["done", "Complete"] : acts.length ? ["active", `${acts.filter((a) => a.status !== "Done").length} open`] : ["todo", "Not started"],
+      };
+      return WORKFLOW_STEPS.map((s) => ({ ...s, state: status[s.id][0], detail: status[s.id][1] }));
+    };
     const techById = (id) => data.techs.find((t) => t.id === id) || data.techs[0];
     return {
+      hasTech,
+      questionnaireFor,
+      questionnairePct,
+      pilotSteps,
       techById,
       currentTech: () => techById(ui.techId),
       techName: (id) => data.techs.find((x) => x.id === id)?.name || "",
