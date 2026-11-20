@@ -59,7 +59,7 @@ so it works from the repository sub-path (`https://<org>.github.io/retriever-sit
 
 | Path | Page |
 | --- | --- |
-| `/` | Landing: editorial hero, readiness video, dashboard preview, "See Retriever in action" showcase |
+| `/` | Landing: editorial hero, readiness video, dashboard preview, "See Retriever in action" showcase (original and new demo videos; all autoplay muted and loop, poster only with reduced motion) |
 | `/book-demo` | Book a demo (`?intent=pilot` for the pilot invite variant) |
 | `/signin` | Sample sign-in (any email and password) |
 | `/shared-roadmap` | Read-only roadmap view |
