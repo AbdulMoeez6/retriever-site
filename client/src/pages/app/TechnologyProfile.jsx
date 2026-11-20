@@ -4,7 +4,8 @@ import { useApp } from "../../lib/store.jsx";
 import { uid } from "../../lib/format.js";
 import { FUNDING_STAGES, ORG, ORG_TYPES } from "../../data/pilotData.js";
 import Icon, { FileIcon } from "../../components/Icon.jsx";
-import { ReviewChip, btnPrimary, btnSecondary } from "../../components/ui.jsx";
+import { PageHeader, ReviewChip, btnPrimary, btnSecondary } from "../../components/ui.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
 
 const STEPS = ["Profile", "Assessment", "Documents", "Analysis"];
 const label = "grid gap-1.5 text-sm font-medium";
@@ -15,10 +16,10 @@ function Stepper({ step, setStep }) {
       {STEPS.map((s, i) => (
         <li key={s} className="flex items-center gap-2">
           <button type="button" onClick={() => setStep(i)} className="flex items-center gap-2 text-sm">
-            <span className={`grid size-6 place-items-center rounded-full border text-xs ${i === step ? "border-[#2F5BD3] bg-[#2F5BD3] text-white" : i < step ? "border-emerald-600 text-emerald-700 dark:text-emerald-400" : "border-line text-muted dark:border-slate-600"}`}>{i < step ? <Icon name="check" className="size-3" strokeWidth={2.4} /> : i + 1}</span>
+            <span className={`grid size-6 place-items-center rounded-full border text-xs ${i === step ? "border-navy bg-navy text-white dark:border-slate-200 dark:bg-slate-200 dark:text-navy" : i < step ? "border-navy/40 text-navy dark:text-slate-200" : "border-line text-muted dark:border-slate-600"}`}>{i < step ? <Icon name="check" className="size-3" strokeWidth={2.4} /> : i + 1}</span>
             <span className={i === step ? "font-medium" : "text-muted dark:text-slate-400"}>{s}</span>
           </button>
-          {i < STEPS.length - 1 && <span className="hidden h-px w-10 bg-line sm:block dark:bg-slate-700" />}
+          {i < STEPS.length - 1 && <span className="hidden h-px w-12 overflow-hidden bg-line sm:block dark:bg-slate-700"><span className="block h-full bg-navy transition-[width] duration-500 dark:bg-slate-300" style={{ width: i < step ? "100%" : "0%" }} /></span>}
         </li>
       ))}
     </ol>
@@ -70,13 +71,16 @@ function ProfileWizard() {
   };
 
   return (
-    <div className="flex max-w-3xl flex-col gap-5">
+    <div className="flex flex-col gap-5">
+      <PageHeader title="Technology profile" sub={`Step ${step + 1} of 4 · ${["Tell us about your organization", "Answer the Readiness Questionnaire", "Add supporting documents", "Review what is on record"][step]}`}>
+        <TechSwitcher />
+      </PageHeader>
+      <div className="flex max-w-3xl flex-col gap-5">
       <Stepper step={step} setStep={(i) => (i === 0 || hasTech ? setStep(i) : toast("Save the profile first"))} />
-      <p className="text-xs text-muted dark:text-slate-400">Step {step + 1} of 4 · {["Tell us about your organization", "Answer the Readiness Questionnaire", "Add supporting documents", "Review what Retriever found"][step]}</p>
 
       {step === 0 && (
         <section className="card p-6">
-          <h2 className="text-lg font-semibold">Basic information</h2>
+          <h2 className="text-base font-medium">Basic information</h2>
           <p className="mt-1 text-sm text-muted dark:text-slate-400">This helps us tailor the assessment and match relevant funding sources.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label className={label}>Organization name<input value={form.orgName} onChange={set("orgName")} className="field font-normal" /></label>
@@ -87,8 +91,8 @@ function ProfileWizard() {
           <div className="mt-2 grid gap-3 sm:grid-cols-3">
             {ORG_TYPES.map((o) => (
               <button type="button" key={o.id} onClick={() => setForm((f) => ({ ...f, orgType: o.id }))} aria-pressed={form.orgType === o.id}
-                className={`rounded-lg border p-3 text-left transition-colors ${form.orgType === o.id ? "border-[#2F5BD3] bg-[#EEF2FC] dark:bg-white/10" : "border-line hover:border-navy/40 dark:border-slate-700"}`}>
-                <Icon name={o.icon} className="size-4 text-[#2F5BD3]" />
+                className={`rounded-lg border p-3 text-left transition-all duration-200 ${form.orgType === o.id ? "border-navy bg-navy/[.04] shadow-sm dark:border-slate-300 dark:bg-white/10" : "border-line hover:-translate-y-0.5 hover:border-navy/40 dark:border-slate-700"}`}>
+                <span className={`grid size-8 place-items-center rounded-md transition-colors ${form.orgType === o.id ? "bg-navy text-white" : "bg-soft text-navy dark:bg-white/10 dark:text-slate-200"}`}><Icon name={o.icon} className="size-4" /></span>
                 <div className="mt-2 text-sm font-medium">{o.label}</div>
                 <div className="text-xs text-muted dark:text-slate-400">{o.sub}</div>
               </button>
@@ -103,7 +107,7 @@ function ProfileWizard() {
 
       {step === 1 && (
         <section className="card p-6">
-          <h2 className="text-lg font-semibold">Assessment</h2>
+          <h2 className="text-base font-medium">Assessment</h2>
           <p className="mt-1 text-sm text-muted dark:text-slate-400">The Readiness Questionnaire has 12 sections and takes about 15 minutes. Answers save as you go.</p>
           <div className="mt-5 flex items-center justify-between text-sm"><span>Questionnaire progress</span><span className="font-mono text-xs">{questionnairePct(id)}%</span></div>
           <div className="progress mt-2"><span style={{ width: `${questionnairePct(id)}%` }} /></div>
@@ -116,7 +120,7 @@ function ProfileWizard() {
 
       {step === 2 && (
         <section className="card p-6">
-          <h2 className="text-lg font-semibold">Documents</h2>
+          <h2 className="text-base font-medium">Documents</h2>
           <p className="mt-1 text-sm text-muted dark:text-slate-400">Only human-reviewed documents count toward readiness.</p>
           <ul className="mt-4 grid gap-2">
             {techDocs.length ? techDocs.map((d) => (
@@ -134,7 +138,7 @@ function ProfileWizard() {
 
       {step === 3 && t && (
         <section className="card p-6">
-          <h2 className="text-lg font-semibold">Analysis</h2>
+          <h2 className="text-base font-medium">Analysis</h2>
           <p className="mt-1 text-sm text-muted dark:text-slate-400">A summary of what is on record for {t.name}. Your team makes the call.</p>
           <dl className="mt-5 grid gap-3 sm:grid-cols-4">
             {[["TRL", t.trl ?? "—"], ["MRL", t.mrl ?? "—"], ["IRL", t.irl ?? "—"], ["Opportunities", pipeline.filter((o) => o.techId === t.id).length]].map(([k, v]) => (
@@ -153,6 +157,7 @@ function ProfileWizard() {
         {step < STEPS.length - 1
           ? <button type="button" onClick={next} className={btnPrimary}>{step === 0 ? (hasTech ? "Save and continue" : "Create and continue") : "Continue"} <Icon name="arrow" /></button>
           : <button type="button" onClick={() => navigate("/app/mission-command")} className={btnPrimary}>Finish</button>}
+      </div>
       </div>
     </div>
   );

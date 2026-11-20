@@ -1,7 +1,7 @@
 import { useApp } from "../../lib/store.jsx";
 import { ORG, ROLES } from "../../data/pilotData.js";
 import Icon from "../../components/Icon.jsx";
-import { Avatar, Chip, btnPrimary } from "../../components/ui.jsx";
+import { Avatar, Chip, PageHeader, btnPrimary } from "../../components/ui.jsx";
 
 export default function Team() {
   const { team, patchUi, patchData, toast } = useApp();
@@ -12,9 +12,10 @@ export default function Team() {
     toast(`Role updated to ${role} (demo)`);
   };
   return (
-    <div className="flex max-w-5xl flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="w-56">
+    <div className="flex flex-col gap-5">
+      <PageHeader title="Team" sub="People in the Acme Labs workspace, their roles and recent activity." />
+      <div className="card flex flex-wrap items-center justify-between gap-3 p-4">
+        <div className="w-64">
           <div className="flex justify-between text-xs text-muted dark:text-slate-400"><span>Seats</span><span className="font-mono">{used} of {ORG.seats} used</span></div>
           <div className="progress mt-1.5"><span style={{ width: `${(used / ORG.seats) * 100}%` }} /></div>
         </div>
@@ -23,10 +24,10 @@ export default function Team() {
       <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
         <div className="flex flex-col gap-5">
           <section className="card">
-            <h2 className="border-b border-line px-5 py-3 text-sm font-semibold dark:border-slate-800">Team members</h2>
+            <h2 className="border-b border-line px-5 py-3 text-sm font-medium dark:border-slate-800">Team members</h2>
             <ul>
               {team.members.map((m) => (
-                <li key={m.id} className="flex flex-wrap items-center gap-3 border-b border-line px-5 py-3 last:border-0 dark:border-slate-800">
+                <li key={m.id} className="row-hover flex flex-wrap items-center gap-3 border-b border-line px-5 py-3 last:border-0 dark:border-slate-800">
                   <Avatar name={m.name} size={34} />
                   <div className="min-w-0 flex-1"><div className="text-sm font-medium">{m.name}</div><div className="truncate text-xs text-muted dark:text-slate-400">{m.email}</div></div>
                   {m.role === "Owner" ? <Chip label="Owner" tone="navy" /> : (
@@ -43,7 +44,7 @@ export default function Team() {
             </ul>
           </section>
           <section className="card p-5">
-            <h2 className="text-sm font-semibold">Roles</h2>
+            <h2 className="text-sm font-medium">Roles</h2>
             <dl className="mt-2">
               {ROLES.map((r) => (
                 <div key={r.id} className="border-b border-line py-3 last:border-0 dark:border-slate-800">
@@ -55,12 +56,12 @@ export default function Team() {
           </section>
         </div>
         <section className="card h-fit p-5">
-          <h2 className="text-sm font-semibold">Activity</h2>
+          <h2 className="text-sm font-medium">Activity</h2>
           <p className="text-xs text-muted dark:text-slate-400">Recent actions across this workspace</p>
           <ul className="mt-3">
             {team.activity.map((a) => (
               <li key={a.id} className="flex gap-2 border-b border-line py-3 last:border-0 dark:border-slate-800">
-                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-[#2F5BD3]" />
+                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy/60" />
                 <div><div className="text-sm"><span className="font-medium">{a.who}</span> {a.what}</div><div className="text-xs text-muted dark:text-slate-400">{a.when}</div></div>
               </li>
             ))}

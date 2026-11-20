@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/store.jsx";
 import { uid } from "../../lib/format.js";
 import Icon, { FileIcon } from "../../components/Icon.jsx";
-import { Avatar, ReviewChip, StatusChip, Tabs, btnSecondary, formatMoney } from "../../components/ui.jsx";
+import { Avatar, PageHeader, ReviewChip, StatusChip, Tabs, btnSecondary, formatMoney } from "../../components/ui.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
 
 const NOTICE = [
   "Do not use Retriever for classified information.",
@@ -36,25 +37,25 @@ export default function KnowledgeBase() {
   const browse = () => { try { inputRef.current?.click(); } catch { patchUi({ modal: "upload" }); } };
 
   return (
-    <div className="flex max-w-4xl flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex flex-col gap-5">
+      <PageHeader title="Knowledge Base" sub={hasTech ? `Documents, opportunity records, readiness gaps and action plans · ${techDocs.length} documents · ${records.length} records · ${gapCount} readiness gaps` : "Documents, opportunity records, readiness gaps and action plans."}>
+        <TechSwitcher />
         <Tabs tabs={["Documents", "Opportunity records"]} value={ui.kbTab} onChange={(v) => patchUi({ kbTab: v })} />
-        {hasTech && <span className="text-xs text-muted dark:text-slate-400">{techDocs.length} documents · {records.length} records · {gapCount} readiness gaps</span>}
-      </div>
+      </PageHeader>
 
       {ui.kbTab === "Documents" ? (
         <>
           <section className="card p-6">
-            <h2 className="text-lg font-semibold">Give your score something to stand on</h2>
+            <h2 className="text-base font-medium">Give your score something to stand on</h2>
             <p className="mt-1 text-sm text-muted dark:text-slate-400">Optional, but every document you add sharpens your score and your funding match.</p>
-            <div className="mt-4 rounded-lg border border-amber-300/70 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-              <div className="flex items-center gap-2 font-semibold"><Icon name="shield" /> Controlled pilot, read before uploading</div>
-              <ul className="mt-2 list-disc space-y-1 pl-9">{NOTICE.map((n) => <li key={n}>{n}</li>)}</ul>
+            <div className="mt-4 rounded-lg border border-line bg-soft/70 p-4 text-sm dark:border-slate-700 dark:bg-white/5">
+              <div className="flex items-center gap-2 font-medium text-navy dark:text-slate-100"><Icon name="shield" /> Controlled pilot, read before uploading</div>
+              <ul className="mt-2 list-disc space-y-1 pl-9 text-muted dark:text-slate-400">{NOTICE.map((n) => <li key={n}>{n}</li>)}</ul>
             </div>
             <div onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)}
               onDrop={(e) => { e.preventDefault(); setOver(false); addFiles(e.dataTransfer?.files); }}
-              className={`mt-5 grid place-items-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors ${over ? "border-[#2F5BD3] bg-[#EEF2FC] dark:bg-white/5" : "border-line dark:border-slate-700"}`}>
-              <Icon name="upload" className="size-7 text-[#2F5BD3]" />
+              className={`group mt-5 grid place-items-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-all duration-300 ${over ? "scale-[1.01] border-navy/50 bg-navy/[.04] dark:bg-white/5" : "border-line hover:border-navy/30 hover:bg-soft/50 dark:border-slate-700"}`}>
+              <span className="grid size-12 place-items-center rounded-full bg-soft text-navy transition-transform duration-300 group-hover:-translate-y-1 dark:bg-white/10 dark:text-slate-200"><Icon name="upload" className="size-5" /></span>
               <div className="mt-3 font-medium">Drag and drop files here</div>
               <div className="mt-1 text-xs text-muted dark:text-slate-400">PDF, DOCX, or PPTX, up to 25MB each</div>
               <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -65,7 +66,7 @@ export default function KnowledgeBase() {
             </div>
           </section>
           <section className="card overflow-hidden">
-            <div className="border-b border-line px-4 py-3 text-sm font-semibold dark:border-slate-800">Documents{hasTech ? ` · ${techName(ui.techId)}` : ""}</div>
+            <div className="border-b border-line px-4 py-3 text-sm font-medium dark:border-slate-800">Documents{hasTech ? ` · ${techName(ui.techId)}` : ""}</div>
             {techDocs.length ? techDocs.map((d) => (
               <button type="button" key={d.id} onClick={() => patchUi({ drawer: { type: "doc", id: d.id } })}
                 className="row-hover grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-line px-4 py-3 text-left last:border-0 dark:border-slate-800 sm:grid-cols-[auto_1fr_auto_auto]">
@@ -79,7 +80,7 @@ export default function KnowledgeBase() {
         </>
       ) : (
         <section className="card overflow-hidden">
-          <div className="border-b border-line px-4 py-3 text-sm font-semibold dark:border-slate-800">Opportunity records</div>
+          <div className="border-b border-line px-4 py-3 text-sm font-medium dark:border-slate-800">Opportunity records</div>
           {records.length ? records.map((o) => (
             <button type="button" key={o.id} onClick={() => patchUi({ drawer: { type: "pipeline", id: o.id } })}
               className="row-hover flex w-full flex-wrap items-center gap-3 border-b border-line px-4 py-3 text-left last:border-0 dark:border-slate-800">
