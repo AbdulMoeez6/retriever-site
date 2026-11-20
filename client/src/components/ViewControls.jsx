@@ -2,14 +2,17 @@ import { useState } from "react";
 import { storageGet, storageSet } from "../lib/env.js";
 import Icon from "./Icon.jsx";
 
+// In-memory copy so choices survive page changes even where storage is blocked (sandboxed viewers).
+const memory = new Map();
+
 /** A view preference remembered on this device (fails soft where storage is blocked). */
 export function usePref(key, initial, allowed) {
   const k = `retriever.view.${key}`;
   const [value, setValue] = useState(() => {
-    const v = storageGet(k);
+    const v = memory.has(k) ? memory.get(k) : storageGet(k);
     return v != null && (!allowed || allowed.includes(v)) ? v : initial;
   });
-  const set = (v) => { setValue(v); storageSet(k, v); };
+  const set = (v) => { setValue(v); memory.set(k, v); storageSet(k, v); };
   return [value, set];
 }
 
