@@ -16,6 +16,7 @@ import Roadmap from "./pages/app/Roadmap.jsx";
 import ActionPlanning from "./pages/app/ActionPlanning.jsx";
 import Profiles from "./pages/app/Profiles.jsx";
 import TechnologyProfile from "./pages/app/TechnologyProfile.jsx";
+import KnowledgeBase from "./pages/app/KnowledgeBase.jsx";
 import Settings from "./pages/app/Settings.jsx";
 import { useApp } from "./lib/store.jsx";
 
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="action-planning" element={<ActionPlanning />} />
           <Route path="profiles" element={<Profiles />} />
           <Route path="technology-profile" element={<TechnologyProfile />} />
+          <Route path="knowledge-base" element={<KnowledgeBase />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
