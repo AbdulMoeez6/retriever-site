@@ -59,7 +59,7 @@ so it works from the repository sub-path (`https://<org>.github.io/retriever-sit
 
 | Path | Page |
 | --- | --- |
-| `/` | Landing: editorial hero, readiness video, dashboard preview, "See Retriever in action" showcase |
+| `/` | Landing: editorial hero, questionnaire video, dashboard preview, platform capabilities, evidence-based readiness, "See Retriever in action" showcase |
 | `/book-demo` | Book a demo (`?intent=pilot` for the pilot invite variant) |
 | `/signin` | Sample sign-in (any email and password) |
 | `/shared-roadmap` | Read-only roadmap view |
@@ -72,7 +72,8 @@ so it works from the repository sub-path (`https://<org>.github.io/retriever-sit
 | `/app/settings` | Plan usage (no prices) and appearance |
 
 Earlier dashboard paths (`/app/evidence`, `/app/funding`, `/app/roadmap`, `/app/action-planning`, `/app/profiles`) redirect to their new pages.
-The dashboard uses a fictional organization (Acme Labs). Use "Start a new technology" in the sidebar switcher to see the empty pilot state.
+The dashboard uses a fictional organization (Acme Labs). Use "Start a new technology" in the page-header Technology selector to see the empty pilot state.
+Landing and dashboard motion (scroll reveal, hover reveal, count-up, progress fills) is turned off under `prefers-reduced-motion`, and content stays visible without JavaScript.
 
 ## Content rules
 
