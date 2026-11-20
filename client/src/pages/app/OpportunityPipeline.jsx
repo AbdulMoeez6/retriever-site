@@ -1,27 +1,64 @@
 import { useApp } from "../../lib/store.jsx";
 import { PIPELINE_STAGES } from "../../data/pilotData.js";
 import Icon from "../../components/Icon.jsx";
-import { CreateProfileBanner, StatusChip, Tabs, formatMoney } from "../../components/ui.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
+import { CreateProfileBanner, PageHeader, ShellContext, StatusChip, Tabs, formatMoney } from "../../components/ui.jsx";
 import Funding from "./Funding.jsx";
+
+const STAGE_SHADE = (i) => `rgba(27,54,93,${0.28 + i * 0.18})`;
+
+/** Stage summary: a segmented bar sized by matched value, with counts underneath. */
+function StageSummary({ opps }) {
+  const total = opps.reduce((a, o) => a + o.amount, 0) || 1;
+  return (
+    <section className="card p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="text-sm font-medium">From match to award</h2>
+        <span className="text-xs text-muted dark:text-slate-400">{opps.length} opportunities · {formatMoney(opps.reduce((a, o) => a + o.amount, 0))} matched (sample)</span>
+      </div>
+      <div className="mt-4 flex h-2.5 gap-1 overflow-hidden rounded-full">
+        {PIPELINE_STAGES.map((st, i) => {
+          const v = opps.filter((o) => o.stage === st).reduce((a, o) => a + o.amount, 0);
+          return v ? <span key={st} className="bar-fill h-full rounded-full" title={`${st} · ${formatMoney(v)}`} style={{ width: `${(v / total) * 100}%`, background: STAGE_SHADE(i), "--d": `${i * 90}ms` }} /> : null;
+        })}
+        {!opps.length && <span className="h-full w-full rounded-full bg-soft dark:bg-white/10" />}
+      </div>
+      <dl className="mt-4 grid grid-cols-5 gap-2">
+        {PIPELINE_STAGES.map((st, i) => {
+          const list = opps.filter((o) => o.stage === st);
+          return (
+            <div key={st}>
+              <dt className="flex items-center gap-1.5 text-xs text-muted dark:text-slate-400"><span className="size-2 rounded-full" style={{ background: STAGE_SHADE(i) }} />{st}</dt>
+              <dd className="mt-1 text-lg font-semibold tabular-nums">{list.length}</dd>
+            </div>
+          );
+        })}
+      </dl>
+    </section>
+  );
+}
 
 function OppCard({ o, onOpen, onMove }) {
   const i = PIPELINE_STAGES.indexOf(o.stage);
+  const last = i === PIPELINE_STAGES.length - 1;
   return (
-    <li className="card card-hover p-3">
+    <li className="group card card-hover tick-in p-3.5">
       <button type="button" onClick={onOpen} className="block w-full text-left">
         <div className="text-sm font-medium leading-snug">{o.title}</div>
         <div className="mt-1 text-xs text-muted dark:text-slate-400">{o.agency} · {o.program}</div>
-        <div className="mt-2 flex items-center justify-between gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2">
           <span className="font-mono text-xs">{formatMoney(o.amount)}</span>
           <StatusChip status={o.fit} />
         </div>
         <div className="mt-1 text-[11px] text-muted dark:text-slate-400">{o.date}</div>
       </button>
-      <div className="mt-2 flex justify-between border-t border-line pt-2 dark:border-slate-700">
-        <button type="button" disabled={i === 0} onClick={() => onMove(-1)} className="rounded px-1.5 text-xs text-muted hover:text-ink disabled:opacity-30 dark:hover:text-white" aria-label="Move back a stage"><Icon name="back" className="size-3.5" /></button>
-        <button type="button" disabled={i === PIPELINE_STAGES.length - 1} onClick={() => onMove(1)} className="inline-flex items-center gap-1 rounded px-1.5 text-xs text-muted hover:text-ink disabled:opacity-30 dark:hover:text-white">
-          {i < PIPELINE_STAGES.length - 1 ? `Move to ${PIPELINE_STAGES[i + 1]}` : "Awarded"} <Icon name="chevronRight" className="size-3.5" />
-        </button>
+      <div className="mt-3 flex items-center justify-between border-t border-line pt-2 dark:border-slate-700">
+        <button type="button" disabled={i === 0} onClick={() => onMove(-1)} className="hover-reveal grid size-6 place-items-center rounded-md text-muted hover:bg-soft disabled:invisible dark:hover:bg-white/10" aria-label="Move back a stage"><Icon name="back" className="size-3.5" /></button>
+        {last ? <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">Awarded</span> : (
+          <button type="button" onClick={() => onMove(1)} className="nudge inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs text-muted transition-colors hover:bg-soft hover:text-ink dark:hover:bg-white/10 dark:hover:text-white">
+            Move to {PIPELINE_STAGES[i + 1]} <Icon name="chevronRight" className="size-3.5" />
+          </button>
+        )}
       </div>
     </li>
   );
@@ -39,27 +76,28 @@ export default function OpportunityPipeline() {
   };
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <PageHeader title="Opportunities" sub="Funding matches, tracked from match to award. Move a card as the work moves.">
+        <TechSwitcher />
         <Tabs tabs={["Pipeline", "Funding matches"]} value={ui.oppTab} onChange={(v) => patchUi({ oppTab: v })} />
-        {ui.oppTab === "Pipeline" && hasTech && <span className="text-xs text-muted dark:text-slate-400">{opps.length} opportunities · {formatMoney(opps.reduce((a, o) => a + o.amount, 0))} matched</span>}
-      </div>
-      {ui.oppTab === "Funding matches" ? <Funding /> : (
+      </PageHeader>
+      {ui.oppTab === "Funding matches" ? <ShellContext.Provider value={true}><Funding /></ShellContext.Provider> : (
         <>
           {!hasTech && <CreateProfileBanner text="Create your Technology Profile to start matching funding opportunities." />}
+          <StageSummary opps={opps} />
           <div className="overflow-x-auto pb-2">
-            <div className="grid min-w-[60rem] grid-cols-5 gap-3">
-              {PIPELINE_STAGES.map((stage) => {
+            <div className="grid min-w-[62rem] grid-cols-5 gap-3">
+              {PIPELINE_STAGES.map((stage, si) => {
                 const col = opps.filter((o) => o.stage === stage);
                 return (
-                  <section key={stage} className="rounded-xl border border-line bg-white/70 p-3 dark:border-slate-800 dark:bg-white/[.03]">
-                    <div className="flex items-center justify-between">
-                      <h2 className="font-mono text-[11px] uppercase tracking-[0.12em]">{stage}</h2>
-                      <span className="grid min-w-5 place-items-center rounded-full border border-line px-1.5 text-[11px] dark:border-slate-700">{col.length}</span>
+                  <section key={stage} className="rounded-xl bg-soft/70 p-2.5 dark:bg-white/[.03]">
+                    <div className="flex items-center justify-between px-1 pb-2">
+                      <h2 className="flex items-center gap-2 text-xs font-medium"><span className="size-2 rounded-full" style={{ background: STAGE_SHADE(si) }} />{stage}</h2>
+                      <span className="font-mono text-[11px] text-muted dark:text-slate-400">{col.length} · {col.length ? formatMoney(col.reduce((a, o) => a + o.amount, 0)) : "—"}</span>
                     </div>
-                    <ul className="mt-3 grid gap-2">
+                    <ul className="grid gap-2">
                       {col.length ? col.map((o) => (
-                        <OppCard key={o.id} o={o} onOpen={() => patchUi({ drawer: { type: "pipeline", id: o.id } })} onMove={(dir) => move(o.id, dir)} />
-                      )) : <li className="rounded-lg border border-dashed border-line px-2 py-5 text-center text-xs text-muted dark:border-slate-700 dark:text-slate-400">No opportunities here yet</li>}
+                        <OppCard key={`${o.id}-${o.stage}`} o={o} onOpen={() => patchUi({ drawer: { type: "pipeline", id: o.id } })} onMove={(dir) => move(o.id, dir)} />
+                      )) : <li className="rounded-lg border border-dashed border-line px-2 py-6 text-center text-xs text-muted dark:border-slate-700 dark:text-slate-400">No opportunities here yet</li>}
                     </ul>
                   </section>
                 );
