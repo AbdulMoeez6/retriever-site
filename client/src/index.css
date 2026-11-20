@@ -234,7 +234,7 @@ button:disabled { cursor: default; }
   .chart-line, .chart-area, .chart-dot, .glass-frame::before, .bd-rise, .bd-success, .bd-err { animation: none !important; }
   .chart-line.animate { stroke-dashoffset: 0; } .chart-area.animate, .chart-dot.animate { opacity: 1; }
   .bd-check-ring, .bd-check-tick { animation: none !important; stroke-dashoffset: 0; }
-  .card, .card-hover, .btn-lift, .ring-arc, .reveal, .glass-reveal, .glass-frame, .bd-btn, .bd-btn::after, .progress > span { transition: none !important; }
+  .card, .card-hover, .btn-lift, .price-swap, .pricing-pill, .ring-arc, .reveal, .glass-reveal, .glass-frame, .bd-btn, .bd-btn::after, .progress > span { transition: none !important; }
   .card:hover, .card-hover:hover, .btn-lift:hover, .bd-btn:hover { transform: none; }
   .glass-frame, .glass-frame:hover { transform: none !important; }
   .reveal, .glass-reveal, html.js .glass-reveal:not(.revealed) { opacity: 1 !important; transform: none !important; filter: none !important; }
@@ -292,23 +292,6 @@ button:disabled { cursor: default; }
   html.js .sr-left:not(.revealed) { transform: translateX(-28px); }
   html.js .sr-right:not(.revealed) { transform: translateX(28px); }
 
-  /* Feature cards: lift, cursor spotlight, and extra text that opens and stays open while hovered or focused. */
-  .feat-card { position: relative; isolation: isolate; overflow: hidden; border-radius: 1rem; border: 1px solid #E2E8F0; background: #fff; padding: 1.5rem;
-    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease, border-color .4s ease; }
-  .feat-card::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .4s ease;
-    background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), rgba(46,90,172,.10), transparent 60%); }
-  .feat-card:hover, .feat-card:focus-within { transform: translateY(-6px); border-color: rgba(27,54,93,.24); box-shadow: 0 28px 50px -30px rgba(27,54,93,.5); }
-  .feat-card:hover::before, .feat-card:focus-within::before { opacity: 1; }
-  html.dark .feat-card { background: #161C27; border-color: #2A3344; }
-  .feat-more { display: grid; grid-template-rows: 0fr; opacity: 0; margin-top: 0; transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1), opacity .35s ease, margin-top .45s ease; }
-  .feat-more > div { overflow: hidden; }
-  .feat-card:hover .feat-more, .feat-card:focus-within .feat-more { grid-template-rows: 1fr; opacity: 1; margin-top: .85rem; }
-  .feat-icon { transition: transform .4s cubic-bezier(.2,.7,.2,1), background-color .3s ease, color .3s ease; }
-  .feat-card:hover .feat-icon { transform: translateY(-2px) rotate(-4deg); background-color: #1B365D; color: #fff; }
-  .feat-cue { transition: opacity .3s ease, transform .3s ease; }
-  .feat-card:hover .feat-cue, .feat-card:focus-within .feat-cue { opacity: 0; transform: translateY(4px); }
-  @media (hover: none) { .feat-more { grid-template-rows: 1fr; opacity: 1; margin-top: .85rem; } .feat-cue { display: none; } }
-
   /* Smooth underline for text links */
   .u-link { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .35s cubic-bezier(.2,.7,.2,1); }
   .u-link:hover, .u-link:focus-visible { background-size: 100% 1px; }
@@ -335,25 +318,8 @@ button:disabled { cursor: default; }
 @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(46,90,172,.38); } 70% { box-shadow: 0 0 0 9px rgba(46,90,172,0); } 100% { box-shadow: 0 0 0 0 rgba(46,90,172,0); } }
 @media (prefers-reduced-motion: reduce) {
   .sr, html.js .sr:not(.revealed) { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .feat-card, .feat-card::before, .feat-more, .feat-icon, .feat-cue, .u-link, .nudge svg, .hover-reveal, .step-node, .trl-seg { transition: none !important; }
-  .feat-card:hover, .feat-card:focus-within, .feat-card:hover .feat-icon, .trl-seg:hover, .step-btn:hover .step-node { transform: none !important; }
+  .u-link, .nudge svg, .hover-reveal, .step-node, .trl-seg { transition: none !important; }
+  .trl-seg:hover, .step-btn:hover .step-node { transform: none !important; }
   .bar-fill, .col-fill, .pulse-ring, .check-pop, .tick-in { animation: none !important; }
 }
 
-/* ---------- Landing feature sections ---------- */
-@layer components {
-  .meter { display: block; overflow: hidden; }
-  .meter > span { display: block; height: 100%; width: var(--w, 0%); border-radius: inherit;
-    transition: width 1.1s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 90ms + 200ms); }
-  html.js .sr:not(.revealed) .meter > span { width: 0; }
-  .lf-col { transform-origin: bottom; transition: transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 60ms + 200ms); }
-  html.js .sr:not(.revealed) .lf-col { transform: scaleY(0); }
-  .lf-seg, .lf-node { transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 70ms + 250ms); }
-  html.js .sr:not(.revealed) .lf-seg { opacity: 0; transform: scaleX(.3); }
-  html.js .sr:not(.revealed) .lf-node { opacity: 0; transform: translateY(8px) scale(.8); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .meter > span, .lf-col, .lf-seg, .lf-node { transition: none !important; }
-  html.js .sr:not(.revealed) .meter > span { width: var(--w, 0%); }
-  html.js .sr:not(.revealed) .lf-col, html.js .sr:not(.revealed) .lf-seg, html.js .sr:not(.revealed) .lf-node { opacity: 1; transform: none; }
-}

@@ -9,7 +9,7 @@ import { Mark } from "../components/ui.jsx";
 import { useApp } from "../lib/store.jsx";
 import { useGreeting } from "../lib/format.js";
 import { ASSETS } from "../lib/assets.js";
-import LandingFeatures, { LandingClosing } from "../components/LandingFeatures.jsx";
+import Reveal from "../components/Reveal.jsx";
 
 export default function Landing() {
   const { currentTech, kpis, patchUi, profile } = useApp();
@@ -35,7 +35,7 @@ export default function Landing() {
                 </h1>
                 <p className="hero-rise mt-8 max-w-xl text-lg text-muted dark:text-slate-300 sm:text-xl" style={{ "--d": "160ms" }}>Retriever structures the evidence; your team makes the call.</p>
                 <div className="hero-rise mt-12 flex flex-wrap items-center gap-3" style={{ "--d": "240ms" }}>
-                  <Link to="/book-demo" className="btn-lift inline-flex h-12 items-center gap-2 rounded-lg bg-navy px-6 text-base font-medium text-white shadow-[0_10px_24px_-12px_rgba(27,54,93,0.7)] hover:bg-navy-700">Book a demo <Icon name="arrow" /></Link>
+                  <Link to="/book-demo" className="btn-lift nudge inline-flex h-12 items-center gap-2 rounded-lg bg-navy px-6 text-base font-medium text-white shadow-[0_10px_24px_-12px_rgba(27,54,93,0.7)] hover:bg-navy-700">Book a demo <Icon name="arrow" /></Link>
                   <button type="button" onClick={() => patchUi({ quickOpen: true })} className="btn-lift inline-flex h-12 items-center rounded-lg border border-line bg-white/80 px-5 text-base font-medium backdrop-blur dark:border-slate-700 dark:bg-[#161C27]">Try the five-question quick assessment</button>
                 </div>
                 <p className="hero-rise mt-5 text-sm text-muted dark:text-slate-400" style={{ "--d": "300ms" }}>For tech transfer offices, government programs and defense primes.</p>
@@ -57,8 +57,7 @@ export default function Landing() {
                       <div className="rounded-md bg-white px-2 py-1.5 font-medium dark:bg-white/10">Mission Command</div>
                       <div className="mt-1 px-2 py-1.5 text-muted dark:text-slate-400">Readiness</div>
                       <div className="px-2 py-1.5 text-muted dark:text-slate-400">Opportunities</div>
-                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Knowledge Base</div>
-                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Commercialization</div>
+                      <div className="px-2 py-1.5 text-muted dark:text-slate-400">Funding</div>
                     </aside>
                     <div className="flex-1 p-5">
                       <div className="text-lg font-semibold">{greet}, {profile.name.split(" ")[0]}</div>
@@ -82,8 +81,6 @@ export default function Landing() {
           </div>
         </section>
 
-        <LandingFeatures />
-
         {/* Faded transition: light hero into the dark navy showcase */}
         <div aria-hidden="true" className="fade-to-navy" />
 
@@ -92,10 +89,9 @@ export default function Landing() {
           <div className="aurora aurora-video video-aurora-mask" />
           <div className="dotgrid video-aurora-mask pointer-events-none absolute inset-0" />
           <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</h2>
+            <Reveal as="h2" className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">See Retriever in action</Reveal>
             <GlassVideo variant="wide" src={ASSETS.missionVideo} poster={ASSETS.missionPoster}
               label="Mission Command walkthrough" className="mx-auto mt-14 w-full max-w-5xl" maxTilt={4} />
-            <LandingClosing />
           </div>
         </section>
       </main>
