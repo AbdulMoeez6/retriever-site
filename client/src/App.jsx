@@ -19,6 +19,7 @@ import TechnologyProfile from "./pages/app/TechnologyProfile.jsx";
 import KnowledgeBase from "./pages/app/KnowledgeBase.jsx";
 import Commercialization from "./pages/app/Commercialization.jsx";
 import Team from "./pages/app/Team.jsx";
+import Questionnaire from "./pages/app/Questionnaire.jsx";
 import Settings from "./pages/app/Settings.jsx";
 import { useApp } from "./lib/store.jsx";
 
@@ -53,6 +54,7 @@ export default function App() {
           <Route path="knowledge-base" element={<KnowledgeBase />} />
           <Route path="commercialization" element={<Commercialization />} />
           <Route path="team" element={<Team />} />
+          <Route path="readiness-questionnaire" element={<Questionnaire />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
