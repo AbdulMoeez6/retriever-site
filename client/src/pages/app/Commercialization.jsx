@@ -2,41 +2,49 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../lib/store.jsx";
 import { exampleTrail } from "../../data/pilotData.js";
 import Icon from "../../components/Icon.jsx";
-import { CreateProfileBanner, btnPrimary, btnSecondary, formatMoney } from "../../components/ui.jsx";
+import KpiCard from "../../components/KpiCard.jsx";
+import TechSwitcher from "../../components/TechSwitcher.jsx";
+import { CreateProfileBanner, PageHeader, btnPrimary, btnSecondary, formatMoney } from "../../components/ui.jsx";
 
-const PHASE_TONE = { now: "border-emerald-600", next: "border-[#2F5BD3]", later: "border-slate-300 dark:border-slate-600" };
+const TRL_NAMES = ["Basic principles", "Concept formulated", "Proof of concept", "Lab validation", "Relevant environment validation", "Relevant environment demo", "Operational demo", "System qualified", "Mission proven"];
 
-function Ladder({ current, target }) {
+/** TRL 1–9 track: filled to the current level, target outlined, hover a segment for its name. */
+function TrlTrack({ current, target }) {
   return (
-    <ol className="grid gap-1.5" aria-label="TRL ladder">
-      {[9, 8, 7, 6, 5, 4, 3, 2, 1].map((n) => {
-        const on = n === current;
-        const tgt = n === target;
-        return (
-          <li key={n} style={{ width: `${52 + n * 5.2}%` }}
-            className={`rounded px-2 py-0.5 font-mono text-[11px] ${on ? "bg-[#2F5BD3] font-semibold text-white" : tgt ? "bg-white/90 text-navy ring-2 ring-[#7EA1F2]" : "bg-white/85 text-navy"}`}>
-            TRL {n}{on ? " · current" : tgt ? " · target" : ""}
-          </li>
-        );
-      })}
-    </ol>
+    <div>
+      <div className="grid grid-cols-9 gap-1.5">
+        {TRL_NAMES.map((name, i) => {
+          const n = i + 1;
+          const filled = current != null && n <= current;
+          const isCur = n === current;
+          const inRange = target != null && current != null && n > current && n <= target;
+          return (
+            <div key={n} className="group relative">
+              <div title={`TRL ${n} · ${name}`}
+                className={`trl-seg bar-fill h-11 rounded-md ${filled ? "bg-navy dark:bg-slate-200" : inRange ? "border border-dashed border-accent bg-accent-soft dark:bg-white/5" : "bg-soft dark:bg-white/10"} ${isCur ? "ring-2 ring-navy/25 ring-offset-2 dark:ring-offset-[#161C27]" : ""}`}
+                style={{ "--d": `${i * 60}ms` }} />
+              <div className={`mt-2 text-center font-mono text-[11px] ${isCur ? "font-semibold text-navy dark:text-white" : "text-muted dark:text-slate-400"}`}>{n}</div>
+              <div className="hover-reveal pointer-events-none absolute -top-9 left-1/2 z-10 w-max -translate-x-1/2 rounded-md bg-navy px-2 py-1 text-[11px] text-white shadow-raised">{name}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted dark:text-slate-400">
+        <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-sm bg-navy dark:bg-slate-200" /> Evidenced</span>
+        <span className="inline-flex items-center gap-1.5"><span className="size-2.5 rounded-sm border border-dashed border-accent bg-accent-soft" /> Planned on this trail</span>
+      </div>
+    </div>
   );
 }
 
 export default function Commercialization() {
-  const { hasTech, currentTech, ui, trail, pipeline, patchData, patchUi, toast } = useApp();
+  const { hasTech, currentTech, trail, pipeline, patchData, patchUi, toast } = useApp();
   const navigate = useNavigate();
   const t = hasTech ? currentTech() : null;
   const record = t ? trail[t.id] : null;
   const phases = record ? record.phases : exampleTrail(t?.trl);
   const target = t && t.trl != null ? Math.min(9, t.trl + 2) : null;
   const matched = t ? pipeline.filter((o) => o.techId === t.id).reduce((a, o) => a + o.amount, 0) : 0;
-  const stats = [
-    ["Current level", t?.trl != null ? `TRL ${t.trl}` : "—"],
-    ["Target level", target ? `TRL ${target}` : "—"],
-    ["Horizon", t ? "18 months" : "—"],
-    ["Funding matched", t && matched ? formatMoney(matched) : "—"],
-  ];
   const toggle = (phaseId, itemId) => {
     if (!record) return;
     patchData((d) => ({
@@ -55,57 +63,67 @@ export default function Commercialization() {
   };
 
   return (
-    <div className="flex max-w-5xl flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-muted dark:text-slate-400">{record ? `Generated ${record.generated}` : "Not generated yet"} · Acme Labs{t ? ` · ${t.name}` : ""}</p>
-        <div className="flex gap-2">
-          <button type="button" onClick={exportPdf} className={btnSecondary}><Icon name="download" /> Export PDF</button>
-          <button type="button" onClick={() => patchUi({ modal: "share" })} className={btnPrimary}><Icon name="share" /> Share</button>
-        </div>
-      </div>
+    <div className="flex flex-col gap-5">
+      <PageHeader title="Commercialization Trail" sub={`A phased plan from evidence to deployment. ${record ? `Generated ${record.generated}` : "Not generated yet"} · Acme Labs.`}>
+        <TechSwitcher />
+        <button type="button" onClick={exportPdf} className={btnSecondary}><Icon name="download" /> Export PDF</button>
+        <button type="button" onClick={() => patchUi({ modal: "share" })} className={btnPrimary}><Icon name="share" /> Share</button>
+      </PageHeader>
       {!hasTech && <CreateProfileBanner text="Create your Technology Profile to generate a Commercialization Trail." />}
 
-      <section className="grid gap-8 rounded-2xl bg-[#0B1729] p-7 text-white shadow-raised md:grid-cols-[1.4fr_1fr]">
-        <div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#9DB6F5]">Commercialization trail</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight">Your Commercialization Trail</h2>
-          <p className="mt-3 max-w-md text-sm text-slate-300">A phased plan built from your Readiness Questionnaire scores and matched funding. The current TRL comes only from documented evidence.</p>
-          <dl className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {stats.map(([k, v]) => (
-              <div key={k}><dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-slate-400">{k}</dt><dd className="mt-1 text-lg font-semibold">{v}</dd></div>
-            ))}
-          </dl>
-          {t && !record && <button type="button" onClick={generate} className="mt-6 rounded-lg bg-white px-4 py-2 text-sm font-medium text-navy">Generate trail</button>}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <KpiCard label="Current level" value={t?.trl != null ? `TRL ${t.trl}` : "—"} sub="From human-reviewed evidence" onClick={() => (hasTech ? navigate("/app/readiness") : patchUi({ modal: "readiness" }))} />
+        <KpiCard label="Target level" value={target ? `TRL ${target}` : "—"} sub="Set in Strategic Goals" onClick={() => navigate("/app/readiness-questionnaire")} />
+        <KpiCard label="Horizon" value={t ? "18 months" : "—"} sub="Now · Next · Later" onClick={() => navigate("/app/action-plan")} />
+        <KpiCard label="Funding matched" value={matched ? formatMoney(matched) : "—"} sub="Across the pipeline (sample)" onClick={() => navigate("/app/opportunities")} />
+      </div>
+
+      <section className="card p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-medium">Readiness track</h2>
+            <p className="mt-1 text-xs text-muted dark:text-slate-400">The current TRL comes only from documented evidence. Hover a level for its meaning.</p>
+          </div>
+          {t && !record && <button type="button" onClick={generate} className={btnPrimary}>Generate trail</button>}
         </div>
-        <Ladder current={t?.trl ?? null} target={target} />
+        <div className="mt-6"><TrlTrack current={t?.trl ?? null} target={target} /></div>
       </section>
 
-      <section>
+      <section className="card p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-lg font-semibold">Trail phases</h2>
-          {!record && <span className="text-xs text-muted dark:text-slate-400">Example items</span>}
+          <h2 className="text-sm font-medium">Trail phases</h2>
+          <span className="text-xs text-muted dark:text-slate-400">{record ? "Tick an item when it is done" : "Example items"}</span>
         </div>
-        <div className="mt-3 grid gap-5 md:grid-cols-3">
-          {phases.map((p) => (
-            <div key={p.id} className={`border-t-2 pt-3 ${PHASE_TONE[p.id]}`}>
-              <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted dark:text-slate-400">{p.label} · {p.window}</div>
-              <h3 className="mt-1 font-semibold">{p.title}</h3>
-              <ul className="mt-3 grid gap-2">
-                {p.items.map((i) => (
-                  <li key={i.id}>
-                    <button type="button" onClick={() => (record ? toggle(p.id, i.id) : toast(t ? "Generate the trail to track items" : "Create your Technology Profile first"))}
-                      className={`flex w-full items-start gap-2 text-left text-sm ${record ? "" : "text-muted dark:text-slate-400"}`}>
-                      <span className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded border ${i.done ? "border-emerald-600 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400" : "border-line dark:border-slate-600"}`}>{i.done && <Icon name="check" className="size-3" strokeWidth={2.6} />}</span>
-                      <span className={i.done ? "line-through opacity-70" : ""}>{i.text}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <ol className="relative mt-5 grid gap-6 md:grid-cols-3">
+          <span aria-hidden="true" className="absolute left-0 right-0 top-[7px] hidden h-px bg-line dark:bg-slate-700 md:block" />
+          {phases.map((p, pi) => {
+            const done = p.items.filter((i) => i.done).length;
+            return (
+              <li key={p.id} className="relative">
+                <span className={`relative z-[1] block size-3.5 rounded-full border-2 ${pi === 0 ? "border-navy bg-navy" : "border-navy/40 bg-white dark:bg-[#161C27]"}`} />
+                <div className="mt-3 text-xs text-muted dark:text-slate-400">{p.label} · {p.window}</div>
+                <h3 className="mt-0.5 font-medium">{p.title}</h3>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="progress flex-1"><span style={{ width: `${(done / p.items.length) * 100}%` }} /></span>
+                  <span className="font-mono text-[11px] text-muted dark:text-slate-400">{done}/{p.items.length}</span>
+                </div>
+                <ul className="mt-3 grid gap-1">
+                  {p.items.map((i) => (
+                    <li key={i.id}>
+                      <button type="button" onClick={() => (record ? toggle(p.id, i.id) : toast(t ? "Generate the trail to track items" : "Create your Technology Profile first"))}
+                        className={`flex w-full items-start gap-2.5 rounded-md px-1.5 py-1.5 text-left text-sm transition-colors hover:bg-soft dark:hover:bg-white/5 ${record ? "" : "text-muted dark:text-slate-400"}`}>
+                        <span className={`mt-0.5 grid size-4 shrink-0 place-items-center rounded border transition-colors ${i.done ? "border-navy bg-navy text-white dark:border-slate-200 dark:bg-slate-200 dark:text-navy" : "border-line dark:border-slate-600"}`}>{i.done && <Icon name="check" className="check-pop size-3" strokeWidth={2.6} />}</span>
+                        <span className={i.done ? "text-muted line-through decoration-navy/30" : ""}>{i.text}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })}
+        </ol>
+        {t && <button type="button" onClick={() => navigate("/app/action-plan")} className={`${btnSecondary} nudge mt-6`}>Turn phases into actions <Icon name="arrow" /></button>}
       </section>
-      {t && <button type="button" onClick={() => navigate("/app/action-plan")} className={`${btnSecondary} self-start`}>Turn phases into actions <Icon name="arrow" /></button>}
     </div>
   );
 }
