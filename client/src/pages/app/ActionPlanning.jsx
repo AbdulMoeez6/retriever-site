@@ -13,7 +13,7 @@ export default function ActionPlanning() {
   const [mode, viewToggle] = useViewMode("actions", ["table", "board"]);
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Action plan" sub="Actions for the team to take on a technology record. Toggle a status to move it on.">
+      <PageHeader title="Action plan" sub="">
         <button type="button" onClick={() => patchUi({ modal: "action" })} className={btnPrimary}><Icon name="plus" /> Add action</button>
       </PageHeader>
       <div className="flex items-center justify-between gap-3">

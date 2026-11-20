@@ -47,15 +47,11 @@ export default function ProposalAssistant() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title={<span className="inline-flex flex-wrap items-center gap-2">Proposal assistant <span className="rounded-full border border-line px-2 py-0.5 text-xs font-medium text-muted dark:border-slate-700 dark:text-slate-400">Template preview</span></span>} sub="Fill-in-the-blanks outline built from your questionnaire answers.">
+      <PageHeader title={<span className="inline-flex flex-wrap items-center gap-2">Proposal assistant <span className="rounded-full border border-line px-2 py-0.5 text-xs font-medium text-muted dark:border-slate-700 dark:text-slate-400">Template preview</span></span>} sub="A starting outline from your questionnaire answers. Not saved.">
         <TechSwitcher />
         <button type="button" onClick={exportDraft} className={btnSecondary}><Icon name="download" /> Export draft</button>
       </PageHeader>
       <div className="flex max-w-3xl flex-col gap-5">
-      <div className="card grid gap-2 border-l-2 border-l-navy p-4 text-sm sm:grid-cols-[11rem_1fr]">
-        <div className="font-medium">Built from fixed templates and not saved.</div>
-        <p className="text-muted dark:text-slate-400">These sections are assembled in your browser from your Readiness Questionnaire answers. Nothing here is reviewed, stored or checked against the solicitation; treat it as a starting outline only.</p>
-      </div>
       <section className="card p-5">
         <label className="grid gap-1.5 text-sm font-medium">Drafting for
           <select value={forId} onChange={(e) => patchUi({ proposalFor: e.target.value })} className="field font-normal">
@@ -63,7 +59,6 @@ export default function ProposalAssistant() {
             {opps.map((x) => <option key={x.id} value={x.id}>{x.title} · {x.agency} · {formatMoney(x.amount)}</option>)}
           </select>
         </label>
-        <p className="mt-2 text-xs text-muted dark:text-slate-400">Sections are filled from your Readiness Questionnaire answers. Edit an answer there and rebuild here.</p>
       </section>
       <section className="card grid gap-6 p-5">
         {SECTIONS.map((s) => (

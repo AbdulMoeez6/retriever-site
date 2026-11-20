@@ -43,7 +43,7 @@ export default function KnowledgeBase() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Knowledge Base" sub={hasTech ? `Documents, opportunity records, readiness gaps and action plans · ${techDocs.length} documents · ${records.length} records · ${gapCount} readiness gaps` : "Documents, opportunity records, readiness gaps and action plans."}>
+      <PageHeader title="Knowledge Base" sub={hasTech ? `${techDocs.length} documents · ${records.length} records · ${gapCount} readiness gaps` : "Documents and opportunity records."}>
         <TechSwitcher />
         <Tabs tabs={["Documents", "Opportunity records"]} value={ui.kbTab} onChange={(v) => patchUi({ kbTab: v })} />
       </PageHeader>
@@ -51,15 +51,14 @@ export default function KnowledgeBase() {
       {ui.kbTab === "Documents" ? (
         <>
           <section className="card p-6">
-            <h2 className="text-base font-medium">Give your score something to stand on</h2>
-            <p className="mt-1 text-sm text-muted dark:text-slate-400">Optional, but every document you add sharpens your score and your funding match.</p>
-            <div className="mt-4 rounded-lg border border-line bg-soft/70 p-4 text-sm dark:border-slate-700 dark:bg-white/5">
-              <div className="flex items-center gap-2 font-medium text-navy dark:text-slate-100"><Icon name="shield" /> Controlled pilot, read before uploading</div>
+            <h2 className="text-base font-medium">Add documents</h2>
+            <details className="group mt-3 rounded-lg border border-line bg-soft/60 px-4 py-2.5 text-sm dark:border-slate-700 dark:bg-white/5">
+              <summary className="flex cursor-pointer list-none items-center gap-2 font-medium text-navy dark:text-slate-100"><Icon name="shield" /> Controlled pilot: no classified, CUI or export-controlled files <Icon name="chevron" className="ml-auto size-3.5 transition-transform group-open:rotate-180" /></summary>
               <ul className="mt-2 list-disc space-y-1 pl-9 text-muted dark:text-slate-400">{NOTICE.map((n) => <li key={n}>{n}</li>)}</ul>
-            </div>
+            </details>
             <div onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)}
               onDrop={(e) => { e.preventDefault(); setOver(false); addFiles(e.dataTransfer?.files); }}
-              className={`group mt-5 grid place-items-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-all duration-300 ${over ? "scale-[1.01] border-navy/50 bg-navy/[.04] dark:bg-white/5" : "border-line hover:border-navy/30 hover:bg-soft/50 dark:border-slate-700"}`}>
+              className={`group mt-5 grid place-items-center rounded-xl border-2 border-dashed px-6 py-8 text-center transition-all duration-300 ${over ? "scale-[1.01] border-navy/50 bg-navy/[.04] dark:bg-white/5" : "border-line hover:border-navy/30 hover:bg-soft/50 dark:border-slate-700"}`}>
               <span className="grid size-12 place-items-center rounded-full bg-soft text-navy transition-transform duration-300 group-hover:-translate-y-1 dark:bg-white/10 dark:text-slate-200"><Icon name="upload" className="size-5" /></span>
               <div className="mt-3 font-medium">Drag and drop files here</div>
               <div className="mt-1 text-xs text-muted dark:text-slate-400">PDF, DOCX, or PPTX, up to 25MB each</div>

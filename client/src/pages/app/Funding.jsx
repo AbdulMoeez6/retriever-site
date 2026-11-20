@@ -2,7 +2,7 @@ import { useApp } from "../../lib/store.jsx";
 import { escapeCsv, fitFromScore } from "../../lib/format.js";
 import Icon from "../../components/Icon.jsx";
 import { useViewMode } from "../../components/ViewControls.jsx";
-import { PageHeader, StatusChip, btnSecondary, filterBtn } from "../../components/ui.jsx";
+import { PageHeader, StatusChip, btnSecondary } from "../../components/ui.jsx";
 
 const COLS = "md:grid-cols-[1.4fr_1.2fr_7rem_3.5rem_6.5rem_7.5rem]";
 
@@ -30,17 +30,18 @@ export default function Funding() {
   };
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Funding matches" sub="Matches for this organization. Fit is a sample score band only.">
+      <PageHeader title="Funding matches" sub="">
         {viewToggle}
         <button type="button" onClick={exportCsv} className={btnSecondary}><Icon name="download" /> Export CSV</button>
       </PageHeader>
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap gap-2"><span className="self-center text-xs text-muted dark:text-slate-400">Agency type</span>
-          {["All", "Government program", "Laboratory", "Innovation office"].map((f) => <button type="button" key={f} onClick={() => patchUi({ fundingType: f })} className={filterBtn(ui.fundingType === f)}>{f}</button>)}
-        </div>
-        <div className="flex flex-wrap gap-2"><span className="self-center text-xs text-muted dark:text-slate-400">Fit</span>
-          {["All", "Strong fit", "Good fit", "Fair fit"].map((f) => <button type="button" key={f} onClick={() => patchUi({ fundingFit: f })} className={filterBtn(ui.fundingFit === f)}>{f}</button>)}
-        </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <select aria-label="Agency type" value={ui.fundingType} onChange={(e) => patchUi({ fundingType: e.target.value })} className="h-8 rounded-lg border border-line bg-white px-2.5 text-xs dark:border-slate-700 dark:bg-[#161C27]">
+          {["All", "Government program", "Laboratory", "Innovation office"].map((f) => <option key={f} value={f}>{f === "All" ? "All agency types" : f}</option>)}
+        </select>
+        <select aria-label="Fit" value={ui.fundingFit} onChange={(e) => patchUi({ fundingFit: e.target.value })} className="h-8 rounded-lg border border-line bg-white px-2.5 text-xs dark:border-slate-700 dark:bg-[#161C27]">
+          {["All", "Strong fit", "Good fit", "Fair fit"].map((f) => <option key={f} value={f}>{f === "All" ? "Any fit" : f}</option>)}
+        </select>
+        <span className="text-xs text-muted dark:text-slate-400">{rows.length} matches</span>
       </div>
       {mode === "cards" ? (
         <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

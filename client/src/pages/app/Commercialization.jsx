@@ -64,7 +64,7 @@ export default function Commercialization() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Commercialization Trail" sub={`A phased plan from evidence to deployment. ${record ? `Generated ${record.generated}` : "Not generated yet"} · Acme Labs.`}>
+      <PageHeader title="Commercialization Trail" sub={record ? `Generated ${record.generated}` : "Not generated yet"}>
         <TechSwitcher />
         <button type="button" onClick={exportPdf} className={btnSecondary}><Icon name="download" /> Export PDF</button>
         <button type="button" onClick={() => patchUi({ modal: "share" })} className={btnPrimary}><Icon name="share" /> Share</button>
@@ -72,17 +72,16 @@ export default function Commercialization() {
       {!hasTech && <CreateProfileBanner text="Create your Technology Profile to generate a Commercialization Trail." />}
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Current level" value={t?.trl != null ? `TRL ${t.trl}` : "—"} sub="From human-reviewed evidence" onClick={() => (hasTech ? navigate("/app/readiness") : patchUi({ modal: "readiness" }))} />
-        <KpiCard label="Target level" value={target ? `TRL ${target}` : "—"} sub="Set in Strategic Goals" onClick={() => navigate("/app/readiness-questionnaire")} />
+        <KpiCard label="Current level" value={t?.trl != null ? `TRL ${t.trl}` : "—"} sub="Reviewed evidence" onClick={() => (hasTech ? navigate("/app/readiness") : patchUi({ modal: "readiness" }))} />
+        <KpiCard label="Target level" value={target ? `TRL ${target}` : "—"} sub="Strategic goals" onClick={() => navigate("/app/readiness-questionnaire")} />
         <KpiCard label="Horizon" value={t ? "18 months" : "—"} sub="Now · Next · Later" onClick={() => navigate("/app/action-plan")} />
-        <KpiCard label="Funding matched" value={matched ? formatMoney(matched) : "—"} sub="Across the pipeline (sample)" onClick={() => navigate("/app/opportunities")} />
+        <KpiCard label="Funding matched" value={matched ? formatMoney(matched) : "—"} sub="Pipeline (sample)" onClick={() => navigate("/app/opportunities")} />
       </div>
 
       <section className="card p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="text-sm font-medium">Readiness track</h2>
-            <p className="mt-1 text-xs text-muted dark:text-slate-400">The current TRL comes only from documented evidence. Hover a level for its meaning.</p>
           </div>
           {t && !record && <button type="button" onClick={generate} className={btnPrimary}>Generate trail</button>}
         </div>
@@ -92,7 +91,7 @@ export default function Commercialization() {
       <section className="card p-5">
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-medium">Trail phases</h2>
-          <span className="text-xs text-muted dark:text-slate-400">{record ? "Tick an item when it is done" : "Example items"}</span>
+          {!record && <span className="text-xs text-muted dark:text-slate-400">Example items</span>}
         </div>
         <ol className="relative mt-5 grid gap-6 md:grid-cols-3">
           <span aria-hidden="true" className="absolute left-0 right-0 top-[7px] hidden h-px bg-line dark:bg-slate-700 md:block" />

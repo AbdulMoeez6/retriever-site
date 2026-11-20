@@ -81,7 +81,6 @@ function ProfileWizard() {
       {step === 0 && (
         <section className="card p-6">
           <h2 className="text-base font-medium">Basic information</h2>
-          <p className="mt-1 text-sm text-muted dark:text-slate-400">This helps us tailor the assessment and match relevant funding sources.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label className={label}>Organization name<input value={form.orgName} onChange={set("orgName")} className="field font-normal" /></label>
             <label className={label}>Website<input value={form.website} onChange={set("website")} placeholder="yourcompany.com" className="field font-normal" /></label>

@@ -31,7 +31,6 @@ export default function PilotWorkflow({ techId }) {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="text-sm font-medium">Pilot workflow</h2>
-          <p className="mt-1 text-xs text-muted dark:text-slate-400">Seven steps from profile to action plan. Steps tick from the record, not from clicks here.</p>
         </div>
         <ProgressRing value={done} total={steps.length} size={56} label={`${done} of ${steps.length} steps complete`} />
       </div>

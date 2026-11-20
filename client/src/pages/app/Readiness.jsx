@@ -25,7 +25,7 @@ export default function Readiness() {
   const all = reviewed.concat(pending);
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Readiness" sub="TRL, MRL and IRL assessments for a technology. Only human-reviewed evidence counts.">
+      <PageHeader title="Readiness" sub="Only human-reviewed evidence counts.">
         <TechSwitcher />
         <button type="button" onClick={() => patchUi({ quickOpen: true })} className={btnSecondary}>Five-question quick assessment</button>
       </PageHeader>

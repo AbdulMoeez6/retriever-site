@@ -51,7 +51,7 @@ export default function EvidenceReasoning() {
       <section className="card flex flex-col gap-4 p-5 md:flex-row md:items-start md:justify-between">
         <div className="max-w-xl">
           <h2 className="text-sm font-medium">Qualitative review</h2>
-          <p className="mt-2 text-sm text-muted dark:text-slate-400">Runs a qualitative review of your Readiness Questionnaire answers and uploaded documents, and lists strengths and gaps with the document each came from. It never changes your Innovation Index or your evidence-based TRL · MRL · IRL, and it only runs when you click the button.</p>
+          <p className="mt-2 text-sm text-muted dark:text-slate-400">Strengths and gaps from your answers and documents, each with its source. It never changes your readiness levels.</p>
           {!hasTech && (
             <div className="mt-3 flex items-center gap-2 text-xs text-muted dark:text-slate-400">Create your Technology Profile first.
               <button type="button" onClick={() => navigate("/app/technology-profile")} className={btnSecondary}>Create Technology Profile</button>

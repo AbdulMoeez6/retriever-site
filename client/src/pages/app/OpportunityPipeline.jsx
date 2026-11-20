@@ -50,7 +50,7 @@ export default function OpportunityPipeline() {
   };
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Opportunities" sub="Funding matches, tracked from match to award. Move a card as the work moves.">
+      <PageHeader title="Opportunities" sub="From match to award.">
         <TechSwitcher />
         <Tabs tabs={["Pipeline", "Funding matches"]} value={ui.oppTab} onChange={(v) => patchUi({ oppTab: v })} />
       </PageHeader>

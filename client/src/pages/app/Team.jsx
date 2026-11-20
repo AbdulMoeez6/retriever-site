@@ -23,7 +23,7 @@ export default function Team() {
   ) : null);
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Team" sub="People in the Acme Labs workspace, their roles and recent activity." />
+      <PageHeader title="Team" />
       <div className="card flex flex-wrap items-center justify-between gap-3 p-4">
         <div className="w-64">
           <div className="flex justify-between text-xs text-muted dark:text-slate-400"><span>Seats</span><span className="font-mono">{used} of {ORG.seats} used</span></div>
@@ -72,7 +72,6 @@ export default function Team() {
         </div>
         <section className="card h-fit p-5">
           <h2 className="text-sm font-medium">Activity</h2>
-          <p className="text-xs text-muted dark:text-slate-400">Recent actions across this workspace</p>
           <ul className="mt-3">
             {team.activity.map((a) => (
               <li key={a.id} className="flex gap-2 border-b border-line py-3 last:border-0 dark:border-slate-800">

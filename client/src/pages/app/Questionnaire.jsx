@@ -38,7 +38,7 @@ function QuestionnaireForm() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Readiness Questionnaire" sub="12 sections · about 15 minutes · your answers are saved as you go.">
+      <PageHeader title="Readiness Questionnaire" sub="12 sections · saved as you go.">
         <TechSwitcher />
         <button type="button" onClick={() => { toast("Answers saved (demo)"); navigate("/app/mission-command"); }} className={btnSecondary}>Save &amp; exit</button>
       </PageHeader>

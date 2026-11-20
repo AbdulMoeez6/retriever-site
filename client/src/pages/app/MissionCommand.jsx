@@ -6,7 +6,7 @@ import { ChartCard, PIPELINE_GROUPS, READINESS_RANGES, pipelineSpec, readinessSp
 import TechSwitcher from "../../components/TechSwitcher.jsx";
 import PilotWorkflow from "../../components/PilotWorkflow.jsx";
 import Icon from "../../components/Icon.jsx";
-import { Avatar, Mark, PageHeader, StatusChip, btnPrimary, btnSecondary, formatMoney } from "../../components/ui.jsx";
+import { Avatar, Mark, PageHeader, btnPrimary, btnSecondary } from "../../components/ui.jsx";
 
 const DATE = "Friday, 20 November 2026";
 
@@ -17,7 +17,7 @@ function StartCard() {
       <div>
         <div className="text-xs text-muted dark:text-slate-400">New technology</div>
         <h2 className="mt-1 text-xl font-semibold tracking-tight">Start with your Technology Profile</h2>
-        <p className="mt-2 max-w-md text-sm text-muted dark:text-slate-400">Nothing has been created for this technology yet. Create the profile, then answer the Readiness Questionnaire to generate an Innovation Index and funding matches.</p>
+        <p className="mt-2 max-w-md text-sm text-muted dark:text-slate-400">Create the profile, then answer the Readiness Questionnaire.</p>
         <div className="mt-6 flex flex-wrap gap-2">
           <button type="button" onClick={() => navigate("/app/technology-profile")} className={`${btnPrimary} nudge`}>Create Technology Profile <Icon name="arrow" /></button>
           <button type="button" onClick={() => navigate("/app/readiness-questionnaire")} className={btnSecondary}>Preview the questionnaire</button>
@@ -33,11 +33,11 @@ function StartCard() {
 }
 
 export default function MissionCommand() {
-  const { hasTech, currentTech, ui, history, pipeline, questionnairePct, actions, notifications, profile, patchUi, toast } = useApp();
+  const { hasTech, currentTech, ui, history, pipeline, questionnairePct, actions, profile, patchUi, toast } = useApp();
   const navigate = useNavigate();
   const first = profile.name.split(" ")[0];
   const header = (techName) => (
-    <PageHeader title={`${greeting()}, ${first}`} sub={`${DATE} · ${techName ? `Mission Command for ${techName}` : "No technology selected yet"}`}>
+    <PageHeader title={`${greeting()}, ${first}`} sub={DATE}>
       <TechSwitcher />
       <button type="button" onClick={() => toast("Report prepared (demo)")} className={btnSecondary}><Icon name="download" /> Download report</button>
       <button type="button" onClick={() => (hasTech ? navigate("/app/readiness") : patchUi({ modal: "readiness" }))} className={btnPrimary}>Open Readiness</button>
@@ -58,12 +58,11 @@ export default function MissionCommand() {
   // Sample Innovation Index: readiness levels weighted with questionnaire coverage.
   const index = Math.round((((t.trl || 0) + (t.mrl || 0) + (t.irl || 0)) / 27) * 60 + qPct * 0.4);
   const nextActions = actions.filter((a) => a.status !== "Done").slice(0, 3);
-  const goActivity = (n) => { if (n.techId) patchUi({ techId: n.techId }); navigate(`/app/${n.route}`); };
   const kpis = [
-    ["Innovation Index", index, "Sample score out of 100", "readiness-questionnaire"],
+    ["Innovation Index", index, "out of 100 (sample)", "readiness-questionnaire"],
     ["Current TRL", t.trl ?? "—", `MRL ${t.mrl ?? "—"} · IRL ${t.irl ?? "—"}`, "readiness"],
-    ["Opportunities", opps.length, `${opps.filter((o) => o.stage === "Awarded").length} awarded · ${opps.filter((o) => o.stage === "Drafting").length} drafting`, "opportunities"],
-    ["Questionnaire", `${qPct}%`, "Answers saved as you go", "readiness-questionnaire"],
+    ["Opportunities", opps.length, `${opps.filter((o) => o.stage === "Awarded").length} awarded`, "opportunities"],
+    ["Questionnaire", `${qPct}%`, "complete", "readiness-questionnaire"],
   ];
 
   return (
@@ -79,43 +78,23 @@ export default function MissionCommand() {
         <ChartCard id="mc.pipeline" title="Opportunity pipeline" types={["bar", "donut"]} groups={PIPELINE_GROUPS} height={190}
           build={({ group }) => pipelineSpec(opps, group)} />
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        <section className="card p-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium">Next actions</h2>
-            <Link to="/app/action-plan" className="u-link text-xs text-muted dark:text-slate-400">View all</Link>
-          </div>
-          <ul className="mt-3 grid gap-3">
-            {nextActions.map((a) => (
-              <li key={a.id} className="flex items-start gap-3">
-                <Avatar name={a.owner} size={28} />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium">{a.title}</div>
-                  <div className="text-xs text-muted dark:text-slate-400">{a.owner} · {a.due}</div>
-                </div>
-                <StatusChip status={a.status} />
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section className="card p-5">
-          <h2 className="text-sm font-medium">Recent activity</h2>
-          <ul className="mt-3 grid gap-2">
-            {notifications.slice(0, 3).map((n) => (
-              <li key={n.id}>
-                <button type="button" onClick={() => goActivity(n)} className="group flex w-full items-start gap-3 rounded-md px-1 py-1 text-left hover:bg-soft/80 dark:hover:bg-white/5">
-                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy/60" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-medium">{n.title}</span>
-                    <span className="block text-xs text-muted dark:text-slate-400">{n.body} · {n.time}</span>
-                  </span>
-                  <Icon name="chevronRight" className="hover-reveal mt-1 size-4 text-muted" />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+      <section className="card p-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-medium">Next actions</h2>
+          <Link to="/app/action-plan" className="u-link text-xs text-muted dark:text-slate-400">View all</Link>
+        </div>
+        <ul className="mt-3 grid gap-x-8 gap-y-3 md:grid-cols-3">
+          {nextActions.map((a) => (
+            <li key={a.id} className="flex items-start gap-3">
+              <Avatar name={a.owner} size={28} />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-sm font-medium">{a.title}</div>
+                <div className="text-xs text-muted dark:text-slate-400">{a.owner} · {a.due}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
