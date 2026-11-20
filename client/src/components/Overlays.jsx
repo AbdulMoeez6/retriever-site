@@ -164,7 +164,7 @@ const Submit = ({ children }) => <button type="submit" className="rounded-lg bg-
 
 /** Add action / New profile / Upload document / Share roadmap modals. */
 export function Modals() {
-  const { ui, patchUi, patchData, techs, toast } = useApp();
+  const { ui, patchUi, patchData, techs, toast, profile } = useApp();
   const navigate = useNavigate();
   const close = () => patchUi({ modal: null });
   if (!ui.modal) return null;
@@ -215,6 +215,27 @@ export function Modals() {
         footer={<button type="button" onClick={close} className="w-full rounded-lg border border-line px-4 py-2 text-sm dark:border-slate-700">Close</button>}>
         <p className="mt-2 text-sm text-muted dark:text-slate-400">Evidence-based readiness is assessed for a technology. Create your Technology Profile first. You don't need to finish the questionnaire to start adding evidence here.</p>
         <button type="button" onClick={() => { close(); navigate("/app/technology-profile"); }} className="mt-4 rounded-lg bg-navy px-4 py-2 text-sm font-medium text-white hover:bg-navy-700">Create Technology Profile</button>
+      </ModalShell>
+    );
+  }
+  if (ui.modal === "invite") {
+    const submit = (e) => {
+      e.preventDefault();
+      const f = new FormData(e.currentTarget);
+      const name = String(f.get("name")).trim();
+      patchData((d) => ({ team: {
+        members: [...d.team.members, { id: uid("m"), name, email: String(f.get("email")).trim(), role: String(f.get("role") || "Member"), status: "Invited" }],
+        activity: [{ id: uid("a"), who: profile.name, what: `invited ${name}`, when: "Just now" }, ...d.team.activity],
+      } }));
+      close(); toast("Invite saved (demo). No email is sent from this preview.");
+    };
+    return (
+      <ModalShell title="Invite teammate" sub="Sample workspace only. Nothing is sent." onClose={close} onSubmit={submit} footer={<><Cancel onClick={close} /><Submit>Add invite</Submit></>}>
+        <div className="mt-5 grid gap-3">
+          <Field label="Name"><input name="name" required className="field" /></Field>
+          <Field label="Work email"><input name="email" type="email" required className="field" /></Field>
+          <Field label="Role"><select name="role" defaultValue="Member" className="field"><option>Admin</option><option>Member</option></select></Field>
+        </div>
       </ModalShell>
     );
   }
