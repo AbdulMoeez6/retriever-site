@@ -2,7 +2,7 @@
   "site": {
     "title": "Retriever",
     "base_url": "https://worldenterprisegroup.github.io",
-    "base_path": "/retriever-site",
+    "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
     "apple_touch_icon": "/images/apple-touch-icon.png",
