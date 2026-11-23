@@ -1,0 +1,16 @@
+@utility shadow {
+  box-shadow: 0px 10px 45px rgba(13, 20, 32, 0.05);
+}
+
+@utility shadow-lg {
+  box-shadow: 0px 15px 34px rgba(13, 20, 32, 0.1);
+}
+
+/* Pinwheel's signature gradient, re-coloured with Retriever navy */
+@utility bg-gradient-to-tl {
+  background-image: linear-gradient(184.78deg, #1b365d 7.64%, #3b6a9e 120.07%);
+}
+
+@utility bg-gradient {
+  background-image: linear-gradient(184.78deg, #1b365d 7.64%, #3b6a9e 120.07%);
+}

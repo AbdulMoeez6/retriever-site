@@ -1,0 +1,27 @@
+---
+// One static page per workspace screen; the workspace itself is a React island.
+import AppLayout from "@/layouts/AppLayout.astro";
+import AppShell, { SCREEN_TITLES } from "@/layouts/function-components/app/AppShell.jsx";
+
+export function getStaticPaths() {
+  return [
+    "mission-command",
+    "readiness",
+    "opportunities",
+    "evidence",
+    "funding",
+    "roadmap",
+    "action-planning",
+    "profiles",
+    "settings",
+  ].map((screen) => ({ params: { screen } }));
+}
+
+const { screen } = Astro.params;
+---
+
+<AppLayout title={SCREEN_TITLES[screen]}>
+  <AppShell client:only="react" screen={screen}>
+    <div slot="fallback" class="grid h-dvh place-items-center text-sm text-muted">Loading the sample workspace…</div>
+  </AppShell>
+</AppLayout>

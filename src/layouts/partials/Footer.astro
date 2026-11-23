@@ -1,0 +1,38 @@
+---
+// Pinwheel footer structure with Retriever content.
+import Logo from "@/components/Logo.astro";
+import config from "@/config/config.json";
+import menu from "@/config/menu.json";
+
+const { footer } = menu;
+const { copyright, footer_description, audience, disclaimer } = config.params;
+---
+
+<footer class="footer bg-light">
+  <div class="container">
+    <div class="row pb-10 pt-[52px]">
+      <div class="col-12 mt-6 md:col-7 lg:col-6">
+        <Logo />
+        <p class="mt-6 max-w-md">{footer_description}</p>
+        <p class="mt-2 max-w-md">{audience}</p>
+      </div>
+      <div class="col-12 mt-10 md:col-5 md:mt-6 lg:col-3 lg:ml-auto">
+        <h2 class="h6">Quick links</h2>
+        <ul>
+          {
+            footer.map((item, i) => (
+              <li class={footer.length - 1 === i ? "mb-0" : "mb-3"}>
+                <a href={item.url}>{item.name}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="border-t border-border pb-10 pt-7 text-center">
+      <p class="text-text">{copyright} · {disclaimer}</p>
+    </div>
+  </div>
+</footer>

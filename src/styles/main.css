@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@plugin "../tailwind-plugin/tw-theme";
+@plugin "../tailwind-plugin/tw-bs-grid";
+@plugin "@tailwindcss/forms" {
+  strategy: "class";
+}
+@plugin "@tailwindcss/typography";
+
+/* Retriever's light/dark toggle puts `.dark` on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Retriever brand tokens (from the original site), used by the workspace UI */
+@theme {
+  --color-navy: #1b365d;
+  --color-navy-700: #152a4a;
+  --color-ink: #0d1420;
+  --color-muted: #4b5465;
+  --color-line: #dce3ec;
+  --color-page: #f3f6f9;
+  --color-soft: #eef3f8;
+  --shadow-raised: 0 0 0 1px rgba(13, 20, 32, 0.06), 0 16px 32px -20px rgba(27, 54, 93, 0.5);
+}
+
+/* Pinwheel theme tokens re-pointed for dark mode */
+.dark {
+  --color-body: #0c1017;
+  --color-border: #2a3344;
+  --color-light: #161c27;
+  --color-text: #9aa3b2;
+  --color-text-dark: #f4f7fa;
+  --color-text-light: #6b7587;
+  color-scheme: dark;
+}
+
+@import "./safe.css";
+@import "./utilities.css";
+
+@layer base {
+  @import "./base.css";
+}
+
+@layer components {
+  @import "./components.css";
+  @import "./navigation.css";
+  @import "./buttons.css";
+  @import "./retriever.css";
+}

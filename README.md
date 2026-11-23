@@ -1,81 +1,95 @@
-# Retriever website
+# Retriever — Astro site (Pinwheel-based)
 
-Marketing site and product preview for **Retriever**: identify the opportunity, validate the evidence, advance the technology.
+The Retriever marketing site and sample workspace, migrated from the single-file
+`Retriever_Template.html` build into a static [Astro](https://astro.build) site that uses the
+[Pinwheel Astro](https://github.com/themefisher/pinwheel-astro) template as its foundation.
 
-Built with React 18, Vite 5, Tailwind CSS 3 and React Router 6, with an optional minimal Express server.
-**Sample data only.** Nothing is saved or sent anywhere: the Book a demo form, sign-in and all dialogs run in the browser.
+- **Pinwheel provides** the layout system and architecture: `Base` layout, header and footer
+  partials, CTA band, page header with breadcrumb, Bootstrap-style `row`/`col` grid, `btn` styles,
+  pricing card structure, theme tokens in `src/config/theme.json`, and content collections.
+- **Retriever provides** the identity and everything on the pages: navy palette, Hanken Grotesk and
+  IBM Plex Mono fonts, aurora/dot-grid backgrounds, glass video frames, all copy, sample data and
+  every interactive feature.
 
-## Branches
+## Run it
 
-| Branch | Purpose |
-| --- | --- |
-| `gh-pages` | Live site, published by GitHub Pages. Only finished, approved work goes here. |
-| `demo` | New ideas and work in progress. Not published. |
-
-## Project layout
-
-```
-.
-├── index.html              # built single-file site served by GitHub Pages (npm run build:pages)
-├── package.json            # root scripts: dev, build, build:pages, start
-├── client/                 # Vite + React + Tailwind app
-│   ├── index.html
-│   ├── vite.config.js      # normal build -> dist/, `--mode singlefile` -> one self-contained file
-│   ├── tailwind.config.js  # navy brand tokens, Hanken Grotesk + IBM Plex Mono
-│   ├── scripts/build-pages.mjs
-│   └── src/
-│       ├── main.jsx        # router selection, fonts bundled locally (no CDN)
-│       ├── App.jsx         # routes
-│       ├── index.css       # Tailwind layers, theme, glass frames, motion
-│       ├── assets/         # logo, favicons, videos and posters
-│       ├── data/           # sample data and navigation
-│       ├── lib/            # store, motion hooks, format and browser helpers
-│       ├── components/     # navbar, sidebar, top bar, charts, video frames, overlays …
-│       └── pages/          # landing, book a demo, sign in, shared roadmap, dashboard pages
-└── server/                 # optional Express server for local hosting (GET /api/health)
-```
-
-## Run locally
-
-Requires Node 18+.
+Requires Node 18.20+ (tested on Node 24).
 
 ```bash
-npm install          # installs root, client and server dependencies
-npm run dev          # Vite on http://localhost:5173 + Express on :3001
-npm run build        # builds client/dist
-npm start            # serves client/dist at http://localhost:3001
+npm install
+npm run dev       # http://localhost:4321
+npm run build     # static output in dist/
+npm run preview   # serve dist/ locally
 ```
 
-## Publish to GitHub Pages
+## Deploy
 
-```bash
-npm run build:pages  # writes the self-contained site to ./index.html
+`npm run build` produces a fully static `dist/` folder. Upload it to any static host
+(GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3...). Before deploying:
+
+- Set `site.base_url` in `src/config/config.json` to the real domain (used for canonical URLs, Open
+  Graph tags and the sitemap).
+- If the site is served from a sub-path (e.g. GitHub Pages project URL `/retriever-site/`), set
+  `site.base_path` too.
+
+## Pages
+
+| Original route (SPA) | Astro page | Pinwheel structure used |
+| --- | --- | --- |
+| `/` | `src/pages/index.astro` | Base layout, banner (hero), CTA band, footer |
+| `/pricing` | `src/pages/pricing.astro` | Page header + breadcrumb, pricing cards grid |
+| `/book-demo` (`?intent=pilot`) | `src/pages/book-demo.astro` | Contact page layout (intro + form columns) |
+| `/signin` | `src/pages/signin.astro` | Sign-in layout (form + gradient banner) |
+| `/shared-roadmap` | `src/pages/shared-roadmap.astro` | Page header + breadcrumb |
+| `/app` | redirect → `/app/mission-command` (`astro.config.mjs`) | — |
+| `/app/<screen>` (9 screens) | `src/pages/app/[screen].astro` | Own workspace layout (`AppLayout.astro`) |
+| unknown routes | `src/pages/404.astro` (redirects home, like the original) | Pinwheel 404 |
+
+## Features carried over
+
+- Light/dark theme toggle, remembered in `localStorage` (`retriever-theme`), applied before paint.
+- Hero and product videos: scroll reveal, pointer tilt, hover to play (tap / Enter / Space on touch
+  and keyboard).
+- Live dashboard preview on the homepage (greeting, KPI count-up, readiness chart).
+- Five-question quick assessment (homepage and Readiness screen).
+- Pricing monthly/annual toggle with the sliding pill and price-swap animation; "Contact sales"
+  toasts; Founding Partner Pilot link to `/book-demo?intent=pilot`.
+- Book-a-demo form: same validation rules and messages, time-slot radio chips, pilot copy variant,
+  animated success state. Nothing is sent (sample page, as before).
+- Sample sign-in (any email + password) into the workspace.
+- Workspace: sidebar, search (⌘/Ctrl+K), notifications, Mission Command, Readiness, Opportunities,
+  Evidence (filters, upload), Funding (filters, CSV export), Roadmap (Gantt, share link), Action
+  planning (add, toggle status), Profiles (add, detail tabs), Settings (usage limits, theme,
+  sign-out), detail drawers, modals, Escape to close, toasts.
+
+## Architecture notes
+
+```
+src/
+  config/            site config, menu, theme tokens (Pinwheel pattern)
+  content/           homepage + pricing content collections
+  layouts/
+    Base.astro       marketing layout (Pinwheel)
+    AppLayout.astro  workspace layout
+    partials/        Head, Header, Footer, Cta
+    components/      Logo, PageHeader, PricingCard, ThemeToggle, VideoShowcase
+    function-components/
+      app/           React workspace: AppShell, shell/, screens/, ui/
+      DashboardPreview.jsx, QuickAssessmentLauncher.jsx  homepage islands
+  lib/               store (workspace state), sample data, formatting, theme, toast, session
+  scripts/           plain JS for marketing pages (site, pricing, book-demo, video-showcase)
+  styles/            Pinwheel CSS layers + retriever.css (brand components/animations)
+public/              images, videos, favicon
 ```
 
-The site uses hash URLs (`#/book-demo`, `#/app/readiness`, …) and inlines its fonts, styles, images and videos,
-so it works from the repository sub-path (`https://<org>.github.io/retriever-site/`) and when opened straight from disk.
-
-## Routes
-
-| Path | Page |
-| --- | --- |
-| `/` | Landing: editorial hero, readiness video, dashboard preview, "See Retriever in action" showcase (original and new demo videos; all autoplay muted and loop, poster only with reduced motion) |
-| `/book-demo` | Book a demo (`?intent=pilot` for the pilot invite variant) |
-| `/signin` | Sample sign-in (any email and password) |
-| `/shared-roadmap` | Read-only roadmap view |
-| `/app/mission-command` | Dashboard: technology snapshot and the 7-step pilot workflow |
-| `/app/opportunities` | Opportunity pipeline (Matched → Awarded) and funding matches |
-| `/app/readiness`, `/app/readiness-gaps`, `/app/action-plan` | TRL · MRL · IRL with evidence, readiness gaps and readiness actions |
-| `/app/knowledge-base`, `/app/commercialization` | Document uploads and opportunity records; Commercialization Trail |
-| `/app/technology-profile`, `/app/team` | Four-step Technology Profile; team seats, roles and activity |
-| `/app/readiness-questionnaire`, `/app/evidence-reasoning`, `/app/proposal-assistant` | 12-section questionnaire, qualitative findings, proposal template preview |
-| `/app/settings` | Plan usage (no prices) and appearance |
-
-Earlier dashboard paths (`/app/evidence`, `/app/funding`, `/app/roadmap`, `/app/action-planning`, `/app/profiles`) redirect to their new pages.
-The dashboard uses a fictional organization (Acme Labs). Use "Start a new technology" in the page-header Technology selector to see the empty pilot state.
-Tables switch between Table, Cards or Board views, and charts switch type (line, area, bar or donut), grouping and range, or can be hidden. Choices are remembered on the device where storage is available.
-Motion (fade-ins, count-up, bar fills) is turned off under `prefers-reduced-motion`, and the landing stays visible without JavaScript.
-
-## Content rules
-
-This repository is public. Do not commit unapproved commercial terms, passwords, keys, `.env` files or client documents.
+- Marketing pages are plain Astro + small vanilla scripts; React loads only where the original
+  app's React components are reused (dashboard preview, quick assessment, shared roadmap, workspace).
+  React is already part of the Pinwheel template (`@astrojs/react`).
+- The original was one in-memory single-page app. Each route is now a real static page, so the
+  workspace state (added actions/documents/profiles, selected technology, filters, sign-in flag) is
+  kept in `sessionStorage` (`src/lib/store.js`) and survives navigation within the tab.
+- Single-file packaging workarounds from the original (hash-router fallback, data-URI video to blob
+  conversion, form-submit shim for sandboxed previews) are no longer needed and were dropped; assets
+  are real files in `public/`.
+- The workspace sidebar becomes a slide-over menu below 1024px so the workspace works on phones and
+  tablets.

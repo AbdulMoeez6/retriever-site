@@ -1,0 +1,32 @@
+.header {
+  @apply sticky top-0 z-50 border-b border-transparent bg-white/85 py-4 backdrop-blur-xl transition-all duration-300 dark:bg-body/85;
+}
+
+.header-sticky {
+  @apply border-border/80 shadow;
+}
+
+/* navbar items */
+.navbar {
+  @apply relative flex flex-wrap items-center justify-between gap-y-2;
+}
+
+.navbar-brand {
+  @apply text-xl font-semibold text-text-dark;
+}
+
+.navbar-nav {
+  @apply text-center lg:text-left;
+}
+
+.nav-link {
+  @apply block p-3 py-2 text-[15px] text-text transition hover:text-text-dark md:px-3 lg:inline-block;
+
+  &.active {
+    @apply relative font-medium text-text-dark;
+
+    &::after {
+      @apply absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-to-tl content-[''];
+    }
+  }
+}

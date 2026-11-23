@@ -1,0 +1,82 @@
+---
+// Pinwheel header structure (logo, nav with active underline, mobile toggler, CTA buttons)
+// carrying Retriever's navigation: Product, Pricing, Sample data, theme toggle, Sign in, Book a demo.
+import Logo from "@/components/Logo.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import menu from "@/config/menu.json";
+
+export interface NavigationLink {
+  name: string;
+  url: string;
+}
+
+const { main }: { main: NavigationLink[] } = menu;
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="header">
+  <nav class="navbar container" aria-label="Main">
+    <div class="order-0">
+      <Logo />
+    </div>
+
+    <!-- navbar toggler (mobile) -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="order-2 grid size-10 place-items-center rounded-md text-text-dark lg:hidden"
+      aria-controls="nav-menu"
+      aria-expanded="false"
+      aria-label="Open menu"
+    >
+      <svg class="nav-open-icon h-6 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
+      </svg>
+      <svg class="nav-close-icon hidden h-6 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+        <polygon
+          points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
+          transform="rotate(45 10 10)"></polygon>
+      </svg>
+    </button>
+
+    <ul
+      id="nav-menu"
+      class="navbar-nav order-3 hidden w-full pb-2 lg:order-1 lg:ml-6 lg:mr-auto lg:flex lg:w-auto lg:space-x-1 lg:pb-0"
+    >
+      {
+        main.map((item) => (
+          <li class="nav-item">
+            <a
+              href={item.url}
+              class:list={["nav-link", { active: pathname === item.url }]}
+              aria-current={pathname === item.url ? "page" : undefined}
+            >
+              {item.name}
+            </a>
+          </li>
+        ))
+      }
+      <li class="nav-item mt-3 flex flex-col items-center gap-3 sm:hidden">
+        <a class="btn btn-white btn-sm w-full max-w-xs" href="/signin">Sign in</a>
+        <a class="btn btn-primary btn-sm w-full max-w-xs" href="/book-demo">Book a demo</a>
+      </li>
+    </ul>
+
+    <div class="order-1 ml-auto flex items-center gap-2 lg:order-2 lg:ml-0">
+      <span
+        class="hidden rounded-full border border-border px-2 py-0.5 text-[11px] font-medium leading-normal text-text lg:inline"
+      >
+        Sample data
+      </span>
+      <ThemeToggle />
+      <a
+        class:list={[
+          "hidden rounded-md px-3 py-2 text-sm text-text-dark hover:text-primary sm:inline-flex dark:hover:text-secondary",
+          { "font-medium": pathname === "/signin" },
+        ]}
+        href="/signin">Sign in</a
+      >
+      <a class="btn btn-primary btn-sm hidden sm:inline-flex" href="/book-demo">Book a demo</a>
+    </div>
+  </nav>
+</header>

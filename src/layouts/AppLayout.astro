@@ -1,0 +1,22 @@
+---
+// Workspace layout: shared <head>, no marketing header/footer (the workspace has its own sidebar).
+import Head from "@/partials/Head.astro";
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head {...Astro.props} noindex />
+  </head>
+  <body class="bg-soft dark:bg-[#090C12]">
+    <slot />
+    <script is:inline>
+      window.__retrieverBooted = true;
+    </script>
+  </body>
+</html>

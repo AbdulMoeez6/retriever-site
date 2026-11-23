@@ -1,0 +1,27 @@
+/* navbar toggler (button with aria-expanded; see scripts/site.js) */
+#nav-toggle[aria-expanded="true"] .nav-open-icon {
+  @apply hidden;
+}
+
+#nav-toggle[aria-expanded="true"] .nav-close-icon {
+  @apply block;
+}
+
+#nav-menu.is-open {
+  @apply block lg:flex;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* form style */
+.form-label {
+  @apply mb-2 block font-primary text-sm font-medium text-text-dark;
+}
+
+.form-control {
+  @apply w-full rounded-lg! border border-border bg-white px-4 py-3 text-text-dark placeholder:text-text-light focus:border-primary! focus:ring-transparent! dark:bg-body;
+}

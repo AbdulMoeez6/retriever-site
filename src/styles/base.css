@@ -1,0 +1,74 @@
+html {
+  @apply text-base;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply bg-body font-primary font-normal leading-relaxed text-text overflow-x-hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-primary font-bold leading-tight text-text-dark;
+}
+
+h1,
+.h1 {
+  @apply text-h1-sm md:text-h1;
+}
+
+h2,
+.h2 {
+  @apply text-h2-sm md:text-h2;
+}
+
+h3,
+.h3 {
+  @apply text-h3-sm md:text-h3;
+}
+
+h4,
+.h4 {
+  @apply text-h4;
+}
+
+h5,
+.h5 {
+  @apply text-h5;
+}
+
+h6,
+.h6 {
+  @apply text-h6;
+}
+
+b,
+strong {
+  @apply font-semibold;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+kbd {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.65rem;
+  border: 1px solid #dce3ec;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.3rem;
+  color: #4b5465;
+}
+
+html.dark kbd {
+  border-color: #2a3344;
+  color: #9aa3b2;
+}

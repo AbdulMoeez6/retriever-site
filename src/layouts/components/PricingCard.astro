@@ -1,0 +1,52 @@
+---
+// Pinwheel PricingCard structure (title, price, description, feature list, button) for a Retriever tier.
+// Monthly and annual values are both rendered; scripts/pricing.js swaps them.
+export interface Props {
+  item: {
+    title: string;
+    designed_for: string;
+    monthly: { value: string; unit: string };
+    annual: { value: string; unit: string };
+    features: string[];
+    button_label: string;
+  };
+  toast: string;
+}
+
+const { item, toast } = Astro.props;
+---
+
+<article class="pricing-card">
+  <h2 class="h4">{item.title}</h2>
+  <p class="mt-2 text-sm leading-normal">{item.designed_for}</p>
+  <div class="mt-5" data-price data-monthly={item.monthly.value} data-annual={item.annual.value}>
+    <p class="price-swap text-3xl font-semibold tracking-tight text-text-dark" data-price-value>
+      {item.monthly.value}
+    </p>
+    <p
+      class="price-swap mt-1 text-sm"
+      data-price-unit
+      data-monthly={item.monthly.unit}
+      data-annual={item.annual.unit}
+    >
+      {item.monthly.unit}
+    </p>
+  </div>
+  <div class="my-6 flex-1 border-y border-border py-6">
+    <ul class="grid gap-3">
+      {
+        item.features.map((feature) => (
+          <li class="flex gap-2 text-sm leading-normal">
+            <svg class="mt-0.5 size-4 shrink-0 text-primary dark:text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 12 4.5 4.5L19 7" />
+            </svg>
+            <span>{feature}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <button type="button" class="btn btn-outline-primary btn-sm w-full" data-toast={toast}>
+    {item.button_label}
+  </button>
+</article>

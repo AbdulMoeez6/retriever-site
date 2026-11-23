@@ -1,0 +1,74 @@
+---
+// Pinwheel sign-in layout (form column + gradient banner) with Retriever's sample sign-in.
+import Logo from "@/components/Logo.astro";
+import Base from "@/layouts/Base.astro";
+import { sampleProfile } from "@/lib/sample-data";
+
+const profile = sampleProfile();
+---
+
+<Base title="Sign in" description="Use any work email and password to enter the sample workspace." noindex>
+  <section class="relative isolate overflow-hidden">
+    <div class="aurora aurora-soft"></div>
+    <div class="dotgrid pointer-events-none absolute inset-0 opacity-50"></div>
+    <div class="container relative py-14 lg:py-20">
+      <div class="row items-stretch">
+        <div class="lg:col-6">
+          <div class="page-enter mx-auto w-full max-w-md">
+            <Logo class="mb-8" />
+            <div class="card p-6 sm:p-8">
+              <h1 class="h3">Sign in</h1>
+              <p class="mt-2 text-sm leading-normal">Use any work email and password to enter the sample workspace.</p>
+              <form class="mt-6 grid gap-4" novalidate data-signin-form>
+                <div>
+                  <label for="signin-email" class="form-label">Work email</label>
+                  <input id="signin-email" name="email" type="email" autocomplete="email" value={profile.email} required class="form-control" />
+                </div>
+                <div>
+                  <label for="signin-password" class="form-label">Password</label>
+                  <input id="signin-password" name="password" type="password" autocomplete="current-password" value="demo" required class="form-control" />
+                </div>
+                <p class="hidden text-sm text-red-600 dark:text-rose-300" role="alert" data-signin-error></p>
+                <button type="submit" class="btn btn-primary mt-2 w-full">Sign in</button>
+              </form>
+            </div>
+            <p class="mt-5 text-center text-sm">
+              <a href="/book-demo" class="underline-offset-2 hover:underline">Book a demo</a>
+            </p>
+          </div>
+        </div>
+        <div class="mt-12 hidden lg:col-6 lg:mt-0 lg:block">
+          <div class="bg-gradient flex h-full flex-col items-center justify-center rounded-[20px] px-10 py-14 text-center">
+            <p class="h3 max-w-md text-white">Identify the opportunity. Validate the evidence. Advance the technology.</p>
+            <img
+              src="/images/readiness-poster.jpg"
+              alt="Retriever readiness screen on a phone"
+              width="720"
+              height="1280"
+              class="mt-10 w-48 rounded-[1.6rem] shadow-lg ring-8 ring-white/10"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { patchStoredUi } from "@/lib/session";
+
+  const form = document.querySelector("[data-signin-form]");
+  const error = document.querySelector("[data-signin-error]");
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    if (!data.get("email") || !data.get("password")) {
+      error.textContent = "Enter a work email and password to continue.";
+      error.classList.remove("hidden");
+      return;
+    }
+    patchStoredUi({ session: true });
+    window.location.assign("/app/mission-command");
+  });
+</script>

@@ -1,0 +1,35 @@
+---
+// Pinwheel call-to-action band, in Retriever navy, using the original "Book a demo" copy.
+import config from "@/config/config.json";
+
+const {
+  call_to_action: {
+    title,
+    description,
+    button: { label, link },
+  },
+} = config;
+---
+
+<section class="px-4 py-20 xl:py-[120px]">
+  <div class="container">
+    <div class="bg-gradient row justify-center rounded-b-[80px] rounded-t-[20px] px-[30px] pb-[75px] pt-16">
+      <div class="lg:col-11">
+        <div class="row items-center">
+          <div class="lg:col-7">
+            <h2 class="h1 text-white">{title}</h2>
+            <a class="btn btn-white mt-8" href={link}>
+              {label}
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"
+                ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+              >
+            </a>
+          </div>
+          <div class="mt-8 lg:col-5 lg:mt-0">
+            <p class="text-lg text-white/90">{description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

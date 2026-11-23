@@ -1,0 +1,25 @@
+---
+// Pinwheel 404. The original app sent unknown routes to the home page, so this page does too.
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Page not found" noindex>
+  <section class="section">
+    <div class="container">
+      <div class="flex min-h-[40vh] items-center justify-center">
+        <div class="text-center">
+          <img src="/images/logo-mark.png" class="mb-4 inline size-24 rounded-full" alt="" width="96" height="96" />
+          <h1 class="mb-4">Page not found</h1>
+          <p>Taking you to the Retriever home page…</p>
+          <a href="/" class="btn btn-primary mt-8">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline>
+  setTimeout(function () {
+    window.location.replace("/");
+  }, 3000);
+</script>

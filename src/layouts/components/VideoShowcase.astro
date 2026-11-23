@@ -1,0 +1,52 @@
+---
+// Glass-framed product video: reveals on scroll, tilts with the pointer, plays on hover
+// (or tap / Enter / Space). Behaviour lives in scripts/video-showcase.js.
+export interface Props {
+  variant?: "device" | "wide";
+  src: string;
+  poster: string;
+  label: string;
+  class?: string;
+  maxTilt?: number;
+  revealAfter?: number;
+}
+
+const { variant = "wide", src, poster, label, class: className = "", maxTilt = 6, revealAfter } = Astro.props;
+const device = variant === "device";
+const glow = device
+  ? "inset:6% -18% -4% -18%;background:radial-gradient(ellipse at 50% 50%, rgba(27,54,93,0.42), rgba(80,140,210,0.18) 45%, transparent 72%)"
+  : "inset:4% 6% -8% 6%;background:radial-gradient(ellipse at 50% 50%, rgba(80,140,210,0.45), rgba(40,90,165,0.15) 50%, transparent 72%)";
+---
+
+<div
+  class:list={["glass-stage glass-reveal", className]}
+  data-video-showcase
+  data-max-tilt={maxTilt}
+  data-reveal-after={revealAfter}
+>
+  <div aria-hidden="true" class="glass-glow" style={glow}></div>
+  <div
+    class:list={["glass-frame", device ? "glass-device" : "glass-wide"]}
+    data-demo-video
+    role="button"
+    tabindex="0"
+    aria-label={`${label} — hover or tap to play`}
+    aria-pressed="false"
+  >
+    <div class:list={["glass-screen", device ? "aspect-[9/16]" : "aspect-video"]}>
+      <img src={poster} alt="" class="glass-poster" draggable="false" />
+      <video src={src} muted playsinline loop preload="metadata" class="glass-video"></video>
+      {device && <span class="device-notch" aria-hidden="true" />}
+      <span class="play-hint" aria-hidden="true">
+        <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M8 5.5v13l10.5-6.5L8 5.5z" fill="currentColor" stroke="none"></path>
+        </svg>
+        <span data-play-label>Hover to play</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import "@/scripts/video-showcase.js";
+</script>

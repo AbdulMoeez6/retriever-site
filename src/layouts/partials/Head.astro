@@ -1,0 +1,69 @@
+---
+// Shared <head> for the marketing layout (Base) and the workspace layout (AppLayout).
+import config from "@/config/config.json";
+import theme from "@/config/theme.json";
+import { plainify } from "@/lib/utils/textConverter";
+import "@/styles/main.css";
+import { Font } from "astro:assets";
+
+export interface Props {
+  title?: string;
+  meta_title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+}
+
+const { title, meta_title, description, image, noindex, canonical } = Astro.props;
+
+const fontEntries = Object.entries(theme.fonts.font_family).filter(
+  ([key]) => !key.includes("_type"),
+);
+const pageTitle = plainify(meta_title || (title ? `${title} | ${config.site.title}` : config.site.title));
+const pageDescription = plainify(description || config.metadata.meta_description);
+const ogImage = `${config.site.base_url}${image || config.metadata.meta_image}`;
+const pageUrl = new URL(Astro.url.pathname, config.site.base_url).href;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+
+<!-- theme: applied before first paint so dark mode never flashes (same key as the original site) -->
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    try {
+      if (localStorage.getItem("retriever-theme") === "dark") root.classList.add("dark");
+    } catch (e) {}
+    root.classList.add("js");
+    // If scripts fail to boot, show content that is hidden until revealed
+    setTimeout(function () {
+      if (!window.__retrieverBooted) root.classList.remove("js");
+    }, 5000);
+  })();
+</script>
+
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
+<meta name="author" content={config.metadata.meta_author} />
+<meta name="generator" content={Astro.generator} />
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+{canonical && <link rel="canonical" href={canonical} />}
+
+<link rel="icon" type="image/png" href={config.site.favicon} />
+<link rel="apple-touch-icon" href={config.site.apple_touch_icon} />
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FB" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0C1017" />
+
+{fontEntries.map(([key]) => <Font cssVariable={`--font-${key}` as any} preload />)}
+
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={pageDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />

@@ -1,0 +1,22 @@
+---
+import PageHeader from "@/components/PageHeader.astro";
+import Base from "@/layouts/Base.astro";
+import SharedRoadmap from "@/layouts/function-components/app/SharedRoadmap.jsx";
+---
+
+<Base title="Shared roadmap" description="A read-only view of the roadmap. Sample data only." noindex>
+  <section class="page-hero pb-8 pt-16">
+    <div class="container">
+      <PageHeader title="Shared roadmap" content="A read-only view of the roadmap. Sample data only.">
+        <p class="mt-6">
+          <span class="rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-text">Sample data</span>
+        </p>
+      </PageHeader>
+    </div>
+  </section>
+  <section class="section pt-0">
+    <div class="container max-w-5xl!">
+      <SharedRoadmap client:load />
+    </div>
+  </section>
+</Base>

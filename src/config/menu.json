@@ -1,0 +1,35 @@
+{
+  "main": [
+    {
+      "name": "Product",
+      "url": "/#product"
+    },
+    {
+      "name": "Pricing",
+      "url": "/pricing"
+    }
+  ],
+
+  "footer": [
+    {
+      "name": "Product",
+      "url": "/#product"
+    },
+    {
+      "name": "See Retriever in action",
+      "url": "/#videos"
+    },
+    {
+      "name": "Pricing",
+      "url": "/pricing"
+    },
+    {
+      "name": "Book a demo",
+      "url": "/book-demo"
+    },
+    {
+      "name": "Sign in",
+      "url": "/signin"
+    }
+  ]
+}
