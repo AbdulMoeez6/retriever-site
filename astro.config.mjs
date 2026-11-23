@@ -45,8 +45,8 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      // The workspace and share view are sample, sign-in areas
-      filter: (page) => !page.includes("/app/") && !page.includes("/shared-roadmap"),
+      // Leave out noindex pages: sample workspace, sign-in, share view and squeeze (campaign) pages
+      filter: (page) => !/\/(app\/|signin|shared-roadmap|demo\/?$|pilot\/?$|readiness-check\/?$)/.test(page),
     }),
   ],
 });

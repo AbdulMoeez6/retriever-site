@@ -1,0 +1,37 @@
+{
+  "_readme": "Paste your IDs below. Anything left empty stays switched off and loads nothing. See README > Integrations.",
+
+  "consent": {
+    "enabled": true,
+    "privacy_url": ""
+  },
+
+  "ga4": {
+    "measurement_id": ""
+  },
+
+  "hotjar": {
+    "site_id": "",
+    "snippet_version": 6
+  },
+
+  "hubspot": {
+    "portal_id": "",
+    "region": "na1",
+    "load_tracking_code": true,
+    "forms": {
+      "demo": "",
+      "pilot": "",
+      "readiness-check": ""
+    }
+  },
+
+  "pixels": {
+    "meta": { "pixel_id": "" },
+    "linkedin": { "partner_id": "", "lead_conversion_id": "" },
+    "pinterest": { "tag_id": "" },
+    "tiktok": { "pixel_id": "" },
+    "x": { "pixel_id": "", "lead_event_id": "" },
+    "reddit": { "pixel_id": "" }
+  }
+}

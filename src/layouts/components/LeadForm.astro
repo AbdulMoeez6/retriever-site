@@ -1,0 +1,147 @@
+---
+// Retriever's lead form (dark glass card), shared by Book a demo and the squeeze pages.
+// Validation, HubSpot submission and lead tracking: scripts/lead-form.js.
+// When HubSpot isn't configured for this form key, it behaves as a sample form and sends nothing.
+import { withBase } from "@/lib/utils/url";
+
+export interface Field {
+  name: string; // "name" is split into HubSpot firstname/lastname; "email" -> email; "org" -> company
+  label: string;
+  type?: string;
+  autocomplete?: string;
+  placeholder?: string;
+  required?: boolean;
+  requiredError?: string;
+  invalidError?: string;
+}
+export interface Chips {
+  name: string;
+  label: string;
+  options: string[];
+  required?: boolean;
+  requiredError?: string;
+  skipInSuccess?: string; // a chip value that is not repeated in the success message
+}
+export interface Props {
+  formKey: string;
+  fields: Field[];
+  chips?: Chips;
+  context?: string; // extra text sent in the HubSpot "message" property
+  cta: string;
+  successTitle?: string; // {first} = first name
+  successText?: string; // {email}; the chosen chip is appended as " about {chip}"
+  backHref?: string;
+  backLabel?: string;
+}
+
+const {
+  formKey,
+  fields,
+  chips,
+  context = "",
+  cta,
+  successTitle = "Thanks, {first}.",
+  successText = "We’ll be in touch at {email}",
+  backHref = "/",
+  backLabel = "Back to Retriever",
+} = Astro.props;
+const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+const id = (name: string) => `lf-${formKey}-${name}`;
+---
+
+<section class="bd-card bd-rise p-7 sm:p-8" style="--d: 160ms" aria-live="polite" data-lead>
+  <form noValidate data-lead-form data-form-key={formKey} data-context={context}>
+    <div class="grid gap-1">
+      {
+        fields.map((f) => (
+          <div>
+            <label for={id(f.name)} class="mb-1.5 block text-[13px] font-medium text-slate-300">
+              {f.label}
+              {!f.required && <span class="text-slate-500"> (optional)</span>}
+            </label>
+            <input
+              id={id(f.name)}
+              name={f.name}
+              type={f.type || "text"}
+              autocomplete={f.autocomplete}
+              placeholder={f.placeholder}
+              aria-invalid="false"
+              aria-describedby={`${id(f.name)}-err`}
+              class="bd-input"
+              data-required={f.required ? "" : undefined}
+              data-required-error={f.requiredError}
+              data-invalid-error={f.invalidError}
+            />
+            <p id={`${id(f.name)}-err`} class="bd-err invisible mt-1.5 h-4 text-xs leading-4 text-rose-300" aria-live="polite">
+              &nbsp;
+            </p>
+          </div>
+        ))
+      }
+      {
+        chips && (
+          <div>
+            <div id={`${id(chips.name)}-label`} class="mb-2 block text-[13px] font-medium text-slate-300">
+              {chips.label}
+            </div>
+            <div
+              id={id(chips.name)}
+              tabindex="-1"
+              role="radiogroup"
+              aria-labelledby={`${id(chips.name)}-label`}
+              aria-describedby={`${id(chips.name)}-err`}
+              class="flex flex-wrap gap-2 outline-none"
+              data-chips={chips.name}
+              data-chips-label={chips.label}
+              data-required={chips.required ? "" : undefined}
+              data-required-error={chips.requiredError}
+              data-skip-in-success={chips.skipInSuccess}
+            >
+              {chips.options.map((option) => (
+                <button type="button" role="radio" aria-checked="false" class="bd-chip" data-chip={option}>
+                  {option}
+                </button>
+              ))}
+            </div>
+            <p id={`${id(chips.name)}-err`} class="bd-err invisible mt-1.5 h-4 text-xs leading-4 text-rose-300" aria-live="polite">
+              &nbsp;
+            </p>
+          </div>
+        )
+      }
+    </div>
+    <button type="submit" class="bd-btn mt-5" data-lead-submit>
+      <span class="relative z-10 inline-flex items-center justify-center gap-2">
+        <span data-cta>{cta}</span>
+        <Fragment set:html={arrow} />
+      </span>
+    </button>
+    <p class="mt-3 hidden text-center text-xs text-rose-300" role="alert" data-lead-error>
+      Something went wrong sending your details. Please try again.
+    </p>
+    <p class="mt-4 text-center text-xs text-slate-500" data-lead-note>Sample page. Nothing you enter is sent anywhere.</p>
+  </form>
+
+  <div
+    class="bd-success flex min-h-[25.6rem] flex-col items-center justify-center text-center"
+    data-lead-success
+    data-success-title={successTitle}
+    data-success-text={successText}
+    hidden
+  >
+    <svg width="72" height="72" viewBox="0 0 52 52" aria-hidden="true">
+      <circle cx="26" cy="26" r="24" fill="rgba(156,192,234,0.08)" stroke="rgba(156,192,234,0.9)" stroke-width="2" class="bd-check-ring"></circle>
+      <path d="M15 27l7 7 15-16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="bd-check-tick"></path>
+    </svg>
+    <h2 class="mt-6 text-2xl font-semibold tracking-tight text-white" data-success-heading></h2>
+    <p class="mt-2 max-w-xs text-sm leading-relaxed text-slate-400" data-success-body></p>
+    <p class="mt-6 text-xs text-slate-500" data-success-note>Nothing was sent from this sample page.</p>
+    <a href={withBase(backHref)} class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-[#9CC0EA] hover:text-white">
+      {backLabel} <Fragment set:html={arrow} />
+    </a>
+  </div>
+</section>
+
+<script>
+  import "@/scripts/lead-form.js";
+</script>

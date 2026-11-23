@@ -1,0 +1,63 @@
+---
+// Squeeze (single-offer landing) layout: no navigation or footer links, one offer and one form.
+// Pages using it are noindex and left out of the sitemap (campaign traffic only).
+import ConsentBanner from "@/components/ConsentBanner.astro";
+import Logo from "@/components/Logo.astro";
+import config from "@/config/config.json";
+import { needsConsent } from "@/lib/analytics";
+import Head from "@/partials/Head.astro";
+
+export interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head title={title} description={description} noindex />
+  </head>
+  <body class="bd-page">
+    <div class="relative isolate flex min-h-dvh flex-col overflow-hidden">
+      <div class="bd-aurora" aria-hidden="true"></div>
+      <div class="bd-grid" aria-hidden="true"></div>
+      <header class="container relative z-10 py-6">
+        <Logo link={false} class="text-white" />
+      </header>
+      <main id="main-content" class="container relative z-10 flex flex-1 items-center pb-16 pt-4 lg:pb-24">
+        <div class="row w-full items-center">
+          <div class="lg:col-6 xl:col-7">
+            <div class="max-w-xl"><slot name="intro" /></div>
+          </div>
+          <div class="mt-14 lg:col-6 lg:mt-0 xl:col-5">
+            <div class="relative mx-auto max-w-[27rem]">
+              <div
+                aria-hidden="true"
+                class="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-[radial-gradient(closest-side,rgba(90,150,225,0.28),transparent)] blur-2xl"
+              >
+              </div>
+              <slot />
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="container relative z-10 pb-8 text-center text-xs text-slate-500">
+        <p>{config.params.copyright} · {config.params.disclaimer}</p>
+        {
+          needsConsent && (
+            <button type="button" class="mt-2 underline-offset-2 hover:underline" data-consent-open>
+              Cookie settings
+            </button>
+          )
+        }
+      </footer>
+    </div>
+    <ConsentBanner />
+    <script is:inline>
+      window.__retrieverBooted = true;
+    </script>
+  </body>
+</html>

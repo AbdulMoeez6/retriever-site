@@ -745,6 +745,11 @@ html.js .glass-reveal:not(.revealed) {
   transform: translateY(0);
   filter: brightness(0.97);
 }
+.bd-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
 .bd-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 4px #5a96e159;

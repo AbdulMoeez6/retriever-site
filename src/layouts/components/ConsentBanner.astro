@@ -1,0 +1,90 @@
+---
+// Cookie consent: Accept all / Reject all / Customize (Analytics, Marketing).
+// Rendered only when consent is enabled and at least one cookie-setting tool is configured.
+// Behaviour: scripts/consent.js. Reopen from any [data-consent-open] link (footer "Cookie settings").
+import integrations from "@/config/integrations.json";
+import { needsConsent, usesAnalytics, usesMarketing } from "@/lib/analytics";
+import { withBase } from "@/lib/utils/url";
+
+const privacyUrl = integrations.consent.privacy_url;
+---
+
+{
+  needsConsent && (
+    <div
+      id="consent-banner"
+      class="consent"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="consent-title"
+      aria-describedby="consent-text"
+      hidden
+    >
+      <p id="consent-title" class="text-base font-semibold text-text-dark">
+        Your privacy choices
+      </p>
+      <p id="consent-text" class="mt-2 text-sm leading-normal">
+        We use cookies to understand how the site is used and to measure our marketing. Choose what you’re
+        comfortable with. You can change it any time from “Cookie settings”.
+        {privacyUrl && (
+          <>
+            {" "}
+            <a class="underline" href={withBase(privacyUrl)}>
+              Privacy policy
+            </a>
+          </>
+        )}
+      </p>
+
+      <fieldset class="consent-options mt-4 grid gap-3" data-consent-options hidden>
+        <legend class="sr-only">Cookie categories</legend>
+        <label class="flex items-start gap-3 text-sm">
+          <input type="checkbox" checked disabled class="mt-0.5 size-4" />
+          <span>
+            <b class="text-text-dark">Necessary</b>: keeps the site working (theme, sample workspace). Always on.
+          </span>
+        </label>
+        {usesAnalytics && (
+          <label class="flex items-start gap-3 text-sm">
+            <input type="checkbox" data-consent-analytics class="mt-0.5 size-4" />
+            <span>
+              <b class="text-text-dark">Analytics</b>: Google Analytics and Hotjar show us how pages are used.
+            </span>
+          </label>
+        )}
+        {usesMarketing && (
+          <label class="flex items-start gap-3 text-sm">
+            <input type="checkbox" data-consent-marketing class="mt-0.5 size-4" />
+            <span>
+              <b class="text-text-dark">Marketing</b>: HubSpot and advertising pixels (Meta, LinkedIn, Pinterest, TikTok,
+              X, Reddit) measure campaigns.
+            </span>
+          </label>
+        )}
+      </fieldset>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button type="button" class="btn btn-primary btn-sm" data-consent-accept>
+          Accept all
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-consent-reject>
+          Reject all
+        </button>
+        <button type="button" class="btn btn-sm border-0 px-3 underline" data-consent-customize>
+          Customize
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" data-consent-save hidden>
+          Save choices
+        </button>
+      </div>
+    </div>
+  )
+}
+
+{
+  needsConsent && (
+    <script>
+      import "@/scripts/consent.js";
+    </script>
+  )
+}

@@ -1,0 +1,93 @@
+---
+// Squeeze page: the five-question readiness check, then a lead form that carries the answers.
+import LeadForm from "@/components/LeadForm.astro";
+import OfferIntro from "@/components/OfferIntro.astro";
+import OfferPoints from "@/components/OfferPoints.astro";
+import SqueezeLayout from "@/layouts/SqueezeLayout.astro";
+import { EMAIL_FIELD, NAME_FIELD, ORG_FIELD, POINTS } from "@/lib/lead-fields";
+import { QUICK_QUESTIONS } from "@/lib/sample-data";
+
+const line =
+  "Five quick questions about your technology. A full readiness assessment uses TRL, MRL and IRL, and only human-reviewed evidence counts.";
+const answers = ["Yes", "No", "Not sure"];
+---
+
+<SqueezeLayout title="Readiness check" description={line}>
+  <Fragment slot="intro">
+    <OfferIntro eyebrow="Readiness check" title="Five questions. " accent="See where you stand." line={line} />
+    <OfferPoints points={POINTS} />
+  </Fragment>
+
+  <section class="bd-card bd-rise p-7 sm:p-8" style="--d: 160ms" data-check>
+    <p class="text-[13px] font-medium text-slate-300" data-check-progress>0 of {QUICK_QUESTIONS.length} answered</p>
+    <div class="mt-5 grid gap-6">
+      {
+        QUICK_QUESTIONS.map((q, i) => (
+          <div>
+            <p id={`q-${q.id}`} class="text-base font-medium leading-snug text-white">
+              {i + 1}. {q.text}
+            </p>
+            <div class="mt-3 flex flex-wrap gap-2" role="radiogroup" aria-labelledby={`q-${q.id}`} data-question={q.id}>
+              {answers.map((a) => (
+                <button type="button" role="radio" aria-checked="false" class="bd-chip" data-answer={a}>
+                  {a}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    <button type="button" class="bd-btn mt-7" data-check-done disabled>
+      <span class="relative z-10">See my result</span>
+    </button>
+  </section>
+
+  <div data-check-result hidden>
+    <p class="mb-5 text-center text-lg font-semibold text-white" data-check-summary></p>
+    <LeadForm
+      formKey="readiness-check"
+      fields={[NAME_FIELD, EMAIL_FIELD, ORG_FIELD]}
+      cta="Get a readiness walkthrough"
+      successText="We’ll be in touch at {email} about a readiness walkthrough"
+    />
+  </div>
+</SqueezeLayout>
+
+<script>
+  import { track } from "@/lib/analytics";
+  import { QUICK_QUESTIONS } from "@/lib/sample-data";
+
+  const card = document.querySelector("[data-check]");
+  const result = document.querySelector("[data-check-result]");
+  const done = card?.querySelector("[data-check-done]");
+  const progress = card?.querySelector("[data-check-progress]");
+  const picked = {};
+
+  card?.querySelectorAll("[data-question]").forEach((group) => {
+    group.querySelectorAll("[data-answer]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        picked[group.dataset.question] = chip.dataset.answer;
+        group.querySelectorAll("[data-answer]").forEach((c) => c.setAttribute("aria-checked", String(c === chip)));
+        const count = Object.keys(picked).length;
+        progress.textContent = `${count} of ${QUICK_QUESTIONS.length} answered`;
+        done.disabled = count < QUICK_QUESTIONS.length;
+      });
+    });
+  });
+
+  done?.addEventListener("click", () => {
+    const yes = Object.values(picked).filter((a) => a === "Yes").length;
+    result.querySelector("[data-check-summary]").textContent =
+      `You answered “Yes” to ${yes} of ${QUICK_QUESTIONS.length}. Want the full picture?`;
+    const form = result.querySelector("[data-lead-form]");
+    form.dataset.context = [
+      "Readiness check answers:",
+      ...QUICK_QUESTIONS.map((q) => `${q.text} ${picked[q.id]}`),
+    ].join("\n");
+    track("readiness_check_complete", { yes_count: yes });
+    card.hidden = true;
+    result.hidden = false;
+    result.querySelector("input")?.focus();
+  });
+</script>

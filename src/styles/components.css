@@ -28,6 +28,11 @@
   @apply dark:text-secondary;
 }
 
+/* cookie consent banner */
+.consent {
+  @apply fixed bottom-4 left-4 z-[85] w-[min(34rem,calc(100vw-2rem))] rounded-xl border border-border bg-white p-5 text-text shadow-lg dark:bg-light;
+}
+
 /* pricing card (Pinwheel PricingCard structure) */
 .pricing-card {
   @apply flex h-full flex-col rounded-xl bg-white px-7 py-9 shadow-lg dark:bg-light;

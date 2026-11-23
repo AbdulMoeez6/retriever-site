@@ -1,36 +1,27 @@
 ---
-import { withBase } from "@/lib/utils/url";
 // Pinwheel contact-page layout (intro column + form column) in Retriever's dark "book a demo" styling.
-// ?intent=pilot switches the copy to the Founding Partner Pilot request (handled client-side).
+// ?intent=pilot switches the copy and the HubSpot form to the Founding Partner Pilot request.
+import LeadForm from "@/components/LeadForm.astro";
+import OfferIntro from "@/components/OfferIntro.astro";
+import OfferPoints from "@/components/OfferPoints.astro";
 import Base from "@/layouts/Base.astro";
-import { DEMO_SLOTS } from "@/lib/sample-data";
+import { EMAIL_FIELD, NAME_FIELD, ORG_FIELD, POINTS, SLOT_CHIPS } from "@/lib/lead-fields";
 
-const variants = {
-  demo: {
-    eyebrow: "Book a demo",
-    title: "See Retriever on ",
-    accent: "your technology.",
-    line: "A short, guided walkthrough of evidence-gated readiness, opportunities and funding matches.",
-    cta: "Book a demo",
-  },
-  pilot: {
-    eyebrow: "Founding Partner Pilot",
-    title: "Request your ",
-    accent: "pilot invite.",
-    line: "The Founding Partner Pilot is invite only. Share a few details and we'll follow up.",
-    cta: "Request invite",
-  },
+const demo = {
+  eyebrow: "Book a demo",
+  title: "See Retriever on ",
+  accent: "your technology.",
+  line: "A short, guided walkthrough of evidence-gated readiness, opportunities and funding matches.",
 };
-const points = ["Evidence-gated TRL, MRL and IRL", "Only human-reviewed evidence counts", "Your team makes the call"];
-const fields = [
-  { id: "name", label: "Full name", type: "text", autocomplete: "name", placeholder: "Jane Doe" },
-  { id: "email", label: "Work email", type: "email", autocomplete: "email", placeholder: "jane@university.edu" },
-  { id: "org", label: "Organization", type: "text", autocomplete: "organization", placeholder: "Technology transfer office" },
-];
-const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+const pilot = {
+  eyebrow: "Founding Partner Pilot",
+  title: "Request your ",
+  accent: "pilot invite.",
+  line: "The Founding Partner Pilot is invite only. Share a few details and we'll follow up.",
+};
 ---
 
-<Base title="Book a demo" description={variants.demo.line}>
+<Base title="Book a demo" description={demo.line}>
   <section class="bd-page relative isolate overflow-hidden" data-book-demo>
     <div class="bd-aurora" aria-hidden="true"></div>
     <div class="bd-grid" aria-hidden="true"></div>
@@ -42,55 +33,13 @@ const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="curre
 
     <div class="container relative z-10 py-16 lg:py-24">
       <div class="row items-center">
-        <!-- intro -->
         <div class="lg:col-6 xl:col-7">
           <div class="max-w-xl">
-            {
-              Object.entries(variants).map(([key, v]) => (
-                <div data-variant={key} hidden={key !== "demo"}>
-                  <p class="bd-rise font-mono text-xs uppercase tracking-[0.18em] text-[#8FB2DC]" style="--d: 0ms">
-                    {v.eyebrow}
-                  </p>
-                  <h1
-                    class="bd-rise mt-5 text-balance text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.03em] text-white sm:text-6xl"
-                    style="--d: 70ms"
-                  >
-                    {v.title}
-                    <span class="text-[#9CC0EA]">{v.accent}</span>
-                  </h1>
-                  <p class="bd-rise mt-6 max-w-md text-lg leading-relaxed text-slate-300/90" style="--d: 140ms">
-                    {v.line}
-                  </p>
-                </div>
-              ))
-            }
-            <ul class="bd-rise mt-10 grid gap-3 text-sm text-slate-400" style="--d: 210ms">
-              {
-                points.map((point) => (
-                  <li class="flex items-center gap-3">
-                    <span class="grid size-5 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
-                      <svg
-                        viewBox="0 0 24 24"
-                        class="size-3 text-[#9CC0EA]"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.6"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                      >
-                        <path d="m5 12 4.5 4.5L19 7" />
-                      </svg>
-                    </span>
-                    {point}
-                  </li>
-                ))
-              }
-            </ul>
+            <OfferIntro {...demo} variant="demo" />
+            <OfferIntro {...pilot} variant="pilot" hidden />
+            <OfferPoints points={POINTS} />
           </div>
         </div>
-
-        <!-- form -->
         <div class="mt-14 lg:col-6 lg:mt-0 xl:col-5">
           <div class="relative mx-auto max-w-[27rem]">
             <div
@@ -98,76 +47,7 @@ const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="curre
               class="pointer-events-none absolute -inset-10 -z-10 rounded-[3rem] bg-[radial-gradient(closest-side,rgba(90,150,225,0.28),transparent)] blur-2xl"
             >
             </div>
-            <section class="bd-card bd-rise p-7 sm:p-8" style="--d: 160ms" aria-live="polite">
-              <form noValidate data-demo-form>
-                <div class="grid gap-1">
-                  {
-                    fields.map((f) => (
-                      <div>
-                        <label for={`bd-${f.id}`} class="mb-1.5 block text-[13px] font-medium text-slate-300">
-                          {f.label}
-                        </label>
-                        <input
-                          id={`bd-${f.id}`}
-                          name={f.id}
-                          type={f.type}
-                          autocomplete={f.autocomplete}
-                          placeholder={f.placeholder}
-                          aria-invalid="false"
-                          aria-describedby={`bd-${f.id}-err`}
-                          class="bd-input"
-                        />
-                        <p id={`bd-${f.id}-err`} class="bd-err invisible mt-1.5 h-4 text-xs leading-4 text-rose-300" aria-live="polite">
-                          &nbsp;
-                        </p>
-                      </div>
-                    ))
-                  }
-                  <div>
-                    <div id="bd-slot-label" class="mb-2 block text-[13px] font-medium text-slate-300">Preferred time</div>
-                    <div
-                      id="bd-slot"
-                      tabindex="-1"
-                      role="radiogroup"
-                      aria-labelledby="bd-slot-label"
-                      aria-describedby="bd-slot-err"
-                      class="flex flex-wrap gap-2 outline-none"
-                    >
-                      {
-                        DEMO_SLOTS.map((slot) => (
-                          <button type="button" role="radio" aria-checked="false" class="bd-chip" data-slot={slot}>
-                            {slot}
-                          </button>
-                        ))
-                      }
-                    </div>
-                    <p id="bd-slot-err" class="bd-err invisible mt-1.5 h-4 text-xs leading-4 text-rose-300" aria-live="polite">
-                      &nbsp;
-                    </p>
-                  </div>
-                </div>
-                <button type="submit" class="bd-btn mt-5">
-                  <span class="relative z-10 inline-flex items-center justify-center gap-2">
-                    <span data-cta>{variants.demo.cta}</span>
-                    <Fragment set:html={arrow} />
-                  </span>
-                </button>
-                <p class="mt-4 text-center text-xs text-slate-500">Sample page. Nothing you enter is sent anywhere.</p>
-              </form>
-
-              <div class="bd-success flex min-h-[25.6rem] flex-col items-center justify-center text-center" data-demo-success hidden>
-                <svg width="72" height="72" viewBox="0 0 52 52" aria-hidden="true">
-                  <circle cx="26" cy="26" r="24" fill="rgba(156,192,234,0.08)" stroke="rgba(156,192,234,0.9)" stroke-width="2" class="bd-check-ring"></circle>
-                  <path d="M15 27l7 7 15-16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="bd-check-tick"></path>
-                </svg>
-                <h2 class="mt-6 text-2xl font-semibold tracking-tight text-white" data-success-title></h2>
-                <p class="mt-2 max-w-xs text-sm leading-relaxed text-slate-400" data-success-text></p>
-                <p class="mt-6 text-xs text-slate-500">Nothing was sent from this sample page.</p>
-                <a href={withBase("/")} class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-[#9CC0EA] hover:text-white">
-                  Back to Retriever <Fragment set:html={arrow} />
-                </a>
-              </div>
-            </section>
+            <LeadForm formKey="demo" fields={[NAME_FIELD, EMAIL_FIELD, ORG_FIELD]} chips={SLOT_CHIPS} cta="Book a demo" />
           </div>
         </div>
       </div>
@@ -175,9 +55,19 @@ const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="curre
   </section>
 </Base>
 
-<script define:vars={{ ctas: { demo: variants.demo.cta, pilot: variants.pilot.cta } }}>
-  window.__bookDemoCtas = ctas;
-</script>
 <script>
-  import "@/scripts/book-demo.js";
+  // ?intent=pilot → Founding Partner Pilot copy, CTA and HubSpot form
+  if (new URLSearchParams(window.location.search).get("intent") === "pilot") {
+    const root = document.querySelector("[data-book-demo]");
+    root?.querySelectorAll("[data-variant='demo'], [data-variant='pilot']").forEach((el) => {
+      el.hidden = el.dataset.variant !== "pilot";
+    });
+    const form = root?.querySelector("[data-lead-form]");
+    if (form) {
+      form.dataset.formKey = "pilot";
+      form.dataset.context = "Request: Founding Partner Pilot invite";
+      const cta = form.querySelector("[data-cta]");
+      if (cta) cta.textContent = "Request invite";
+    }
+  }
 </script>

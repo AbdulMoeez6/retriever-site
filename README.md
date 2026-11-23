@@ -45,6 +45,63 @@ npm run preview   # serve dist/ locally
 | `/app/<screen>` (9 screens) | `src/pages/app/[screen].astro` | Own workspace layout (`AppLayout.astro`) |
 | unknown routes | `src/pages/404.astro` (redirects home, like the original) | Pinwheel 404 |
 
+### Squeeze pages (campaign landing pages)
+
+Single-offer pages with no site navigation, built on `src/layouts/SqueezeLayout.astro`. They are
+`noindex` and left out of the sitemap: send campaign traffic (ads, email, QR codes) to them.
+
+| URL | Offer | HubSpot form key |
+| --- | --- | --- |
+| `/demo` | Book a demo (same form as `/book-demo`) | `demo` |
+| `/pilot` | Founding Partner Pilot invite request | `pilot` |
+| `/readiness-check` | Five-question readiness check, then a lead form carrying the answers | `readiness-check` |
+
+`/book-demo` also submits to `demo`, or to `pilot` when opened with `?intent=pilot`.
+
+## Integrations
+
+All IDs live in **`src/config/integrations.json`**. Anything left empty stays switched off and
+loads nothing. With every ID empty (the default), no tracking code and no consent banner appear.
+Rebuild and redeploy after changing it.
+
+| Tool | Field | Where to find it |
+| --- | --- | --- |
+| Google Analytics 4 | `ga4.measurement_id` (`G-XXXXXXX`) | GA4 › Admin › Data streams › your web stream |
+| Hotjar | `hotjar.site_id` | Hotjar › Sites & Organizations |
+| HubSpot | `hubspot.portal_id`, `hubspot.region` (`na1` or `eu1`) | HubSpot › Settings › Account defaults |
+| HubSpot forms | `hubspot.forms.demo` / `pilot` / `readiness-check` (form GUIDs) | HubSpot › Marketing › Forms › form › URL / embed code |
+| Meta Pixel | `pixels.meta.pixel_id` | Meta Events Manager |
+| LinkedIn Insight Tag | `pixels.linkedin.partner_id`, optional `lead_conversion_id` | Campaign Manager › Insight Tag / Conversions |
+| Pinterest Tag | `pixels.pinterest.tag_id` | Pinterest Ads › Conversions |
+| TikTok Pixel | `pixels.tiktok.pixel_id` | TikTok Events Manager |
+| X (Twitter) Pixel | `pixels.x.pixel_id`, optional `lead_event_id` | X Ads › Events manager |
+| Reddit Pixel | `pixels.reddit.pixel_id` | Reddit Ads › Events manager |
+
+**Consent.** `consent.enabled` (on by default) shows a banner whenever a cookie-setting tool is
+configured: Accept all / Reject all / Customize, with two categories.
+- **Analytics:** GA4 and Hotjar.
+- **Marketing:** HubSpot tracking and the ad pixels.
+
+GA4 uses Google Consent Mode v2: it loads on every page in cookieless "denied" mode and is upgraded
+when the visitor accepts. Hotjar, HubSpot tracking and the pixels load only after consent for their
+category. The choice is saved in `localStorage` (`retriever-consent`). "Cookie settings" in the
+footer reopens the banner. Set `consent.privacy_url` to link your privacy policy from the banner;
+add one before collecting leads.
+
+**HubSpot forms.** The site keeps its own designed forms and posts them to HubSpot's Forms
+Submission API (`src/lib/hubspot.js`). Create one HubSpot form per key containing these contact
+properties: `firstname`, `lastname`, `email`, `company`, `jobtitle`, `message`. The full name is split
+into first and last name. Organization goes to `company`. The preferred demo time, the pilot request
+and the readiness-check answers go into `message`. Until a form's GUID is set, that form behaves as a
+sample form and sends nothing.
+
+**Events sent** (`src/lib/analytics.js`):
+- `generate_lead` (GA4) plus each platform's lead event on every form submission: Meta `Lead`,
+  LinkedIn conversion, Pinterest `lead`, TikTok `SubmitForm`, X event, Reddit `Lead`.
+- `quick_assessment_complete`
+- `readiness_check_complete`
+- `video_play`
+
 ## Features carried over
 
 - Light/dark theme toggle, remembered in `localStorage` (`retriever-theme`), applied before paint.

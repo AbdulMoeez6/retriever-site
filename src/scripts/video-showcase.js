@@ -1,4 +1,5 @@
 // Product video showcases: scroll reveal, pointer tilt, hover/tap/keyboard playback.
+import { track } from "@/lib/analytics";
 import { matchesMedia, prefersReducedMotion } from "@/lib/format";
 
 const canHover = () => matchesMedia("(hover: hover) and (pointer: fine)");
@@ -58,6 +59,7 @@ function setupPlayer(stage) {
     const result = video.play();
     const onPlay = () => {
       setPlaying(true);
+      if (!video.classList.contains("is-on")) track("video_play", { video: frame.getAttribute("aria-label") });
       video.classList.add("is-on");
     };
     if (result?.then) result.then(onPlay).catch(() => {});

@@ -1,0 +1,38 @@
+---
+// GA4 with Google Consent Mode v2. Consent defaults are set before gtag loads, from the
+// visitor's saved choice (or "denied" until they choose, when the consent banner is on).
+// Other trackers load later, after consent, from scripts/consent.js.
+import integrations from "@/config/integrations.json";
+import { CONSENT_KEY, needsConsent } from "@/lib/analytics";
+
+const id = integrations.ga4.measurement_id;
+---
+
+{
+  id && (
+    <>
+      <script is:inline define:vars={{ id, needsConsent, key: CONSENT_KEY }}>
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        var choice = { analytics: !needsConsent, marketing: !needsConsent };
+        try {
+          var saved = JSON.parse(localStorage.getItem(key) || "null");
+          if (saved) choice = { analytics: !!saved.analytics, marketing: !!saved.marketing };
+        } catch (e) {}
+        var ads = choice.marketing ? "granted" : "denied";
+        window.gtag("consent", "default", {
+          analytics_storage: choice.analytics ? "granted" : "denied",
+          ad_storage: ads,
+          ad_user_data: ads,
+          ad_personalization: ads,
+          wait_for_update: 500,
+        });
+        window.gtag("js", new Date());
+        window.gtag("config", id);
+      </script>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} />
+    </>
+  )
+}

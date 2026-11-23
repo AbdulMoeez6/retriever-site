@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@/layouts/function-components/app/ui/Icon";
+import { track } from "@/lib/analytics";
 import { Link } from "@/lib/navigation";
 import { QUICK_QUESTIONS } from "@/lib/sample-data";
 import { useStore } from "@/lib/store";
@@ -148,11 +149,11 @@ export function QuickAssessment() {
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      f
-                        ? r((g) => g + 1)
-                        : toast("Choose an answer to continue")
-                    }
+                    onClick={() => {
+                      if (!f) return toast("Choose an answer to continue");
+                      if (n === o - 1) track("quick_assessment_complete");
+                      r((g) => g + 1);
+                    }}
                     className={`rounded-lg bg-navy px-4 py-2 text-sm font-medium text-white ${f ? "" : "opacity-50"}`}
                   >
                     Next

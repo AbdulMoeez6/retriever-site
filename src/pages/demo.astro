@@ -1,0 +1,18 @@
+---
+// Squeeze page: book a demo (no navigation). Same form and HubSpot form as /book-demo.
+import LeadForm from "@/components/LeadForm.astro";
+import OfferIntro from "@/components/OfferIntro.astro";
+import OfferPoints from "@/components/OfferPoints.astro";
+import SqueezeLayout from "@/layouts/SqueezeLayout.astro";
+import { EMAIL_FIELD, NAME_FIELD, ORG_FIELD, POINTS, SLOT_CHIPS } from "@/lib/lead-fields";
+
+const line = "A short, guided walkthrough of evidence-gated readiness, opportunities and funding matches.";
+---
+
+<SqueezeLayout title="Book a demo" description={line}>
+  <Fragment slot="intro">
+    <OfferIntro eyebrow="Book a demo" title="See Retriever on " accent="your technology." line={line} />
+    <OfferPoints points={POINTS} />
+  </Fragment>
+  <LeadForm formKey="demo" fields={[NAME_FIELD, EMAIL_FIELD, ORG_FIELD]} chips={SLOT_CHIPS} cta="Book a demo" />
+</SqueezeLayout>

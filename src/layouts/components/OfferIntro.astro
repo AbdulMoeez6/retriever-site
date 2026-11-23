@@ -1,0 +1,26 @@
+---
+// Left column heading of an offer page (Book a demo, squeeze pages): eyebrow, headline and line.
+// `variant` + `hidden` let a page switch between copy variants client-side (e.g. ?intent=pilot).
+export interface Props {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  line: string;
+  variant?: string;
+  hidden?: boolean;
+}
+
+const { eyebrow, title, accent, line, variant, hidden = false } = Astro.props;
+---
+
+<div data-variant={variant} hidden={hidden}>
+  <p class="bd-rise font-mono text-xs uppercase tracking-[0.18em] text-[#8FB2DC]" style="--d: 0ms">{eyebrow}</p>
+  <h1
+    class="bd-rise mt-5 text-balance text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.03em] text-white sm:text-6xl"
+    style="--d: 70ms"
+  >
+    {title}
+    <span class="text-[#9CC0EA]">{accent}</span>
+  </h1>
+  <p class="bd-rise mt-6 max-w-md text-lg leading-relaxed text-slate-300/90" style="--d: 140ms">{line}</p>
+</div>

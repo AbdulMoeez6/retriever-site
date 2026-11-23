@@ -1,0 +1,23 @@
+---
+// Squeeze page: Founding Partner Pilot invite request (no navigation).
+import LeadForm from "@/components/LeadForm.astro";
+import OfferIntro from "@/components/OfferIntro.astro";
+import OfferPoints from "@/components/OfferPoints.astro";
+import SqueezeLayout from "@/layouts/SqueezeLayout.astro";
+import { EMAIL_FIELD, NAME_FIELD, ORG_FIELD, POINTS, ROLE_FIELD } from "@/lib/lead-fields";
+
+const line = "The Founding Partner Pilot is invite only. Share a few details and we'll follow up.";
+---
+
+<SqueezeLayout title="Founding Partner Pilot" description={line}>
+  <Fragment slot="intro">
+    <OfferIntro eyebrow="Founding Partner Pilot" title="Request your " accent="pilot invite." line={line} />
+    <OfferPoints points={POINTS} />
+  </Fragment>
+  <LeadForm
+    formKey="pilot"
+    fields={[NAME_FIELD, EMAIL_FIELD, ORG_FIELD, ROLE_FIELD]}
+    context="Request: Founding Partner Pilot invite"
+    cta="Request invite"
+  />
+</SqueezeLayout>

@@ -1,5 +1,6 @@
 ---
 // Workspace layout: shared <head>, no marketing header/footer (the workspace has its own sidebar).
+import ConsentBanner from "@/components/ConsentBanner.astro";
 import Head from "@/partials/Head.astro";
 
 export interface Props {
@@ -15,6 +16,7 @@ export interface Props {
   </head>
   <body class="bg-soft dark:bg-[#090C12]">
     <slot />
+    <ConsentBanner />
     <script is:inline>
       window.__retrieverBooted = true;
     </script>
