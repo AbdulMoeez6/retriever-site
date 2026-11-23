@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Pinwheel sign-in layout (form column + gradient banner) with Retriever's sample sign-in.
 import Logo from "@/components/Logo.astro";
 import Base from "@/layouts/Base.astro";
@@ -33,7 +34,7 @@ const profile = sampleProfile();
               </form>
             </div>
             <p class="mt-5 text-center text-sm">
-              <a href="/book-demo" class="underline-offset-2 hover:underline">Book a demo</a>
+              <a href={withBase("/book-demo")} class="underline-offset-2 hover:underline">Book a demo</a>
             </p>
           </div>
         </div>
@@ -41,7 +42,7 @@ const profile = sampleProfile();
           <div class="bg-gradient flex h-full flex-col items-center justify-center rounded-[20px] px-10 py-14 text-center">
             <p class="h3 max-w-md text-white">Identify the opportunity. Validate the evidence. Advance the technology.</p>
             <img
-              src="/images/readiness-poster.jpg"
+              src={withBase("/images/readiness-poster.jpg")}
               alt="Retriever readiness screen on a phone"
               width="720"
               height="1280"
@@ -57,6 +58,7 @@ const profile = sampleProfile();
 
 <script>
   import { patchStoredUi } from "@/lib/session";
+  import { withBase } from "@/lib/utils/url";
 
   const form = document.querySelector("[data-signin-form]");
   const error = document.querySelector("[data-signin-error]");
@@ -69,6 +71,6 @@ const profile = sampleProfile();
       return;
     }
     patchStoredUi({ session: true });
-    window.location.assign("/app/mission-command");
+    window.location.assign(withBase("/app/mission-command"));
   });
 </script>

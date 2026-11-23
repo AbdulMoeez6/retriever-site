@@ -1,3 +1,4 @@
+import { withBase } from "@/lib/utils/url";
 import { Icon } from "@/layouts/function-components/app/ui/Icon";
 import { initials } from "@/lib/format";
 import { useStore } from "@/lib/store";
@@ -5,7 +6,7 @@ import { useStore } from "@/lib/store";
 export function LogoMark({ size = 28 }) {
   return (
     <img
-      src="/images/logo-mark.png"
+      src={withBase("/images/logo-mark.png")}
       alt=""
       width={size}
       height={size}

@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Shared <head> for the marketing layout (Base) and the workspace layout (AppLayout).
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
@@ -22,7 +23,7 @@ const fontEntries = Object.entries(theme.fonts.font_family).filter(
 );
 const pageTitle = plainify(meta_title || (title ? `${title} | ${config.site.title}` : config.site.title));
 const pageDescription = plainify(description || config.metadata.meta_description);
-const ogImage = `${config.site.base_url}${image || config.metadata.meta_image}`;
+const ogImage = new URL(withBase(image || config.metadata.meta_image), config.site.base_url).href;
 const pageUrl = new URL(Astro.url.pathname, config.site.base_url).href;
 ---
 
@@ -51,8 +52,8 @@ const pageUrl = new URL(Astro.url.pathname, config.site.base_url).href;
 {noindex && <meta name="robots" content="noindex,nofollow" />}
 {canonical && <link rel="canonical" href={canonical} />}
 
-<link rel="icon" type="image/png" href={config.site.favicon} />
-<link rel="apple-touch-icon" href={config.site.apple_touch_icon} />
+<link rel="icon" type="image/png" href={withBase(config.site.favicon)} />
+<link rel="apple-touch-icon" href={withBase(config.site.apple_touch_icon)} />
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FB" />
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0C1017" />
 

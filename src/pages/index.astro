@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 import VideoShowcase from "@/components/VideoShowcase.astro";
 import Base from "@/layouts/Base.astro";
 import DashboardPreview from "@/layouts/function-components/DashboardPreview.jsx";
@@ -34,7 +35,7 @@ const previewNav = ["Mission Command", "Readiness", "Opportunities", "Funding"];
               {banner.content}
             </p>
             <div class="hero-rise mt-12 flex flex-wrap items-center gap-3" style="--d: 240ms">
-              <a class="btn btn-primary btn-lift" href={banner.button.link}>
+              <a class="btn btn-primary btn-lift" href={withBase(banner.button.link)}>
                 {banner.button.label}
                 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"
                   ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
@@ -61,7 +62,7 @@ const previewNav = ["Mission Command", "Readiness", "Opportunities", "Funding"];
       </div>
 
       <!-- Dashboard preview: opens sign-in, as on the original site -->
-      <a href={preview.link} class="relative mx-auto mt-24 block w-full max-w-6xl text-left" aria-label={preview.aria_label}>
+      <a href={withBase(preview.link)} class="relative mx-auto mt-24 block w-full max-w-6xl text-left" aria-label={preview.aria_label}>
         <div
           aria-hidden="true"
           class="absolute -top-8 left-1/2 -z-10 h-40 w-[85%] -translate-x-1/2 rounded-full bg-navy/20 blur-3xl lg:h-72"
@@ -76,7 +77,7 @@ const previewNav = ["Mission Command", "Readiness", "Opportunities", "Funding"];
                 class="hidden w-48 shrink-0 border-r border-line bg-soft p-3 text-xs leading-normal text-ink dark:border-slate-800 dark:bg-[#121722] dark:text-slate-100 sm:block"
               >
                 <div class="mb-4 flex items-center gap-2 font-semibold">
-                  <img src="/images/logo-mark.png" alt="" width="20" height="20" class="size-5 rounded-full object-cover" />
+                  <img src={withBase("/images/logo-mark.png")} alt="" width="20" height="20" class="size-5 rounded-full object-cover" />
                   Retriever
                 </div>
                 {

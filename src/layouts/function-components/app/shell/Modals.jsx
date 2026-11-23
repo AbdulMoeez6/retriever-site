@@ -1,3 +1,4 @@
+import { withBase } from "@/lib/utils/url";
 import { Icon } from "@/layouts/function-components/app/ui/Icon";
 import { CloseButton } from "@/layouts/function-components/app/ui/primitives";
 import { makeId } from "@/lib/format";
@@ -262,7 +263,7 @@ export function Modals() {
     );
   }
   if (ui.modal === "share") {
-    const a = `${window.location.origin}/shared-roadmap`,
+    const a = `${window.location.origin}${withBase("/shared-roadmap")}`,
       o = () => {
         var u, p;
         try {

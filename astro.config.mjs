@@ -40,7 +40,7 @@ export default defineConfig({
   fonts: fontsConfig,
   // The original app redirected /app to its first screen
   redirects: {
-    "/app": "/app/mission-command",
+    "/app": `${config.site.base_path.replace(/\/$/, "")}/app/mission-command`,
   },
   integrations: [
     react(),

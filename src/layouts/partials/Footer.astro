@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Pinwheel footer structure with Retriever content.
 import Logo from "@/components/Logo.astro";
 import config from "@/config/config.json";
@@ -22,7 +23,7 @@ const { copyright, footer_description, audience, disclaimer } = config.params;
           {
             footer.map((item, i) => (
               <li class={footer.length - 1 === i ? "mb-0" : "mb-3"}>
-                <a href={item.url}>{item.name}</a>
+                <a href={withBase(item.url)}>{item.name}</a>
               </li>
             ))
           }

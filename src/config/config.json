@@ -1,15 +1,14 @@
 {
   "site": {
     "title": "Retriever",
-    "base_url": "https://retriever.example.com",
-    "base_path": "/",
+    "base_url": "https://worldenterprisegroup.github.io",
+    "base_path": "/retriever-site",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
     "apple_touch_icon": "/images/apple-touch-icon.png",
     "logo": "/images/logo-mark.png",
     "logo_text": "Retriever"
   },
-
   "call_to_action": {
     "title": "See Retriever on your technology.",
     "description": "A short, guided walkthrough of evidence-gated readiness, opportunities and funding matches.",
@@ -18,14 +17,12 @@
       "link": "/book-demo"
     }
   },
-
   "params": {
     "footer_description": "Retriever structures the evidence; your team makes the call.",
     "audience": "For tech transfer offices, government programs and defense primes.",
     "disclaimer": "Retriever does not guarantee any award, contract or funding. Patent pending. Sample data only.",
     "copyright": "© 2026 Retriever"
   },
-
   "metadata": {
     "meta_author": "Retriever",
     "meta_image": "/images/mission-poster.jpg",

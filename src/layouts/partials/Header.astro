@@ -1,4 +1,5 @@
 ---
+import { pathWithoutBase, withBase } from "@/lib/utils/url";
 // Pinwheel header structure (logo, nav with active underline, mobile toggler, CTA buttons)
 // carrying Retriever's navigation: Product, Pricing, Sample data, theme toggle, Sign in, Book a demo.
 import Logo from "@/components/Logo.astro";
@@ -11,7 +12,7 @@ export interface NavigationLink {
 }
 
 const { main }: { main: NavigationLink[] } = menu;
-const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const pathname = pathWithoutBase(Astro.url.pathname);
 ---
 
 <header class="header">
@@ -47,7 +48,7 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
         main.map((item) => (
           <li class="nav-item">
             <a
-              href={item.url}
+              href={withBase(item.url)}
               class:list={["nav-link", { active: pathname === item.url }]}
               aria-current={pathname === item.url ? "page" : undefined}
             >
@@ -57,8 +58,8 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
         ))
       }
       <li class="nav-item mt-3 flex flex-col items-center gap-3 sm:hidden">
-        <a class="btn btn-white btn-sm w-full max-w-xs" href="/signin">Sign in</a>
-        <a class="btn btn-primary btn-sm w-full max-w-xs" href="/book-demo">Book a demo</a>
+        <a class="btn btn-white btn-sm w-full max-w-xs" href={withBase("/signin")}>Sign in</a>
+        <a class="btn btn-primary btn-sm w-full max-w-xs" href={withBase("/book-demo")}>Book a demo</a>
       </li>
     </ul>
 
@@ -74,9 +75,9 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
           "hidden rounded-md px-3 py-2 text-sm text-text-dark hover:text-primary sm:inline-flex dark:hover:text-secondary",
           { "font-medium": pathname === "/signin" },
         ]}
-        href="/signin">Sign in</a
+        href={withBase("/signin")}>Sign in</a
       >
-      <a class="btn btn-primary btn-sm hidden sm:inline-flex" href="/book-demo">Book a demo</a>
+      <a class="btn btn-primary btn-sm hidden sm:inline-flex" href={withBase("/book-demo")}>Book a demo</a>
     </div>
   </nav>
 </header>

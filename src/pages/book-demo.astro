@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Pinwheel contact-page layout (intro column + form column) in Retriever's dark "book a demo" styling.
 // ?intent=pilot switches the copy to the Founding Partner Pilot request (handled client-side).
 import Base from "@/layouts/Base.astro";
@@ -162,7 +163,7 @@ const arrow = `<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="curre
                 <h2 class="mt-6 text-2xl font-semibold tracking-tight text-white" data-success-title></h2>
                 <p class="mt-2 max-w-xs text-sm leading-relaxed text-slate-400" data-success-text></p>
                 <p class="mt-6 text-xs text-slate-500">Nothing was sent from this sample page.</p>
-                <a href="/" class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-[#9CC0EA] hover:text-white">
+                <a href={withBase("/")} class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-[#9CC0EA] hover:text-white">
                   Back to Retriever <Fragment set:html={arrow} />
                 </a>
               </div>

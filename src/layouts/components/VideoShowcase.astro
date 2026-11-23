@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Glass-framed product video: reveals on scroll, tilts with the pointer, plays on hover
 // (or tap / Enter / Space). Behaviour lives in scripts/video-showcase.js.
 export interface Props {
@@ -34,8 +35,8 @@ const glow = device
     aria-pressed="false"
   >
     <div class:list={["glass-screen", device ? "aspect-[9/16]" : "aspect-video"]}>
-      <img src={poster} alt="" class="glass-poster" draggable="false" />
-      <video src={src} muted playsinline loop preload="metadata" class="glass-video"></video>
+      <img src={withBase(poster)} alt="" class="glass-poster" draggable="false" />
+      <video src={withBase(src)} muted playsinline loop preload="metadata" class="glass-video"></video>
       {device && <span class="device-notch" aria-hidden="true" />}
       <span class="play-hint" aria-hidden="true">
         <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">

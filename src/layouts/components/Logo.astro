@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 // Retriever wordmark: round logo mark + name (from the original site's header).
 import config from "@/config/config.json";
 
@@ -13,12 +14,12 @@ const Tag = link ? "a" : "span";
 ---
 
 <Tag
-  href={link ? "/" : undefined}
+  href={link ? withBase("/") : undefined}
   aria-label={link ? `${config.site.logo_text} home` : undefined}
   class:list={["navbar-brand inline-flex items-center gap-2.5 rounded-md font-semibold tracking-tight", className]}
 >
   <img
-    src={config.site.logo}
+    src={withBase(config.site.logo)}
     alt=""
     width={size}
     height={size}

@@ -1,4 +1,5 @@
 ---
+import { withBase } from "@/lib/utils/url";
 import PageHeader from "@/components/PageHeader.astro";
 import PricingCard from "@/components/PricingCard.astro";
 import Base from "@/layouts/Base.astro";
@@ -82,7 +83,7 @@ const data = pricing.data;
               ))
             }
           </dl>
-          <a class="btn btn-primary btn-sm mt-6" href={data.pilot.button.link}>{data.pilot.button.label}</a>
+          <a class="btn btn-primary btn-sm mt-6" href={withBase(data.pilot.button.link)}>{data.pilot.button.label}</a>
         </section>
 
         <p class="mt-8 text-center text-xs">{data.disclaimer}</p>
